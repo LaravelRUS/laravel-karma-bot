@@ -64,7 +64,7 @@ var App = (function () {
             /[.,-\/#!$%\^&\*;:{}=\-_`~()]/g, ""
         );
 
-        return text.indexOf('спасибо') === 0 || text.endsWith('спасибо');
+        return text.indexOf('спасибо') === 0 || text.endsWith('спасибо') || text.indexOf('спс') === 0 || text.endsWith('спс');
     };
 
     var isBotMessage = function(message) {
