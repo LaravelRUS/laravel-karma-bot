@@ -1,10 +1,24 @@
 <?php
 
+/**
+ * This file is part of GitterBot package.
+ *
+ * @author Serafim <nesk@xakep.ru>
+ * @date 24.09.2015 15:27
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Console\Commands;
 
 use App\Gitter\Client;
+use App\Gitter\Middleware\DbSyncMiddleware;
+use App\Gitter\Middleware\LoggerMiddleware;
+use App\Gitter\Middleware\Storage;
 use App\Gitter\Models\Message;
 use Illuminate\Console\Command;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 
 /**
@@ -20,7 +34,6 @@ class StartGitterBot extends Command
      */
     protected $signature = 'gitter:listen';
 
-
     /**
      * The console command description.
      *
@@ -28,29 +41,32 @@ class StartGitterBot extends Command
      */
     protected $description = 'Startup gitter bot';
 
-
     /**
      * Execute the console command.
      *
+     * @param Container $container
      * @param Repository $config
+     *
      * @return mixed
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \LogicException
      */
-    public function handle(Repository $config)
+    public function handle(Container $container, Repository $config)
     {
-        $token = $config->get('gitter.token');
-        $rooms = $config->get('gitter.rooms');
+        $token      = $config->get('gitter.token');
+        $rooms      = $config->get('gitter.rooms');
+        $client     = new Client($token);
 
 
-        $client = new Client($token);
+        $storage    = new Storage($container);
+        $storage->add(LoggerMiddleware::class, Storage::PRIORITY_MAXIMAL);
+        $storage->add(DbSyncMiddleware::class, Storage::PRIORITY_MAXIMAL);
+
         $client
             ->stream('messages', ['roomId' => $rooms[0]])
-            ->subscribe(function ($data) {
-
-                var_dump(new Message($data));
-
+            ->subscribe(function ($data) use ($storage) {
+                $storage->handle(new Message($data));
             });
 
         $client->run();
