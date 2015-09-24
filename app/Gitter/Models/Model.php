@@ -73,8 +73,11 @@ abstract class Model implements Arrayable
         }
 
         static::boot();
-        $id = $attributes[static::$primaryKey];
-        static::$storage[static::class][$id] = $this;
+        
+        if (array_key_exists(static::$primaryKey, $attributes)) {
+            $id = $attributes[static::$primaryKey];
+            static::$storage[static::class][$id] = $this;
+        }
     }
 
     /**
