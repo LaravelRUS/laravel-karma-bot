@@ -1,7 +1,6 @@
 <?php
 return [
     'token' => env('GITTER_TOKEN', null),
-    'user'  => '52fcfccb5e986b0712ef71d0',
 
     'rooms' => [
         '5602e05e0fc9f982beb19cdc', // Debug (Karma bot chat)

@@ -53,10 +53,10 @@ class StreamBuffer
     }
 
     /**
-     * @param callable $callback
+     * @param callable|array $callback
      * @return StreamBuffer
      */
-    public function subscribe(callable $callback): StreamBuffer
+    public function subscribe($callback): StreamBuffer
     {
         $this->callbacks[] = $callback;
         return $this;

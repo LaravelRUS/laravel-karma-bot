@@ -15,16 +15,16 @@ namespace App\Gitter\Models;
 use App\Gitter\Support\AttributeMapper;
 
 /**
- * Class User
+ * Class UserObject
  * @package App\Gitter\Models
  *
- * @property-read string $id
- * @property-read string $login
- * @property-read string $name
- * @property-read string $url
- * @property-read string $avatar
+ * @property string $gitter_id
+ * @property string $login
+ * @property string $name
+ * @property string $url
+ * @property string $avatar
  */
-class User extends Model
+class UserObject extends Model
 {
     /**
      * @param array $attributes
@@ -34,10 +34,11 @@ class User extends Model
     public function format(array $attributes): array
     {
         return (new AttributeMapper($attributes))
+            ->rename('id', 'gitter_id')
             ->rename('username', 'login')
             ->rename('displayName', 'name')
             ->rename('avatarUrlMedium', 'avatar')
-            ->only(['id', 'login', 'name', 'avatar', 'url'])
+            ->only(['gitter_id', 'login', 'name', 'avatar', 'url'])
             ->toArray();
     }
 }

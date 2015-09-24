@@ -12,6 +12,7 @@
 
 namespace App\Gitter;
 
+use App\Gitter\Http\Request;
 use App\Gitter\Http\Stream;
 use App\Gitter\Http\UrlStorage;
 use React\EventLoop\Factory as EventLoop;
@@ -100,6 +101,20 @@ class Client
     public function stream($route, array $args = [], $method = 'GET'): Stream
     {
         return new Stream($this, $route, $args, $method);
+    }
+
+    /**
+     * @param $route
+     * @param array $args
+     * @param null $content
+     * @param string $method
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function request($route, array $args, $content = null, $method = 'GET')
+    {
+        return (new Request($this, $route, $args, $method))
+            ->sendParseJson($content);
     }
 
     /**

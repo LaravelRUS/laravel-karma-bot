@@ -9,7 +9,9 @@
         "laravel/framework": "5.1.*",
         "react/react": "^0.4.2",
         "react/socket-client": "^0.4.4",
-        "react/http-client": "^0.4.6"
+        "react/http-client": "^0.4.6",
+        "barryvdh/laravel-ide-helper": "2.1.*",
+        "guzzlehttp/guzzle": "^6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -39,6 +41,7 @@
             "php artisan clear-compiled"
         ],
         "post-update-cmd": [
+            "php artisan ide-helper:generate",
             "php artisan optimize"
         ],
         "post-root-package-install": [
