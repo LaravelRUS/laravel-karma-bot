@@ -40,7 +40,7 @@ class Stream
             ->request($method, $url, $headers);
 
         $request->on('response', function (Response $response) {
-            $response->on('data', function (ResponseStream $data, Response $response) {
+            $response->on('data', function ($data, Response $response) {
                 $this->buffer->add((string)$data);
             });
         });
