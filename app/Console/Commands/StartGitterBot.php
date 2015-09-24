@@ -20,7 +20,7 @@ class StartGitterBot extends Command
      */
     protected $signature = 'gitter:listen';
 
-    
+
     /**
      * The console command description.
      *

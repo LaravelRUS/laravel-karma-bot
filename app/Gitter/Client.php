@@ -33,6 +33,9 @@ class Client
      */
     protected $dnsResolver;
 
+    /**
+     * @var UrlStorage
+     */
     protected $urlStorage;
 
     /**
