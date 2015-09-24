@@ -4,15 +4,8 @@ namespace App\Console\Commands;
 
 use App\Gitter\Client;
 use App\Gitter\Models\Message;
-use React\HttpClient\Response;
-use React\Stream\Stream;
 use Illuminate\Console\Command;
-use React\SocketClient\Connector;
-use React\SocketClient\SecureConnector;
-use React\EventLoop\Factory as EventLoop;
 use Illuminate\Contracts\Config\Repository;
-use React\HttpClient\Factory as HttpClient;
-use React\Dns\Resolver\Factory as DnsResolver;
 
 /**
  * Class StartGitterBot
@@ -27,12 +20,14 @@ class StartGitterBot extends Command
      */
     protected $signature = 'gitter:listen';
 
+    
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Startup gitter bot';
+
 
     /**
      * Execute the console command.
@@ -52,7 +47,7 @@ class StartGitterBot extends Command
         $client = new Client($token);
         $client
             ->stream('messages', ['roomId' => $rooms[0]])
-            ->subscribe(function($data) {
+            ->subscribe(function ($data) {
 
                 var_dump(new Message($data));
 
