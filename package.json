@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "redis": "^2.0.0",
+    "shelljs": "^0.5.3"
+  },
+  "dependencies": {
+    "node-gitter": "^1.2.8"
+  }
+}

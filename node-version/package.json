@@ -1,0 +1,11 @@
+{
+  "license": "MIT",
+  "dependencies": {
+    "config": "^1.16.0",
+    "ends-with-any": "^0.1.0",
+    "node-gitter": "^1.2.8",
+    "redis": "^2.0.0",
+    "shelljs": "^0.5.3",
+    "starts-with-any": "^0.1.0"
+  }
+}
