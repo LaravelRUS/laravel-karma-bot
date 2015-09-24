@@ -36,9 +36,10 @@ abstract class Model implements Arrayable
     protected static $booted = [];
 
     /**
-     * @param $data
+     * @param array $data
+     * @return Model
      */
-    public static function findOrCreate($data)
+    public static function findOrCreate(array $data): Model
     {
         static::boot();
 
@@ -59,9 +60,10 @@ abstract class Model implements Arrayable
             return;
         }
 
-        if (array_key_exists(static::class, static::$storage)) {
+        if (!array_key_exists(static::class, static::$storage)) {
             static::$storage[static::class] = [];
         }
+
         static::$booted[static::class] = true;
     }
 
@@ -75,7 +77,6 @@ abstract class Model implements Arrayable
      */
     public function __construct(array $attributes = [])
     {
-
         $attributes = $this->format($attributes);
 
         foreach ($attributes as $key => $value) {
@@ -94,7 +95,7 @@ abstract class Model implements Arrayable
      * @param array $attributes
      * @return array
      */
-    public function format(array $attributes)
+    public function format(array $attributes): array
     {
         return $attributes;
     }
@@ -136,7 +137,7 @@ abstract class Model implements Arrayable
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->attributes;
     }
@@ -144,7 +145,7 @@ abstract class Model implements Arrayable
     /**
      * @return array
      */
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
         return $this->toArray();
     }

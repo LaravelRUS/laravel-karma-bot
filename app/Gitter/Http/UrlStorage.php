@@ -67,6 +67,7 @@ class UrlStorage
         'message.unread'    => 'https://api.gitter.im/v1/user/{userId}/rooms/{roomId}/unreadItems',
     ];
 
+
     /**
      * @param string $token
      */
@@ -75,13 +76,14 @@ class UrlStorage
         $this->token = $token;
     }
 
+
     /**
      * @param $name
      * @param array $args
-     * @return mixed
+     * @return mixed|string
      * @throws \InvalidArgumentException
      */
-    public function route($name, array $args = [])
+    public function route($name, array $args = []): string
     {
         if (!array_key_exists($name, static::$routes)) {
             $message = sprintf('%s route not found.', $name);
@@ -93,12 +95,13 @@ class UrlStorage
         return $this->url(static::$routes[$name], $args);
     }
 
+
     /**
      * @param $url
      * @param array $args
      * @return mixed|string
      */
-    public function url($url, array $args = [])
+    public function url($url, array $args = []): string
     {
         $url .= '?';
 

@@ -24,18 +24,22 @@ class Storage
     const PRIORITY_DEFAULT = 2;
     const PRIORITY_MAXIMAL = 3; // Maximal priority (?)
 
+
     // Middleware response for stopping iterations
     const SIGNAL_STOP = null;
+
 
     /**
      * @var MiddlewareInterface[]|\SplPriorityQueue
      */
     protected $storage;
 
+
     /**
      * @var Container
      */
     protected $container;
+
 
     /**
      * @param Container $container
@@ -47,12 +51,13 @@ class Storage
         $this->storage = new \SplPriorityQueue();
     }
 
+
     /**
      * @param string $class
      * @param int $priority
-     * @return $this
+     * @return Storage
      */
-    public function add($class, $priority = self::PRIORITY_DEFAULT)
+    public function add($class, $priority = self::PRIORITY_DEFAULT): Storage
     {
         $this->container->singleton($class, $class);
         $instance = $this->container->make($class);
@@ -62,11 +67,12 @@ class Storage
         return $this;
     }
 
+
     /**
      * @param Model|mixed $data
-     * @return mixed
+     * @return Storage
      */
-    public function handle($data)
+    public function handle($data): Storage
     {
         foreach ($this->storage as $middleware) {
             $response = $middleware->handle($data);

@@ -12,43 +12,32 @@
 
 namespace App\Gitter\Models;
 
+use App\Gitter\Support\AttributeMapper;
 
 /**
  * Class User
  * @package App\Gitter\Models
+ *
+ * @property-read string $id
+ * @property-read string $login
+ * @property-read string $name
+ * @property-read string $url
+ * @property-read string $avatar
  */
 class User extends Model
 {
     /**
-     * @var array
-     */
-    protected static $users = [];
-
-    /**
-     * @param $userData
-     */
-    public static function findOrCreate($userData)
-    {
-        $id = $userData['id'];
-        if (!array_key_exists($id, static::$users)) {
-            static::$users[$id] = new static($userData);
-        }
-
-        return static::$users[$id];
-    }
-
-    /**
      * @param array $attributes
      * @return array
+     * @throws \InvalidArgumentException
      */
-    public function format(array $attributes)
+    public function format(array $attributes): array
     {
-        return [
-            'gitter_id' => $attributes['id'],
-            'login'     => $attributes['username'],
-            'name'      => $attributes['displayName'],
-            'url'       => $attributes['url'],
-            'avatar'    => $attributes['avatarUrlMedium'],
-        ];
+        return (new AttributeMapper($attributes))
+            ->rename('username', 'login')
+            ->rename('displayName', 'name')
+            ->rename('avatarUrlMedium', 'avatar')
+            ->only(['id', 'login', 'name', 'avatar', 'url'])
+            ->toArray();
     }
 }

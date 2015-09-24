@@ -62,7 +62,7 @@ class Stream
      * @param callable $callback
      * @return Stream
      */
-    public function subscribe(callable $callback)
+    public function subscribe(callable $callback): Stream
     {
         $this->buffer->subscribe(function ($message) use ($callback) {
             $data = json_decode(trim($message), true);

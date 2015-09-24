@@ -30,8 +30,9 @@ class StreamBuffer
 
     /**
      * @param $chunk
+     * @return StreamBuffer
      */
-    public function add($chunk)
+    public function add($chunk): StreamBuffer
     {
         $chunks = explode("\n", $chunk);
         $count  = count($chunks);
@@ -47,22 +48,24 @@ class StreamBuffer
                 }
             }
         }
+
+        return $this;
     }
 
     /**
      * @param callable $callback
-     * @return $this
+     * @return StreamBuffer
      */
-    public function subscribe(callable $callback)
+    public function subscribe(callable $callback): StreamBuffer
     {
         $this->callbacks[] = $callback;
         return $this;
     }
 
     /**
-     * @return string
+     * @return mixed|string
      */
-    public function flush()
+    public function flush(): string
     {
         $result = $this->data;
         $this->data = '';
@@ -75,9 +78,9 @@ class StreamBuffer
     }
 
     /**
-     * @return int
+     * @return mixed|integer
      */
-    public function size()
+    public function size(): integer
     {
         return strlen($this->data);
     }

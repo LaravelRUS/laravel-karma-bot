@@ -15,6 +15,7 @@ namespace App\Gitter;
 use App\Gitter\Http\Stream;
 use App\Gitter\Http\UrlStorage;
 use React\EventLoop\Factory as EventLoop;
+use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Factory as HttpClient;
 use React\Dns\Resolver\Factory as DnsResolver;
 
@@ -64,7 +65,7 @@ class Client
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return [
             'Content-Type'  => 'application/json',
@@ -74,9 +75,9 @@ class Client
     }
 
     /**
-     * @return \React\HttpClient\Client
+     * @return ReactClient
      */
-    public function getHttpClient()
+    public function getHttpClient(): ReactClient
     {
         return $this->client;
     }
@@ -84,7 +85,7 @@ class Client
     /**
      * @return UrlStorage
      */
-    public function getRouter()
+    public function getRouter(): UrlStorage
     {
         return $this->urlStorage;
     }
@@ -96,15 +97,15 @@ class Client
      * @return Stream
      * @throws \InvalidArgumentException
      */
-    public function stream($route, array $args = [], $method = 'GET')
+    public function stream($route, array $args = [], $method = 'GET'): Stream
     {
         return new Stream($this, $route, $args, $method);
     }
 
     /**
-     * @return $this
+     * @return Client
      */
-    public function run()
+    public function run(): Client
     {
         $this->loop->run();
         return $this;

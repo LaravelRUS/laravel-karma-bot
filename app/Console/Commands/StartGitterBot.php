@@ -12,14 +12,17 @@
 
 namespace App\Console\Commands;
 
+
+use App\Gitter\Thread;
 use App\Gitter\Client;
-use App\Gitter\Middleware\DbSyncMiddleware;
-use App\Gitter\Middleware\LoggerMiddleware;
-use App\Gitter\Middleware\Storage;
+use App\Gitter\Threads\Worker;
 use App\Gitter\Models\Message;
 use Illuminate\Console\Command;
+use App\Gitter\Middleware\Storage;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
+use App\Gitter\Middleware\LoggerMiddleware;
+use App\Gitter\Middleware\DbSyncMiddleware;
 
 /**
  * Class StartGitterBot
@@ -56,6 +59,7 @@ class StartGitterBot extends Command
     {
         $token      = $config->get('gitter.token');
         $rooms      = $config->get('gitter.rooms');
+
         $client     = new Client($token);
 
 
@@ -63,10 +67,19 @@ class StartGitterBot extends Command
         $storage->add(LoggerMiddleware::class, Storage::PRIORITY_MAXIMAL);
         $storage->add(DbSyncMiddleware::class, Storage::PRIORITY_MAXIMAL);
 
+
         $client
             ->stream('messages', ['roomId' => $rooms[0]])
             ->subscribe(function ($data) use ($storage) {
-                $storage->handle(new Message($data));
+                Thread::create(
+                    new class(['storage' => $storage, 'data' => $data]) extends Worker
+                    {
+                        final public function run()
+                        {
+                            $this->storage->handle(new Message($this->data));
+                        }
+                    }
+                );
             });
 
         $client->run();

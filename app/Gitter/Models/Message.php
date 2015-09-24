@@ -12,6 +12,7 @@
 
 namespace App\Gitter\Models;
 
+use App\Gitter\Support\AttributeMapper;
 use Carbon\Carbon;
 
 /**
@@ -23,23 +24,23 @@ class Message extends Model
     /**
      * @param array $attributes
      * @return array
+     * @throws \InvalidArgumentException
      */
-    public function format(array $attributes)
+    public function format(array $attributes): array
     {
-        return [
-            'gitter_id'  => $attributes['id'],
-            'text'       => $attributes['text'],
-            'html'       => $attributes['html'],
-            'edited'     => !!$attributes['editedAt'],
-            'user'       => User::findOrCreate($attributes['fromUser']),
-            'unread'     => $attributes['unread'],
-            'read_by'    => $attributes['readBy'],
-            'urls'       => $attributes['urls'],
-            'mentions'   => $attributes['mentions'],
-            'issues'     => $attributes['issues'],
-            'meta'       => $attributes['meta'],
-            'created_at' => new Carbon($attributes['sent']),
-            'updated_at' => new Carbon($attributes['editedAt'])
-        ];
+        $fields = ['id', 'text', 'html', 'edited', 'user', 'unread',
+            'read_by', 'urls', 'mentions', 'issues', 'meta', 'created_at', 'updated_at'];
+
+        return (new AttributeMapper($attributes))
+
+            ->value('editedAt', function($val)  { return !!$val;                    }, 'edited')
+            ->value('fromUser', function($user) { return User::findOrCreate($user); }, 'user')
+            ->rename('readBy', 'read_by')
+            ->value('sent',     function($date) { return new Carbon($date);         }, 'created_at')
+            ->value('editedAt', function($date) { return new Carbon($date);         }, 'updated_at')
+
+            ->only($fields)
+            ->toArray();
+
     }
 }
