@@ -13,6 +13,7 @@
 namespace App\Gitter\Http;
 
 use App\Gitter\Client;
+use Carbon\Carbon;
 use React\HttpClient\Response;
 use App\Gitter\Support\StreamBuffer;
 
@@ -28,6 +29,26 @@ class Stream
     protected $buffer;
 
     /**
+     * @var string|mixed|string
+     */
+    protected $url;
+
+    /**
+     * @var string
+     */
+    protected $method;
+
+    /**
+     * @var array
+     */
+    protected $headers;
+
+    /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * @param Client $client
      * @param $route
      * @param array $args
@@ -36,23 +57,39 @@ class Stream
      */
     public function __construct(Client $client, $route, array $args, $method = 'GET')
     {
-        $router = $client->getRouter();
-        $url = $router->route($route, $args);
+        $this->url      = $client->getRouter()->route($route, $args);
+        $this->method   = $method;
+        $this->headers  = $client->getHeaders();
+        $this->client   = $client;
+        $this->buffer   = new StreamBuffer();
 
 
-        $this->buffer = new StreamBuffer();
+        $this->headers['Connection'] = 'Keep-Alive';
 
-        $headers = $client->getHeaders();
-        $headers['Connection'] = 'Keep-Alive';
+        $this->connect();
+    }
 
-        $request = $client
+    /**
+     *
+     */
+    public function connect()
+    {
+        $request = $this->client
             ->getHttpClient()
-            ->request($method, $url, $headers);
+            ->request($this->method, $this->url, $this->headers);
 
         $request->on('response', function (Response $response) {
             $response->on('data', function ($data, Response $response) {
                 $this->buffer->add((string)$data);
             });
+        });
+
+        $request->on('end', function () {
+            $this->buffer->clear();
+        });
+
+        $request->on('error', function() {
+            $this->connect();
         });
 
         $request->end();
@@ -65,9 +102,13 @@ class Stream
     public function subscribe(callable $callback): Stream
     {
         $this->buffer->subscribe(function ($message) use ($callback) {
-            $data = json_decode(trim($message), true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $callback($data);
+            $message = trim($message);
+            if ($message) {
+                $data = json_decode(trim($message), true);
+
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $callback($data);
+                }
             }
         });
 

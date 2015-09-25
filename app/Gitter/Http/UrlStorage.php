@@ -48,6 +48,7 @@ class UrlStorage
          *        Rooms
          * --------------------- */
         'room.list'         => 'https://api.gitter.im/v1/rooms',
+        'room.info'         => 'https://api.gitter.im/v1/rooms/{roomId}',
         'room.users'        => 'https://api.gitter.im/v1/rooms/{roomId}/users',
         'room.channels'     => 'https://api.gitter.im/v1/rooms/{roomId}/channels',
         // POST: {"uri": "username/repo"}

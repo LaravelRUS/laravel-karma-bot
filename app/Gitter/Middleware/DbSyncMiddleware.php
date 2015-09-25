@@ -13,9 +13,9 @@
 namespace App\Gitter\Middleware;
 
 
+use App\User;
 use App\Gitter\Client;
 use App\Gitter\Models\UserObject;
-use App\User;
 use App\Gitter\Models\MessageObject;
 
 
@@ -57,7 +57,7 @@ class DbSyncMiddleware implements MiddlewareInterface
      */
     protected function applyUsers(MessageObject $message)
     {
-        $message->user = $this->fromGitterModel($message->user);
+        $message->user = User::fromGitterObject($message->user);
 
         $this->fromMentions($message);
 
@@ -65,32 +65,19 @@ class DbSyncMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @TODO Add User::class memory pool (with GC probably)
-     *
-     * @param UserObject $userObject
-     * @return \Illuminate\Database\Eloquent\Model|null|static
-     */
-    protected function fromGitterModel(UserObject $userObject)
-    {
-        $user = User::where('gitter_id', $userObject->gitter_id)->first();
-        if (!$user) {
-            $user = User::create($userObject->toArray());
-        }
-        return $user;
-    }
-
-    /**
      * @param MessageObject $message
      */
     protected function fromMentions(MessageObject $message)
     {
+        $mentions = [];
+
         foreach ($message->mentions as $mention) {
             if (array_key_exists('userId', $mention)) {
-
-                #$response = $this->client->request('user', ['userId' => $mention['userId']]);
-                #var_dump($response); // @TODO fix 403 error
-
+                $user = User::where('gitter_id', $mention['userId'])->first();
+                $mentions[] = $user;
             }
         }
+
+        $message->set('mentions', $mentions);
     }
 }

@@ -12,7 +12,10 @@
 namespace App\Gitter\Middleware;
 
 use App\Gitter\Models\Model;
-use Illuminate\Container\Container;
+use App\Gitter\Support\PriorityList;
+use Illuminate\Console\OutputStyle;
+use Illuminate\Contracts\Container\Container;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Storage
@@ -30,7 +33,7 @@ class Storage
 
 
     /**
-     * @var MiddlewareInterface[]|\SplPriorityQueue
+     * @var MiddlewareInterface[]|PriorityList
      */
     protected $storage;
 
@@ -40,15 +43,23 @@ class Storage
      */
     protected $container;
 
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
+
 
     /**
      * @param Container $container
-     * @return Storage
+     * @param OutputInterface $output
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, OutputInterface $output)
     {
-        $this->container = $container;
-        $this->storage = new \SplPriorityQueue();
+        $this->output       = $output;
+        $this->container    = $container;
+        $this->storage      = new PriorityList();
+
+        $this->output->writeln(sprintf(' <comment>Initialize middlware:</comment> %s', static::class));
     }
 
 
@@ -63,6 +74,9 @@ class Storage
         $instance = $this->container->make($class);
 
         $this->storage->insert($instance, $priority);
+
+
+        $this->output->writeln(sprintf('     > %s', $class));
 
         return $this;
     }

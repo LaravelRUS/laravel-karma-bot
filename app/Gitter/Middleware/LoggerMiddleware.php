@@ -28,17 +28,11 @@ class LoggerMiddleware implements MiddlewareInterface
     protected $config;
 
     /**
-     * @var Logger
-     */
-    protected $log;
-
-    /**
      * @param Repository $config
      */
     public function __construct(Repository $config)
     {
         $this->config = $config;
-        $this->log = new Logger($this->config->get('app.debug'));
     }
 
     /**
@@ -51,7 +45,7 @@ class LoggerMiddleware implements MiddlewareInterface
         if ($data instanceof MessageObject) {
             $message = $data->user->name . ': ' . $data->text;
         }
-        $this->log->write($message);
+        #$this->log->write($message);
 
 
         return $data;

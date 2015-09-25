@@ -116,6 +116,17 @@ abstract class Model implements Arrayable
 
     /**
      * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function set($key, $value)
+    {
+        $this->__set($key, $value);
+        return $this;
+    }
+
+    /**
+     * @param $key
      * @return mixed
      * @throws \InvalidArgumentException
      */

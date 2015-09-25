@@ -63,6 +63,15 @@ class StreamBuffer
     }
 
     /**
+     * @return $this
+     */
+    public function clear()
+    {
+        $this->data = '';
+        return $this;
+    }
+
+    /**
      * @return mixed|string
      */
     public function flush(): string

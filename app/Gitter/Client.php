@@ -15,6 +15,8 @@ namespace App\Gitter;
 use App\Gitter\Http\Request;
 use App\Gitter\Http\Stream;
 use App\Gitter\Http\UrlStorage;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use React\EventLoop\Factory as EventLoop;
 use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Factory as HttpClient;
@@ -52,10 +54,19 @@ class Client
     protected $urlStorage;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * @param $token
+     * @throws \Exception
      */
     public function __construct($token)
     {
+        $this->logger       = new Logger('Gitter');
+        $this->logger->pushHandler(new StreamHandler('php://stdout'));
+
         $this->token        = $token;
         $this->loop         = EventLoop::create();
         $this->dnsResolver  = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
@@ -89,6 +100,22 @@ class Client
     public function getRouter(): UrlStorage
     {
         return $this->urlStorage;
+    }
+
+    /**
+     * @return Logger
+     */
+    public function getLogger(): Logger
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @return \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
+     */
+    public function getEventLoop()
+    {
+        return $this->loop;
     }
 
     /**
