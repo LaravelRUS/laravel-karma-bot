@@ -13,6 +13,7 @@
 namespace App\Console\Commands;
 
 
+use App\Gitter\Models\Room;
 use App\User;
 use Carbon\Carbon;
 use App\Gitter\Client;
@@ -75,14 +76,19 @@ class StartGitterBot extends Command
     public function handle(Repository $config, Container $container)
     {
         // Input arguments
-        $room  = $this->argument('room');
+        $room = $this->argument('room');
         $token = $config->get('gitter.token');
 
 
         // Bind client
         $this->container = $container;
+
         $container->singleton(Client::class, function () use ($token, $room) {
             return new Client($token, $room);
+        });
+
+        $container->singleton(Room::class, function () use ($room) {
+            return new Room(['id' => $room]);
         });
 
         // Start
@@ -100,33 +106,44 @@ class StartGitterBot extends Command
     {
         $this->prepare($client, $room);
 
+        $storage = $this->createMiddlewareStorage();
 
-        $storage = new Storage($this->container, $this->output);
-        $storage->add(LoggerMiddleware::class, Storage::PRIORITY_MAXIMAL);
-        $storage->add(DbSyncMiddleware::class, Storage::PRIORITY_MAXIMAL);
-
-        $storage->add(KarmaCounterMiddleware::class);
-
-
+        // Message listener
         $client
             ->stream('messages', ['roomId' => $room])
             ->subscribe(function ($data) use ($client, $storage, $room) {
+
                 try {
+
                     $message = new MessageObject($data);
                     $storage->handle($message);
 
                 } catch (\Exception $e) {
-                    $client->getAuthUser()->pre(
-                        $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine()
-                    );
+
+                    $error = sprintf('%s in %s:%s', $e->getMessage(), $e->getFile(), $e->getLine());
+                    $client->getAuthUser()->pre($error);
+
                 }
+
             });
 
 
         $this->showUptime($client);
 
-
         $client->run();
+    }
+
+    /**
+     * @return Storage
+     */
+    protected function createMiddlewareStorage()
+    {
+        $storage = new Storage($this->container, $this->output);
+        foreach (\Config::get('gitter.middlewares') as $middleware => $priority) {
+            $storage->add($middleware, $priority);
+        }
+
+        return $storage;
     }
 
     /**
@@ -170,6 +187,7 @@ class StartGitterBot extends Command
         $this->syncUsers($client, $room);
     }
 
+
     /**
      * @param Client $client
      * @param $room
@@ -192,6 +210,7 @@ class StartGitterBot extends Command
         $message = sprintf($pattern, Str::substr($room['url'], 1), $room['topic'] ?: $room['name']);
         $this->output->writeln($message);
     }
+
 
     /**
      * @TODO Create external class for cli processes
@@ -227,6 +246,7 @@ class StartGitterBot extends Command
         $this->output->write("\r");
         $this->output->writeln(sprintf(' <comment>Sync users:</comment> <info>[OK]</info>%80s', ''));
     }
+    
 
     /**
      * @return void
