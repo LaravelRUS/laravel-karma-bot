@@ -12,6 +12,7 @@
 
 namespace App\Gitter\Models;
 
+use App\Gitter\Client;
 use App\Gitter\Support\AttributeMapper;
 
 /**
@@ -40,5 +41,16 @@ class UserObject extends Model
             ->rename('avatarUrlMedium', 'avatar')
             ->only(['gitter_id', 'login', 'name', 'avatar', 'url'])
             ->toArray();
+    }
+
+    /**
+     * @param $text
+     * @return $this
+     */
+    public function answer($text)
+    {
+        $text = sprintf('@%s %s', $this->login, $text);
+
+        return parent::answer($text);
     }
 }

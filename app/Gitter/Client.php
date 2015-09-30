@@ -15,6 +15,7 @@ namespace App\Gitter;
 use App\Gitter\Http\Request;
 use App\Gitter\Http\Stream;
 use App\Gitter\Http\UrlStorage;
+use App\Gitter\Models\UserObject;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use React\EventLoop\Factory as EventLoop;
@@ -59,11 +60,24 @@ class Client
     protected $logger;
 
     /**
-     * @param $token
-     * @throws \Exception
+     * @var string
      */
-    public function __construct($token)
+    protected $room;
+
+    /**
+     * @var UserObject
+     */
+    protected $auth;
+
+    /**
+     * Client constructor.
+     * @param string $token
+     * @param string $room
+     */
+    public function __construct($token, $room)
     {
+        $this->room         = $room;
+
         $this->logger       = new Logger('Gitter');
         $this->logger->pushHandler(new StreamHandler('php://stdout'));
 
@@ -71,7 +85,19 @@ class Client
         $this->loop         = EventLoop::create();
         $this->dnsResolver  = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
         $this->client       = (new HttpClient())->create($this->loop, $this->dnsResolver);
-        $this->urlStorage   = new UrlStorage($token);
+        $this->urlStorage   = (new UrlStorage($token));
+
+        $this->auth         = new UserObject(
+            $this->request('user.current')[0]
+        );
+    }
+
+    /**
+     * @return UserObject
+     */
+    public function getAuthUser(): UserObject
+    {
+        return $this->auth;
     }
 
     /**
@@ -84,6 +110,14 @@ class Client
             'Accept'        => 'application/json',
             'Authorization' => 'Bearer ' . $this->token
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoomId(): string
+    {
+        return $this->room;
     }
 
     /**
@@ -138,7 +172,7 @@ class Client
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function request($route, array $args, $content = null, $method = 'GET')
+    public function request($route, array $args = [], $content = null, $method = 'GET')
     {
         return (new Request($this, $route, $args, $method))
             ->sendParseJson($content);

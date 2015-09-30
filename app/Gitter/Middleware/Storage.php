@@ -90,6 +90,7 @@ class Storage
     {
         foreach ($this->storage as $middleware) {
             $response = $middleware->handle($data);
+
             if ($response === static::SIGNAL_STOP) {
                 return $this;
             }

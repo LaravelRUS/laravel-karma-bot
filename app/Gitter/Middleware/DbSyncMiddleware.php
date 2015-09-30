@@ -40,15 +40,21 @@ class DbSyncMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param $data
+     * @param MessageObject $message
      * @return mixed
      */
-    public function handle($data)
+    public function handle($message)
     {
-        if ($data instanceof MessageObject) {
-            return $this->applyUsers($data);
+        if ($message instanceof MessageObject) {
+            $message = $this->applyUsers($message);
+
+            // Ignore self messages
+            if ($message->user->gitter_id === $this->client->getAuthUser()->gitter_id) {
+                return null;
+            }
         }
-        return $data;
+
+        return $message;
     }
 
     /**
@@ -69,12 +75,19 @@ class DbSyncMiddleware implements MiddlewareInterface
      */
     protected function fromMentions(MessageObject $message)
     {
+        $ids = [];
+
         $mentions = [];
 
         foreach ($message->mentions as $mention) {
+
             if (array_key_exists('userId', $mention)) {
                 $user = User::where('gitter_id', $mention['userId'])->first();
-                $mentions[] = $user;
+
+                if (!in_array($user->gitter_id, $ids)) {
+                    $ids[] = $user->gitter_id;
+                    $mentions[] = $user;
+                }
             }
         }
 

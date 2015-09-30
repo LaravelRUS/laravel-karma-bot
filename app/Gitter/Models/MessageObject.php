@@ -12,6 +12,7 @@
 
 namespace App\Gitter\Models;
 
+use App\Gitter\Client;
 use Carbon\Carbon;
 use App\Gitter\Support\AttributeMapper;
 
@@ -56,6 +57,5 @@ class MessageObject extends Model
 
             ->only($fields)
             ->toArray();
-
     }
 }

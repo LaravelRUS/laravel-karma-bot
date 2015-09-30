@@ -13,21 +13,21 @@
 namespace App\Console\Commands;
 
 
-use App\Gitter\Console\CircleProgress;
-use App\Gitter\Middleware\DbSyncMiddleware;
-use App\Gitter\Middleware\LoggerMiddleware;
-use App\Gitter\Middleware\Storage;
 use App\User;
-use App\Gitter\Client;
-use App\Gitter\Application;
 use Carbon\Carbon;
-use GuzzleHttp\Exception\ClientException;
+use App\Gitter\Client;
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use App\Gitter\Models\UserObject;
+use App\Gitter\Middleware\Storage;
 use App\Gitter\Models\MessageObject;
+use App\Gitter\Console\CircleProgress;
+use GuzzleHttp\Exception\ClientException;
+use App\Gitter\Middleware\DbSyncMiddleware;
+use App\Gitter\Middleware\LoggerMiddleware;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Str;
+use App\Gitter\Middleware\KarmaCounterMiddleware;
 
 
 /**
@@ -74,15 +74,18 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container)
     {
-        $room = $this->argument('room');
+        // Input arguments
+        $room  = $this->argument('room');
         $token = $config->get('gitter.token');
+
 
         // Bind client
         $this->container = $container;
-        $container->singleton(Client::class, function () use ($token) {
-            return new Client($token);
+        $container->singleton(Client::class, function () use ($token, $room) {
+            return new Client($token, $room);
         });
 
+        // Start
         $this->listenRoom($container->make(Client::class), $room);
     }
 
@@ -97,41 +100,62 @@ class StartGitterBot extends Command
     {
         $this->prepare($client, $room);
 
+
         $storage = new Storage($this->container, $this->output);
         $storage->add(LoggerMiddleware::class, Storage::PRIORITY_MAXIMAL);
         $storage->add(DbSyncMiddleware::class, Storage::PRIORITY_MAXIMAL);
 
+        $storage->add(KarmaCounterMiddleware::class);
+
 
         $client
             ->stream('messages', ['roomId' => $room])
-            ->subscribe(function ($data) use ($storage) {
-                $message = new MessageObject($data);
-                $storage->handle($message);
+            ->subscribe(function ($data) use ($client, $storage, $room) {
+                try {
+                    $message = new MessageObject($data);
+                    $storage->handle($message);
+
+                } catch (\Exception $e) {
+                    $client->getAuthUser()->pre(
+                        $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine()
+                    );
+                }
             });
 
-        $started = Carbon::now();
-        $this->output->newLine(2);
-        $this->warn(' [Client started at ' . Carbon::now()->toDayDateTimeString() . ']');
 
-        $client->getEventLoop()->addPeriodicTimer(1, function() use ($started) {
-            $mBytes  = number_format(memory_get_usage(true) / 1000 / 1000, 2);
-            $uptime    = Carbon::now()->diff($started);
-
-            $message = "\r" . sprintf(
-                ' <comment>[%02d:%02d:%02d]:</comment> %smb used         ',
-                $uptime->h,
-                $uptime->i,
-                $uptime->s,
-                $mBytes
-            );
-
-            $this->output->write($message);
-        });
-
+        $this->showUptime($client);
 
 
         $client->run();
     }
+
+    /**
+     * @param Client $client
+     */
+    protected function showUptime(Client $client)
+    {
+        $started = Carbon::now();
+
+        $this->output->newLine(2);
+        $this->warn(' [Client started at ' . Carbon::now()->toDayDateTimeString() . ']');
+
+
+        $client->getEventLoop()->addPeriodicTimer(1, function () use ($started) {
+            $mBytes = number_format(memory_get_usage(true) / 1000 / 1000, 2);
+            $uptime = Carbon::now()->diff($started);
+
+            $message = "\r" . sprintf(
+                    ' <comment>[%02d:%02d:%02d]:</comment> %smb used         ',
+                    $uptime->h,
+                    $uptime->i,
+                    $uptime->s,
+                    $mBytes
+                );
+
+            $this->output->write($message);
+        });
+    }
+
 
     /**
      * @param Client $client
