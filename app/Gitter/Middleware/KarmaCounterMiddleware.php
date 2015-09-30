@@ -76,12 +76,7 @@ class KarmaCounterMiddleware implements MiddlewareInterface
         // Achieve test @TODO
         foreach ($message->mentions as $user) {
             if ($user->karma == 10) {
-                $message->answer(new Achieve([
-                    'title'       => 'Десяточка',
-                    'description' => 'Получить 10 кармы',
-                    'image'       => 'http://docs.rudev.org/stream/a265faa4be6dbd24f957db97b89c4e51',
-                    'user'        => $user,
-                ]));
+                $user->achieve('Десяточка', 'Получить 10 кармы', 'http://docs.rudev.org/stream/a265faa4be6dbd24f957db97b89c4e51');
             }
         }
 

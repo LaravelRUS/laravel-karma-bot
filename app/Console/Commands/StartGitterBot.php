@@ -246,7 +246,7 @@ class StartGitterBot extends Command
         $this->output->write("\r");
         $this->output->writeln(sprintf(' <comment>Sync users:</comment> <info>[OK]</info>%80s', ''));
     }
-    
+
 
     /**
      * @return void

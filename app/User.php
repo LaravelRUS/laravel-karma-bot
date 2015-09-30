@@ -1,6 +1,8 @@
 <?php
 namespace App;
 use App\Gitter\Client;
+use App\Gitter\Models\Achieve;
+use App\Gitter\Models\Room;
 use App\Gitter\Models\UserObject;
 
 /**
@@ -54,5 +56,22 @@ class User extends \Eloquent
     {
         return ($this->karma > 0 ? '+' : '') .
             $this->karma;
+    }
+
+    /**
+     * @param $title
+     * @param $description
+     * @param $icon
+     */
+    public function achieve($title, $description, $icon)
+    {
+        $room = \App::make(Room::class);
+
+        $room->answer(new Achieve([
+            'title'       => $title,
+            'description' => $description,
+            'image'       => $icon,
+            'user'        => $this,
+        ]));
     }
 }
