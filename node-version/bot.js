@@ -1,11 +1,11 @@
-var Gitter = require('node-gitter'),
-    redis  = require("redis"),
-    client = redis.createClient(),
-    shell  = require('shelljs'),
-    endsWithAny = require('ends-with-any'),
+var Gitter        = require('node-gitter'),
+    redis         = require("redis"),
+    client        = redis.createClient(),
+    shell         = require('shelljs'),
+    endsWithAny   = require('ends-with-any'),
     startsWithAny = require('starts-with-any'),
-    config = require('config'),
-    gitter = new Gitter(config.get("token"));
+    config        = require('config'),
+    gitter        = new Gitter(config.get("token"));
 
 
 client.on("error", function (err) {
@@ -26,11 +26,9 @@ class Message {
     isThanks() {
         var text = this.model.text;
 
-        text = text.replace(/@([0-9a-zA-Z\- \/_?:.,\s]+) /g, function () {
-            return "";
-        }).trim().toLocaleLowerCase().replace(
+        text = text.replace(/@([0-9a-zA-Z\- \/_?:.,\s]+) /g, "").toLocaleLowerCase().replace(
             /[.,-\/#!$%\^&\*;:{}=\-_`~()]/g, ""
-        );
+        ).trim();
 
         return startsWithAny(text, config.get("thanksText")) || endsWithAny(text, config.get("thanksText"));
     }
@@ -40,7 +38,17 @@ class Message {
     }
 
     isKarma() {
-        return this.model.text.toLowerCase() === "карма";
+        return this.model.text.toLowerCase() === config.get("karmaText");
+    }
+
+    isGoogle() {
+        var text = this.model.text;
+
+        text = text.replace(/@([0-9a-zA-Z\- \/_?:.,\s]+) /g, "").toLocaleLowerCase().replace(
+            /[.,-\/#!$%\^&\*;:{}=\-_`~()]/g, ""
+        ).trim();
+
+        return startsWithAny(text, config.get("googleText"));
     }
 
     isSql() {
@@ -79,6 +87,10 @@ gitter.rooms.find(config.get("roomId")).then(function (room) {
                 App.processKarma(messageObj.model, room);
                 return true;
             }
+            if (messageObj.isGoogle()) {
+                App.processGoogle(messageObj, room);
+                return true;
+            }
             if (messageObj.isSql()) {
                 App.processSql(messageObj.model, room);
                 return true;
@@ -90,9 +102,18 @@ gitter.rooms.find(config.get("roomId")).then(function (room) {
 
 var App = (function () {
     var processThanks = function (message, room) {
-        var mentionedUsers = message.mentions;
+        var mentionedUsers       = message.mentions,
+            mentionedUsersIds    = [],
+            uniqueMentionedUsers = [];
 
-        mentionedUsers.forEach(function (user) {
+        mentionedUsers.forEach(function(user) {
+            if (mentionedUsersIds.indexOf(user.userId) < 0) {
+                uniqueMentionedUsers.push(user);
+                mentionedUsersIds.push(user.userId);
+            }
+        });
+
+        uniqueMentionedUsers.forEach(function (user) {
             if (message.fromUser.id == user.userId) {
                 room.send(MessagesBag.errorYourSelfThanks(message));
                 return false;
@@ -157,16 +178,25 @@ var App = (function () {
     };
 
     var processSql = function (message, room) {
-        var text = message.text.trim().replace(/"/g, "'").replace(/\\/g, '').replace(/`/g, "");
+        var text = message.text.trim().replace(/"/g, "'").replace(/\\/g, '').replace(/`/g, "").replace(/(\r\n|\n|\r)/gm, " ");
         var result = shell.exec("php artisan sql:build \"" + text + "\"", {silent: true}).output;
 
         room.send("```\n" + result + "\n```");
     };
 
+    var processGoogle = function(message, room) {
+        var googleText = config.get("googleText").join("|"),
+            googleRegular = new RegExp(googleText, "g"),
+            text = message.model.text.replace(/@([0-9a-zA-Z\- \/_?:.,\s]+) /g, "").replace(googleRegular, "").replace(/"/g, "'").replace(/\\/g, '').replace(/`/g, "").replace(/(\r\n|\n|\r)/gm, " ").trim();
+
+        room.send(MessagesBag.googleText(text, message.model.mentions));
+    };
+
     return {
         processThanks: processThanks,
         processKarma: processKarma,
-        processSql: processSql
+        processSql: processSql,
+        processGoogle: processGoogle
     }
 })();
 
@@ -204,6 +234,16 @@ var MessagesBag = (function () {
         return "@" + message.fromUser.username + " *Вас ещё никто не благодарил*";
     };
 
+    var googleText = function(text, mentions) {
+        var mentionsText = "";
+
+        mentions.forEach(function(user) {
+            mentionsText += "@" + user.screenName;
+        });
+
+        return mentionsText + " Погуглил за тебя: [ссылочка](http://lmgtfy.com/?q=" + encodeURIComponent(text) + ")";
+    };
+
     return {
         toWhomThanks: toWhomThanks,
         errorYourSelfThanks: errorYourSelfThanks,
@@ -212,6 +252,7 @@ var MessagesBag = (function () {
         successThanks: successThanks,
         userNotExists: userNotExists,
         karmaMessage: karmaMessage,
-        noKarma: noKarma
+        noKarma: noKarma,
+        googleText: googleText
     }
 })();
