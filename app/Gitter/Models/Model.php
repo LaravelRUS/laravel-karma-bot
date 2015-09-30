@@ -171,7 +171,7 @@ abstract class Model implements Arrayable
         $client = \App::make(Client::class);
 
         $client->request('message.send', ['roomId' => $client->getRoomId()], [
-            'text' => $text
+            'text' => (string)$text
         ], 'POST');
 
 

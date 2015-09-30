@@ -80,7 +80,6 @@ class DbSyncMiddleware implements MiddlewareInterface
         $mentions = [];
 
         foreach ($message->mentions as $mention) {
-
             if (array_key_exists('userId', $mention)) {
                 $user = User::where('gitter_id', $mention['userId'])->first();
 

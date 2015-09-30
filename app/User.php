@@ -1,5 +1,6 @@
 <?php
 namespace App;
+use App\Gitter\Client;
 use App\Gitter\Models\UserObject;
 
 /**
@@ -36,5 +37,22 @@ class User extends \Eloquent
             $user = static::create($userObject->toArray());
         }
         return $user;
+    }
+
+    /**
+     *
+     */
+    protected static function boot()
+    {
+        parent::boot();
+    }
+
+    /**
+     * @return string
+     */
+    public function getKarmaTextAttribute()
+    {
+        return ($this->karma > 0 ? '+' : '') .
+            $this->karma;
     }
 }
