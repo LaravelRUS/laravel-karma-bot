@@ -135,4 +135,12 @@ class AttributeMapper implements Arrayable
     {
         return $this->attributes;
     }
+
+    /**
+     * @return object
+     */
+    public function toObject()
+    {
+        return (object)$this->toArray();
+    }
 }

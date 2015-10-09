@@ -17,6 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\StartGitterBot::class,
+        \App\Console\Commands\SyncGitterUsers::class,
+        \App\Console\Commands\SyncGitterMessages::class,
     ];
 
     /**

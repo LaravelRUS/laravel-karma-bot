@@ -12,12 +12,11 @@
 
 namespace App\Gitter;
 
-use App\Gitter\Http\Request;
 use App\Gitter\Http\Stream;
+use App\Gitter\Http\Request;
+use App\User;
+use InvalidArgumentException;
 use App\Gitter\Http\UrlStorage;
-use App\Gitter\Models\UserObject;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use React\EventLoop\Factory as EventLoop;
 use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Factory as HttpClient;
@@ -29,6 +28,8 @@ use React\Dns\Resolver\Factory as DnsResolver;
  */
 class Client
 {
+    const VERSION = '0.1b';
+
     /**
      * @var string
      */
@@ -55,49 +56,51 @@ class Client
     protected $urlStorage;
 
     /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * @var string
      */
     protected $room;
 
-    /**
-     * @var UserObject
-     */
-    protected $auth;
+
+    protected $user;
 
     /**
      * Client constructor.
      * @param string $token
-     * @param string $room
+     * @throws InvalidArgumentException
      */
-    public function __construct($token, $room)
+    public function __construct($token)
     {
-        $this->room         = $room;
-
-        $this->logger       = new Logger('Gitter');
-        $this->logger->pushHandler(new StreamHandler('php://stdout'));
-
         $this->token        = $token;
         $this->loop         = EventLoop::create();
         $this->dnsResolver  = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
         $this->client       = (new HttpClient())->create($this->loop, $this->dnsResolver);
         $this->urlStorage   = (new UrlStorage($token));
 
-        $this->auth         = new UserObject(
-            $this->request('user.current')[0]
-        );
+
+        $this->authAs(null);
     }
 
     /**
-     * @return UserObject
+     * @param null|string $gitterUserId
+     * @return $this
+     * @throws InvalidArgumentException
      */
-    public function getAuthUser(): UserObject
+    public function authAs($gitterUserId = null)
     {
-        return $this->auth;
+        $auth       = $this->request('user', ['userId' => $gitterUserId])[0];
+        $this->user = User::fromGitterObject($auth);
+
+        \Auth::loginUsingId($this->user->id);
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getAuthUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -110,14 +113,6 @@ class Client
             'Accept'        => 'application/json',
             'Authorization' => 'Bearer ' . $this->token
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getRoomId(): string
-    {
-        return $this->room;
     }
 
     /**
@@ -134,14 +129,6 @@ class Client
     public function getRouter(): UrlStorage
     {
         return $this->urlStorage;
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger(): Logger
-    {
-        return $this->logger;
     }
 
     /**

@@ -18,6 +18,7 @@ use Illuminate\Contracts\Support\Arrayable;
 /**
  * Class Model
  * @package App\Gitter\Models
+ * @deprecated
  */
 abstract class Model implements Arrayable
 {

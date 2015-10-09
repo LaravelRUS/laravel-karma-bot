@@ -14,6 +14,7 @@ namespace App\Gitter\Http;
 
 use App\Gitter\Client;
 use Carbon\Carbon;
+use Illuminate\Events\Dispatcher;
 use React\HttpClient\Response;
 use App\Gitter\Support\StreamBuffer;
 
@@ -23,6 +24,19 @@ use App\Gitter\Support\StreamBuffer;
  */
 class Stream
 {
+    // Message part (chunk)
+    const EVENT_CHUNK   = 'chunk';
+    // Full message string
+    const EVENT_DATA    = 'data';
+    // Parsed as json data
+    const EVENT_MESSAGE = 'message';
+    // Connection
+    const EVENT_CONNECT = 'connect';
+    // Errors
+    const EVENT_ERROR   = 'error';
+    // End
+    const EVENT_END     = 'end';
+
     /**
      * @var StreamBuffer
      */
@@ -49,6 +63,11 @@ class Stream
     protected $client;
 
     /**
+     * @var Dispatcher|null
+     */
+    protected $events = null;
+
+    /**
      * @param Client $client
      * @param $route
      * @param array $args
@@ -57,20 +76,47 @@ class Stream
      */
     public function __construct(Client $client, $route, array $args, $method = 'GET')
     {
-        $this->url      = $client->getRouter()->route($route, $args);
-        $this->method   = $method;
-        $this->headers  = $client->getHeaders();
-        $this->client   = $client;
-        $this->buffer   = new StreamBuffer();
-
+        $this->url = $client->getRouter()->route($route, $args);
+        $this->method = $method;
+        $this->headers = $client->getHeaders();
+        $this->client = $client;
+        $this->buffer = new StreamBuffer();
+        $this->events = new Dispatcher();
 
         $this->headers['Connection'] = 'Keep-Alive';
+
+        $this->buffer->subscribe(function ($message) {
+            $message = trim($message);
+
+            if ($message) {
+                $this->events->fire(static::EVENT_DATA, [$message]);
+
+                $data = json_decode(trim($message), true);
+
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $this->events->fire(static::EVENT_MESSAGE, [$this, $data]);
+                } else {
+                    $this->events->fire(static::EVENT_ERROR, [
+                        $this,
+                        new \LogicException(json_last_error_msg())
+                    ]);
+                }
+            }
+        });
 
         $this->connect();
     }
 
     /**
-     *
+     * @return \React\HttpClient\Request
+     */
+    public function reconnect()
+    {
+        return $this->connect();
+    }
+
+    /**
+     * @return \React\HttpClient\Request
      */
     public function connect()
     {
@@ -80,38 +126,49 @@ class Stream
 
         $request->on('response', function (Response $response) {
             $response->on('data', function ($data, Response $response) {
-                $this->buffer->add((string)$data);
+                $data = (string)$data;
+                $this->events->fire(static::EVENT_CHUNK, [$this, $data, $response]);
+                $this->buffer->add($data);
             });
         });
 
         $request->on('end', function () {
             $this->buffer->clear();
+            $this->events->fire(static::EVENT_END, [$this]);
         });
 
-        $request->on('error', function() {
-            $this->connect();
+        $request->on('error', function ($exception) {
+            $this->events->fire(static::EVENT_ERROR, [$this, $exception]);
         });
+
+        $this->events->fire(static::EVENT_CONNECT, [$this, $request]);
 
         $request->end();
+
+        return $request;
     }
 
     /**
+     * @param string|array $events
+     * @param $listener
+     * @param int $priority
+     * @return $this
+     */
+    public function on($events, $listener, $priority = 0)
+    {
+        $this->events->listen($events, $listener, $priority);
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
      * @param callable $callback
      * @return Stream
      */
     public function subscribe(callable $callback): Stream
     {
-        $this->buffer->subscribe(function ($message) use ($callback) {
-            $message = trim($message);
-            if ($message) {
-                $data = json_decode(trim($message), true);
-
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    $callback($data);
-                }
-            }
-        });
-
+        $this->on(static::EVENT_MESSAGE, $callback);
         return $this;
     }
 }

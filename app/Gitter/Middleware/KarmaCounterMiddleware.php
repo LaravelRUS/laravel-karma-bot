@@ -7,6 +7,7 @@ use App\User;
 use Carbon\Carbon;
 use App\Gitter\Client;
 use App\Gitter\Models\MessageObject;
+use App\Gitter\Support\KarmaValidator;
 
 /**
  * @TODO Refactor me
@@ -22,12 +23,19 @@ class KarmaCounterMiddleware implements MiddlewareInterface
     protected $client;
 
     /**
+     * @var KarmaValidator
+     */
+    protected $validator;
+
+    /**
      * KarmaCounterMiddleware constructor.
      * @param Client $client
      */
     public function __construct(Client $client)
     {
         $this->client = $client;
+
+        $this->validator = new KarmaValidator();
     }
 
     /**
@@ -56,6 +64,17 @@ class KarmaCounterMiddleware implements MiddlewareInterface
             return $this->addKarma($user);
         });
 
+
+        if (trim(mb_strtolower($message->text)) === 'карма') {
+            $user = $message->user;
+
+            $text = $user->karma > 0
+                ? '@' . $user->login . ', ваша карма: ' . $user->karma_text
+                : '@' . $user->login . ', Вас ещё никто не благодарил';
+
+            $message->italic($text);
+        }
+
 //
 // Temporary remove
 //
@@ -74,11 +93,11 @@ class KarmaCounterMiddleware implements MiddlewareInterface
 
 
         // Achieve test @TODO
-        foreach ($message->mentions as $user) {
-            if ($user->karma == 10) {
-                $user->achieve('Десяточка', 'Получить 10 кармы', 'http://docs.rudev.org/stream/a265faa4be6dbd24f957db97b89c4e51');
-            }
-        }
+        //foreach ($message->mentions as $user) {
+        //    if ($user->karma == 10) {
+        //        $user->achieve('Десяточка', 'Получить 10 кармы', 'http://docs.rudev.org/stream/a265faa4be6dbd24f957db97b89c4e51');
+        //    }
+        //}
 
         return $message;
     }

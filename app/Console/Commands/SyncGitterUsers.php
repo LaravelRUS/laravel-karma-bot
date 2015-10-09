@@ -13,25 +13,27 @@
 namespace App\Console\Commands;
 
 
+use App\Gitter\Console\CircleProgress;
 use App\Room;
 use App\Gitter\Client;
+use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 
 
 /**
- * Class StartGitterBot
+ * Class SyncGitterUsers
  * @package App\Console\Commands
  */
-class StartGitterBot extends Command
+class SyncGitterUsers extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'gitter:listen {room}';
+    protected $signature = 'gitter:users {room}';
 
 
     /**
@@ -39,7 +41,7 @@ class StartGitterBot extends Command
      *
      * @var string
      */
-    protected $description = 'Start gitter bot thread for target room.';
+    protected $description = 'Fill users table from users of target room.';
 
 
     /**
@@ -72,7 +74,20 @@ class StartGitterBot extends Command
         $room   = new Room($client, $room);
         $container->bind(Room::class, $room);
 
-        $stream = $room->listen();
-        $client->run();
+
+        $users      = $client->request('room.users', ['roomId' => $room]);
+        $process    = new CircleProgress();
+
+        $message    = "\r%s<comment>[%s/%s]</comment> %s%80s";
+
+        $count      = count($users);
+        $current    = 1;
+        foreach ($users as $user) {
+            $user = User::fromGitterObject($user);
+            $this->output->write(sprintf($message, $process->get(), $current, $count, $user->login, ''));
+            $current++;
+        }
+
+        $this->output->write(sprintf($message, ' ', $count, $count, 'OK', ''));
     }
 }
