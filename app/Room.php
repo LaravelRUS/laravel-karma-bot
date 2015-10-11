@@ -126,7 +126,15 @@ class Room
      */
     public function onMessage(Message $message)
     {
-        $this->middlewares->handle($message);
+        try {
+            $this->middlewares->handle($message);
+        } catch (\Exception $e) {
+            \Log::error(
+                $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . "\n" .
+                $e->getTraceAsString() . "\n" .
+                str_repeat('=', 80) . "\n"
+            );
+        }
     }
 
     /**
