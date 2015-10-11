@@ -143,7 +143,9 @@ class SyncGitterMessages extends Command
         }
 
         if ($status->isIncrement() || $status->isDecrement()) {
-            $this->output->writeln(sprintf('<comment>[%s]</comment> %s%80s', $count, trim($message->text), ''));
+            $msg = mb_substr(str_replace(["\r", "\n"], '', trim($message->text)), 0, 100);
+
+            $this->output->write(sprintf("\r" . '<comment>[%s]</comment> %s%80s', $count, $msg, ''));
         }
     }
 }
