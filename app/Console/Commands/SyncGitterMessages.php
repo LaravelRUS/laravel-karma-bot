@@ -70,6 +70,7 @@ class SyncGitterMessages extends Command
      */
     public function handle(Repository $config, Container $container)
     {
+        $config->set('gitter.output', false);
         $this->warn('Be sure what users was be synced first!');
 
         $client      = Client::make($config->get('gitter.token'), $this->argument('room'));

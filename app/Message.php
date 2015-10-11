@@ -87,12 +87,14 @@ class Message extends Model
      */
     public function answer($text)
     {
-        $client = \App::make(Client::class);
-        $room   = \App::make(Room::class);
+        if (\Config::get('gitter.output')) {
+            $client = \App::make(Client::class);
+            $room   = \App::make(Room::class);
 
-        $client->request('message.send', ['roomId' => $room->id], [
-            'text' => (string)$text,
-        ], 'POST');
+            $client->request('message.send', ['roomId' => $room->id], [
+                'text' => (string)$text,
+            ], 'POST');
+        }
 
         return $this;
     }

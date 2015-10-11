@@ -4,6 +4,8 @@ use App\Gitter\Middleware\Storage;
 return [
     'token'       => env('GITTER_TOKEN', null),
 
+    'output'      => true,
+
     'rooms'       => [
         'debug' => '5617cdcad33f749381a8d5e5', // Debug
         'chat'  => '52f9b90e5e986b0712ef6b9d', // Laravel Chat

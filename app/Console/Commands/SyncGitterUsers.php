@@ -43,7 +43,6 @@ class SyncGitterUsers extends Command
      */
     protected $description = 'Fill users table from users of target room.';
 
-
     /**
      * @var Container
      */
@@ -64,6 +63,8 @@ class SyncGitterUsers extends Command
      */
     public function handle(Repository $config, Container $container)
     {
+        $config->set('gitter.output', false);
+
         $client     = Client::make($config->get('gitter.token'), $this->argument('room'));
         $room       = $container->make(Room::class);
 

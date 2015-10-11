@@ -161,11 +161,13 @@ class Room
      */
     public function write($text)
     {
-        $client = \App::make(Client::class);
+        if (\Config::get('gitter.output')) {
+            $client = \App::make(Client::class);
 
-        $client->request('message.send', ['roomId' => $this->id], [
-            'text' => (string)$text,
-        ], 'POST');
+            $client->request('message.send', ['roomId' => $this->id], [
+                'text' => (string)$text,
+            ], 'POST');
+        }
 
         return $this;
     }
