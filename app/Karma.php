@@ -80,4 +80,13 @@ class Karma extends \Eloquent
     {
         return $this->belongsTo(User::class, 'user_target_id', 'id');
     }
+
+    /**
+     * @param $time
+     * @return Carbon
+     */
+    public function getCreatedAtAttribute($time)
+    {
+        return new Carbon($time);
+    }
 }

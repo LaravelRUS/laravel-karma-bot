@@ -96,15 +96,17 @@ class User extends \Eloquent implements
     }
 
     /**
-     * @return mixed
+     * @return Carbon
      */
     public function getLastKarmaTimeAttribute()
     {
-        return Karma::query()
+        $result = Karma::query()
             ->where('user_target_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->take(1)
             ->first();
+
+        return $result->created_at ?: Carbon::createFromTimestamp(0);
     }
 
     /**

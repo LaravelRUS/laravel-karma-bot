@@ -82,4 +82,13 @@ class Achieve extends \Eloquent
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    /**
+     * @param $time
+     * @return Carbon
+     */
+    public function getCreatedAtAttribute($time)
+    {
+        return new Carbon($time);
+    }
 }

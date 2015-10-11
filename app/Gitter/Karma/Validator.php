@@ -127,7 +127,7 @@ class Validator
     protected function validateTimeout(Message $message)
     {
         foreach ($message->mentions as $user) {
-            if ($user->last_karma_time->timestamp + 60 <= Carbon::now()->timestamp) {
+            if ($user->last_karma_time->timestamp + 60 > Carbon::now()->timestamp) {
                 return false;
             }
         }

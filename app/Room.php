@@ -126,15 +126,7 @@ class Room
      */
     public function onMessage(Message $message)
     {
-        try {
-            $this->middlewares->handle($message);
-
-        } catch (\Exception $e) {
-            $message->pre(
-                'Error =( ' . "\n" .
-                $e->getMessage()
-            );
-        }
+        $this->middlewares->handle($message);
     }
 
     /**
