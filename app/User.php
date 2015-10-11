@@ -104,7 +104,7 @@ class User extends \Eloquent implements
             ->where('user_target_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->take(1)
-            ->get();
+            ->first();
     }
 
     /**
