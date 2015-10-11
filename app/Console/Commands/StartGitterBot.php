@@ -98,7 +98,7 @@ class StartGitterBot extends Command
      */
     protected function makePidFile()
     {
-        $this->pid = storage_path(date('Y_m_d_tis') . '.pid');
+        $this->pid = storage_path('pids/' . date('Y_m_d_tis_') . microtime(1) . '.pid');
         file_put_contents($this->pid, getmypid());
     }
 

@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        \App\Console\Commands\StartGitterPool::class,
+
         \App\Console\Commands\StartGitterBot::class,
         \App\Console\Commands\SyncGitterUsers::class,
         \App\Console\Commands\SyncGitterMessages::class,
