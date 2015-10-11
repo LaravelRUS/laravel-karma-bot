@@ -15,6 +15,7 @@ namespace App\Console\Commands;
 
 use App\Room;
 use App\Gitter\Client;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
@@ -62,9 +63,24 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container)
     {
-        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $started = Carbon::now();
+        $client  = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $stream  = $container->make(Room::class)->listen();
 
-        $stream = $container->make(Room::class)->listen();
+        $this->line(sprintf(' Gitter Bot %s started at %s', Client::VERSION, $started->toDateTimeString()));
+
+        $client->getEventLoop()->addPeriodicTimer(1, function() use ($started) {
+            $memory = number_format(memory_get_usage(true) / 1000 / 1000, 2);
+            $uptime = Carbon::now()->diff($started);
+
+            $this->output->write("\r" . sprintf(
+                '[memory: %smb] [uptime: %s]%60s',
+                $memory,
+                $uptime->format('%Y.%M.%D %H:%I:%S'),
+                ''
+            ));
+        });
+
         $client->run();
     }
 }
