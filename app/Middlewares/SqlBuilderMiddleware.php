@@ -1,10 +1,9 @@
 <?php
-namespace App\Gitter\Middleware;
+namespace App\Middlewares;
 
 use App\Message;
-use App\Gitter\Client;
-use App\Gitter\Karma\Validator;
 use BigShark\SQLToBuilder\BuilderClass;
+use App\Gitter\Middleware\MiddlewareInterface;
 
 /**
  * Class SqlBuilderMiddleware

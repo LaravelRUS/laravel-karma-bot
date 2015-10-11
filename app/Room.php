@@ -12,8 +12,9 @@ namespace App;
 
 use App\Gitter\Client;
 use App\Gitter\Http\Stream;
-use App\Gitter\Middleware\Storage;
 use InvalidArgumentException;
+use App\Gitter\Middleware\Storage as Middlewares;
+use App\Gitter\Subscriber\Storage as Subscribers;
 
 /**
  * Class Room
@@ -50,9 +51,9 @@ class Room
     public $id;
 
     /**
-     * @var Storage
+     * @var Middlewares
      */
-    protected $storage;
+    protected $middlewares;
 
     /**
      * Room constructor.
@@ -60,38 +61,34 @@ class Room
      */
     public function __construct($roomId)
     {
-        $this->client = \App::make(Client::class);
-        $this->id = static::getId($roomId);
-        $this->storage = $this->createMiddlewaresStorage();
+        $this->client       = \App::make(Client::class);
+        $this->id           = static::getId($roomId);
+        $this->middlewares  = $this->createMiddlewaresStorage();
 
-        $this->createAchievementsStorage();
+        $this->createSubscribersStorage();
     }
 
     /**
-     * @TODO Нужно переместить в отдельную категорию "подписчиков"
-     * Create achieve
+     * Create subscribers storage
+     * @return Subscribers
      */
-    protected function createAchievementsStorage()
+    protected function createSubscribersStorage()
     {
-        $achievements = \Config::get('gitter.achievements');
+        $container = \App::make('app');
+        $subscribers = \Config::get('gitter.subscribers');
 
-        // Init achievements
-        foreach ($achievements as $achieve) {
-            (new $achieve)->handle();
+
+        $storage    = new Subscribers($container);
+        foreach ($subscribers as $subscriber) {
+            $storage->add($subscriber);
         }
 
-        Achieve::created(function (Achieve $achieve) {
-            $this->write(
-                '> #### ' . $achieve->title . "\n" .
-                '> *Поздравляем тебя @' . $achieve->user->login . '! ' .
-                    $achieve->description . '*' . "\n" .
-                '> ![' . $achieve->title . '](' . $achieve->image . ')'
-            );
-        });
+        return $storage;
     }
 
     /**
      * Create middlewares storage
+     * @return Middlewares
      */
     protected function createMiddlewaresStorage()
     {
@@ -99,7 +96,7 @@ class Room
         $middlewares = \Config::get('gitter.middlewares');
 
 
-        $storage = new Storage($container);
+        $storage = new Middlewares($container);
         foreach ($middlewares as $middleware => $priority) {
             $storage->add($middleware, $priority);
         }
@@ -130,7 +127,7 @@ class Room
     public function onMessage(Message $message)
     {
         try {
-            $this->storage->handle($message);
+            $this->middlewares->handle($message);
 
         } catch (\Exception $e) {
             $message->pre(

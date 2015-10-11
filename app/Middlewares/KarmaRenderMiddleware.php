@@ -1,9 +1,8 @@
 <?php
-namespace App\Gitter\Middleware;
+namespace App\Middlewares;
 
 use App\Message;
-use App\Gitter\Client;
-use App\Gitter\Karma\Validator;
+use App\Gitter\Middleware\MiddlewareInterface;
 
 /**
  * Проверяет слово "карма" и выводит статус

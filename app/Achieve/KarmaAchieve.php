@@ -18,6 +18,9 @@ use App\Karma;
  */
 class KarmaAchieve extends AbstractAchieve
 {
+    /**
+     * @throws \LogicException
+     */
     public function handle()
     {
         Karma::created(function (Karma $karma) {

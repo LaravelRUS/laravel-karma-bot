@@ -1,7 +1,8 @@
 <?php
-namespace App\Gitter\Middleware;
+namespace App\Middlewares;
 
 use App\Message;
+use App\Gitter\Middleware\MiddlewareInterface;
 
 /**
  * Class GoogleSearchMiddleware

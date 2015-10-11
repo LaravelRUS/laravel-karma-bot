@@ -17,22 +17,28 @@ return [
     // Middlewares
     'middlewares' => [
         // Подсчёт "спасибок"
-        App\Gitter\Middleware\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
+        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
 
         // Вывод кармы по запросу
-        App\Gitter\Middleware\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
+        App\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
 
         // SQL билдер
-        App\Gitter\Middleware\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
+        App\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
 
         // Google поисковик
-        App\Gitter\Middleware\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
+        App\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
+    ],
+
+
+    // Subscribers
+    'subscribers' => [
+        // Подписывается на создание ачивки и отправляет сообщеньку в чат
+        App\Subscribers\AchieveSubscriber::class,
     ],
 
 
     // Achievements
     'achievements' => [
-
         App\Achieve\KarmaAchieve::class
     ]
 ];
