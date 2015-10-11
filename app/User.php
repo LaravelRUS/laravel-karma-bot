@@ -106,7 +106,11 @@ class User extends \Eloquent implements
             ->take(1)
             ->first();
 
-        return $result->created_at ?: Carbon::createFromTimestamp(0);
+        if ($result) {
+            return $result->created_at;
+        }
+
+        return Carbon::createFromTimestamp(0);
     }
 
     /**
