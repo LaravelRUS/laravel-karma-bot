@@ -21,7 +21,8 @@ class KarmaRenderMiddleware implements MiddlewareInterface
         if (trim(mb_strtolower($message->text)) === 'карма') {
             $args = [
                 'user' => $message->user->login,
-                'karma' => $message->user->karma
+                'karma' => $message->user->karma_text,
+                'thanks' => $message->user->thanks
             ];
 
             $karmaMessage = $args['karma']

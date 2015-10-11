@@ -7,7 +7,7 @@ return [
     'bot'       => '*шикос* :thumbsup:',
 
     'count'     => [
-        'message' => '@:user, Ваша карма **:karma**.',
+        'message' => '@:user, Ваша карма **:karma**. Вы благодарили **:thanks** раз.',
         'empty'   => '@:user, Вас ещё никто не благодарил.'
     ]
 ];
