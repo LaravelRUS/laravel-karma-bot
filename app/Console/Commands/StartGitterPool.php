@@ -11,14 +11,10 @@
 namespace App\Console\Commands;
 
 
-use App\Room;
-use App\Gitter\Client;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Symfony\Component\Finder\Finder;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 
 
 /**
@@ -94,10 +90,8 @@ class StartGitterPool extends Command
     protected function start()
     {
         foreach ($this->config->get('gitter.rooms') as $key => $id) {
-            system('php artisan gitter:users ' . $key);
-
-            $process = new Process('nohup php artisan gitter:listen ' . $key . ' &');
-            $process->run();
+            shell_exec('php artisan gitter:users ' . $key);
+            shell_exec('nohup php artisan gitter:listen ' . $key . ' > /dev/null 2>&1 &');
 
             $this->line('Starting ' . $key . ' => ' . $id . ' listener.');
         }
@@ -115,7 +109,7 @@ class StartGitterPool extends Command
 
         foreach ($finder as $file) {
             $pid = file_get_contents($file->getRealpath());
-            system('kill ' . $pid);
+            shell_exec('kill ' . $pid);
             unlink($file->getRealpath());
         }
     }
