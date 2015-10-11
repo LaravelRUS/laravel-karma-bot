@@ -15,6 +15,7 @@ use App\Achieve;
 use App\Gitter\Subscriber\SubscriberInterface;
 use App\Subscribers\Achievements\KarmaAchieve;
 use App\Subscribers\Achievements\Karma50Achieve;
+use App\Subscribers\Achievements\Karma100Achieve;
 
 /**
  * Class AchieveSubscriber
@@ -27,7 +28,8 @@ class AchieveSubscriber implements SubscriberInterface
      */
     protected $achievements = [
         KarmaAchieve::class,
-        Karma50Achieve::class
+        Karma50Achieve::class,
+        Karma100Achieve::class,
     ];
 
     /**
