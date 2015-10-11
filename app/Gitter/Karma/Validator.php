@@ -111,7 +111,13 @@ class Validator
      */
     protected function validateUser(Message $message)
     {
-        return \Auth::user()->login !== $message->user;
+        foreach ($message->mentions as $user) {
+            if ($message->user->login === $user->login) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -120,7 +126,12 @@ class Validator
      */
     protected function validateTimeout(Message $message)
     {
-        return $message->updated_at->timestamp + 60 <= Carbon::now()->timestamp;
+        foreach ($message->mentions as $user) {
+            if ($user->last_karma_time->timestamp + 60 <= Carbon::now()->timestamp) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

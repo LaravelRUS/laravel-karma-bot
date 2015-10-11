@@ -33,6 +33,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property-read string $karma_text
  * @property-read int $karma
  * @property-read int $thanks
+ * @property-read Carbon $last_karma_time
  *
  */
 class User extends \Eloquent implements
@@ -92,6 +93,18 @@ class User extends \Eloquent implements
             ->where('status', Karma::STATUS_INCREMENT)
             ->count();
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastKarmaTimeAttribute()
+    {
+        return Karma::query()
+            ->where('user_target_id', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->take(1)
+            ->get();
     }
 
     /**
