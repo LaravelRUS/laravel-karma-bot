@@ -1,5 +1,7 @@
 ## Gitter Bot based on Laravel 5.1
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LaravelRUS/GitterBot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### Запуск
 
 - Выполните `composer install`
