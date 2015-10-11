@@ -30,11 +30,6 @@ class Validator
     protected $dislikes = [];
 
     /**
-     * @var string
-     */
-    protected $pattern = '/@([0-9a-zA-Z_]+)\s+%s\b/iu';
-
-    /**
      * Validator constructor.
      */
     public function __construct()
@@ -95,7 +90,7 @@ class Validator
      */
     protected function validateMessage(Message $message, $validStatus, array $words = [])
     {
-        if ($this->validateText($message->text, $words)) {
+        if ($this->validateText($message, $words)) {
             if (!$this->validateUser($message)) {
                 return new Status(Status::STATUS_SELF);
             }
@@ -133,20 +128,32 @@ class Validator
      * @TODO Анализировать "спасибки" и вконце предложения тоже
      * @TODO Анализировать каждое предложение (разбить по точке и новой строке)
      *
-     * @param $text
+     * @param $message
      * @param array $words
      * @return bool
      */
-    protected function validateText($text, array $words = [])
+    protected function validateText(Message $message, array $words = [])
     {
         if (count($words)) {
-            $escaped = array_map(function ($word) {
-                return preg_quote($word);
-            }, $words);
 
-            $pattern = sprintf($this->pattern, implode('|', $escaped));
+            // Если "@Some спасибо"
+            $escaped = implode('|', array_map(function ($word) { return preg_quote($word); }, $words));
+            $pattern = sprintf('/@([0-9a-zA-Z_]+)\s+%s\b/iu', $escaped);
 
-            if (preg_match($pattern, $text)) {
+            if (preg_match($pattern, $message->text)) {
+                return true;
+            }
+
+            // Если "спасибо" в начале или конце предложения
+            $escapedText = $message->text;
+            $escapedText = mb_strtolower($escapedText);
+            $escapedText = preg_replace('/@([0-9a-zA-Z\- \/_?:.,\s]+) /isu', '', $escapedText);
+            $escapedText = preg_replace('/[.,-\/#!$%\^&\*;:{}=\-_`~()]/su', '', $escapedText);
+
+            $atStart     = preg_match(sprintf('/^%s/isu', $escaped), $escapedText);
+            $atEnd       = preg_match(sprintf('/%s$/isu', $escaped), $escapedText);
+
+            if ($atStart || $atEnd) {
                 return true;
             }
         }
