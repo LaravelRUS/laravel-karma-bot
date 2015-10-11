@@ -27,7 +27,7 @@ class Karma100Achieve extends AbstractAchieve
         Karma::created(function (Karma $karma) {
             $count = $karma->target->karma;
 
-            if ($count === 50) {
+            if ($count === 100) {
                 $this
                     ->forUser($karma->target)
                     ->create(
