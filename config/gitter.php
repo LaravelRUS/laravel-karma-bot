@@ -13,6 +13,8 @@ return [
         'jphp'  => '550177ff15522ed4b3dd296e', // Jphp
     ],
 
+
+    // Middlewares
     'middlewares' => [
         // Подсчёт "спасибок"
         App\Gitter\Middleware\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
@@ -26,4 +28,11 @@ return [
         // Google поисковик
         App\Gitter\Middleware\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
     ],
+
+
+    // Achievements
+    'achievements' => [
+
+        App\Achieve\KarmaAchieve::class
+    ]
 ];

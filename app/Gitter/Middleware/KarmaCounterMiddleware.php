@@ -40,7 +40,7 @@ class KarmaCounterMiddleware implements MiddlewareInterface
                 $message->italic($state->getTranslation($user, $user->karma));
 
                 if ($user->id === \Auth::user()->id) {
-                    $message->answer(\Lang::get('gitter.bot'));
+                    $message->answer(\Lang::get('karma.bot'));
                 }
             }
         }

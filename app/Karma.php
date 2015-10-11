@@ -59,7 +59,10 @@ class Karma extends \Eloquent
 
         static::creating(function (Karma $karma) {
             $karma->created_at = $karma->freshTimestamp();
+
+            \Event::fire('karma.add', ['karma' => $karma]);
         });
+
     }
 
     /**

@@ -35,6 +35,7 @@ class Room
         if (array_key_exists($alias, $rooms)) {
             return $rooms[$alias];
         }
+
         return $roomId;
     }
 
@@ -56,17 +57,54 @@ class Room
     /**
      * Room constructor.
      * @param string $roomId
-     *
      */
     public function __construct($roomId)
     {
         $this->client = \App::make(Client::class);
-        $this->id     = static::getId($roomId);
+        $this->id = static::getId($roomId);
+        $this->storage = $this->createMiddlewaresStorage();
 
-        $this->storage = new Storage(\App::make('app'));
-        foreach (\Config::get('gitter.middlewares') as $middleware => $priority) {
-            $this->storage->add($middleware, $priority);
+        $this->createAchievementsStorage();
+    }
+
+    /**
+     * @TODO Нужно переместить в отдельную категорию "подписчиков"
+     * Create achieve
+     */
+    protected function createAchievementsStorage()
+    {
+        $achievements = \Config::get('gitter.achievements');
+
+        // Init achievements
+        foreach ($achievements as $achieve) {
+            (new $achieve)->handle();
         }
+
+        Achieve::created(function (Achieve $achieve) {
+            $this->write(
+                '> #### ' . $achieve->title . "\n" .
+                '> *Поздравляем тебя @' . $achieve->user->login . '! ' .
+                    $achieve->description . '*' . "\n" .
+                '> ![' . $achieve->title . '](' . $achieve->image . ')'
+            );
+        });
+    }
+
+    /**
+     * Create middlewares storage
+     */
+    protected function createMiddlewaresStorage()
+    {
+        $container = \App::make('app');
+        $middlewares = \Config::get('gitter.middlewares');
+
+
+        $storage = new Storage($container);
+        foreach ($middlewares as $middleware => $priority) {
+            $storage->add($middleware, $priority);
+        }
+
+        return $storage;
     }
 
     /**
@@ -77,7 +115,7 @@ class Room
     {
         $client = $this->client
             ->stream('messages', ['roomId' => $this->id])
-            ->on(Stream::EVENT_MESSAGE, function($stream, $data) {
+            ->on(Stream::EVENT_MESSAGE, function ($stream, $data) {
                 $this->onMessage(Message::fromGitterObject($data));
             })
             ->on(Stream::EVENT_END, [$this, 'onClose'])
@@ -96,7 +134,7 @@ class Room
 
         } catch (\Exception $e) {
             $message->pre(
-                'Error =\'( ' . "\n" .
+                'Error =( ' . "\n" .
                 $e->getMessage()
             );
         }
@@ -120,8 +158,18 @@ class Room
         $stream->reconnect();
     }
 
+    /**
+     * @param $text
+     * @return $this
+     */
     public function write($text)
     {
+        $client = \App::make(Client::class);
 
+        $client->request('message.send', ['roomId' => $this->id], [
+            'text' => (string)$text,
+        ], 'POST');
+
+        return $this;
     }
 }
