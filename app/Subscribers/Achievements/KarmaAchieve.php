@@ -30,7 +30,11 @@ class KarmaAchieve extends AbstractAchieve
             if ($count === 10) {
                 $this
                     ->forUser($karma->target)
-                    ->create('Десяточка', 'Наберите 10 кармы', 'http://docs.rudev.org/stream/ae516df2ad56f8eb71c4d2c0233d951f');
+                    ->create(
+                        'Десяточка',
+                        'Наберите 10 кармы',
+                        'https://raw.githubusercontent.com/SerafimArts/GitterBot/php_version/resources/achieve/karma-10.gif'
+                    );
             }
         });
     }
