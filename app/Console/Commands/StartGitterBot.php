@@ -62,17 +62,9 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container)
     {
-        $room   = Room::getId($this->argument('room'));
-        $token  = $config->get('gitter.token');
+        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
 
-
-        $client = new Client($token);
-        $container->bind(Client::class, $client);
-
-        $room   = new Room($client, $room);
-        $container->bind(Room::class, $room);
-
-        $stream = $room->listen();
+        $stream = $container->make(Room::class)->listen();
         $client->run();
     }
 }

@@ -12,11 +12,12 @@
 
 namespace App\Console\Commands;
 
-
+use App\Karma;
 use App\User;
 use App\Room;
 use App\Message;
 use App\Gitter\Client;
+use InvalidArgumentException;
 use App\Gitter\Karma\Validator;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
@@ -71,21 +72,21 @@ class SyncGitterMessages extends Command
     {
         $this->warn('Be sure what users was be synced first!');
 
-        $room           = Room::getId($this->argument('room'));
+        $client      = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $room        = $container->make(Room::class);
 
-        $client         = new Client($config->get('gitter.token'));
-        $container->bind(Client::class, $client);
-
-        $room   = new Room($client, $room);
-        $container->bind(Room::class, $room);
-
-        $this->karma    = new Validator();
+        $this->karma = new Validator();
 
 
         $request = $this->cursor($client, $room);
         $count = 1;   // Start number
         $page = 0;   // Current page
         $chunk = 100; // Per page
+
+
+        Karma::query()
+            ->where('room_id', $room->id)
+            ->delete();
 
         while (true) {
             $messages = $request($chunk, $chunk * $page++);
@@ -105,15 +106,15 @@ class SyncGitterMessages extends Command
 
     /**
      * @param Client $client
-     * @param $room
+     * @param Room $room
      * @return \Closure
      * @throws \InvalidArgumentException
      */
-    public function cursor(Client $client, $room)
+    public function cursor(Client $client, Room $room)
     {
         return function ($limit = 100, $skip = 0) use ($client, $room) {
             return $client->request('message.list', [
-                'roomId' => $room,
+                'roomId' => $room->id,
                 'limit'  => $limit,
                 'skip'   => $skip,
             ]);
@@ -123,10 +124,22 @@ class SyncGitterMessages extends Command
     /**
      * @param Message $message
      * @param $count
+     * @throws InvalidArgumentException
      */
     protected function onMessage(Message $message, $count)
     {
-        $this->karma->validate($message);
+        $status = $this->karma->validate($message);
+
+        if ($status->isIncrement()) {
+            foreach ($message->mentions as $user) {
+                $message->user->addKarmaTo($user, $message);
+            }
+
+        } else if ($status->isDecrement()) {
+            foreach ($message->mentions as $user) {
+                $message->user->addKarmaTo($user, $message);
+            }
+        }
 
         $this->output->write(sprintf("\r <comment>[%s]</comment> %s%80s", $count, $message->text, ''));
     }

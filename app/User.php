@@ -24,7 +24,6 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property string $login
  * @property string $email
  * @property string $password
- * @property int $karma
  * @property string $remember_token
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -32,6 +31,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * === Accessors ===
  *
  * @property-read string $karma_text
+ * @property-read int $karma
  *
  */
 class User extends \Eloquent implements
@@ -67,6 +67,18 @@ class User extends \Eloquent implements
     protected static function boot()
     {
         parent::boot();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKarmaAttribute()
+    {
+        $query = Karma::query()->where('user_target_id', $this->id);
+
+        return
+            $query->where('status', Karma::STATUS_INCREMENT)->count() -
+            $query->where('status', Karma::STATUS_DECREMENT)->count();
     }
 
     /**

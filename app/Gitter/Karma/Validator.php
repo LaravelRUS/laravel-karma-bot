@@ -68,7 +68,7 @@ class Validator
 
     /**
      * @param Message $message
-     * @return int
+     * @return Status
      */
     public function validate(Message $message)
     {

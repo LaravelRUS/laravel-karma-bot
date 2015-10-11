@@ -12,9 +12,11 @@
 
 namespace App\Gitter;
 
+use App;
+use App\Room;
+use App\User;
 use App\Gitter\Http\Stream;
 use App\Gitter\Http\Request;
-use App\User;
 use InvalidArgumentException;
 use App\Gitter\Http\UrlStorage;
 use React\EventLoop\Factory as EventLoop;
@@ -29,6 +31,31 @@ use React\Dns\Resolver\Factory as DnsResolver;
 class Client
 {
     const VERSION = '0.1b';
+
+    /**
+     * @param $token
+     * @param $roomId
+     * @return Client
+     * @throws InvalidArgumentException
+     */
+    public static function make($token, $roomId)
+    {
+        $client = new Client($token);
+        App::singleton(Client::class, function() use ($client) {
+            return $client;
+        });
+        App::alias(Client::class, 'gitter');
+
+
+        $room = new Room($roomId);
+        App::singleton(Room::class, function() use ($room) {
+            return $room;
+        });
+        App::alias(Room::class, 'room');
+
+        return $client;
+    }
+
 
     /**
      * @var string
@@ -60,7 +87,9 @@ class Client
      */
     protected $room;
 
-
+    /**
+     * @var User
+     */
     protected $user;
 
     /**

@@ -43,23 +43,14 @@ class Storage
      */
     protected $container;
 
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
-
 
     /**
      * @param Container $container
-     * @param OutputInterface $output
      */
-    public function __construct(Container $container, OutputInterface $output)
+    public function __construct(Container $container)
     {
-        $this->output       = $output;
         $this->container    = $container;
         $this->storage      = new PriorityList();
-
-        $this->output->writeln(sprintf(' <comment>Initialize middlware:</comment> %s', static::class));
     }
 
 
@@ -70,13 +61,10 @@ class Storage
      */
     public function add($class, $priority = self::PRIORITY_DEFAULT): Storage
     {
-        $this->container->singleton($class, $class);
+        $this->container->bind($class, $class);
         $instance = $this->container->make($class);
 
         $this->storage->insert($instance, $priority);
-
-
-        $this->output->writeln(sprintf('     > %s', $class));
 
         return $this;
     }

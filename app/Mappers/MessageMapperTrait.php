@@ -10,6 +10,7 @@
  */
 namespace App\Mappers;
 
+use App\Room;
 use App\User;
 use App\Message;
 use Carbon\Carbon;
@@ -30,7 +31,7 @@ trait MessageMapperTrait
     public static function fromGitterObject(array $attributes)
     {
         $fields = ['gitter_id', 'text', 'html', 'edited', 'user', 'unread',
-            'read_by', 'urls', 'mentions', 'issues', 'meta', 'created_at', 'updated_at'];
+            'read_by', 'urls', 'mentions', 'issues', 'meta', 'created_at', 'updated_at', 'room_id'];
 
         $values = (new AttributeMapper($attributes))
 
@@ -45,6 +46,10 @@ trait MessageMapperTrait
             })
             ->only($fields)
             ->toArray();
+
+        if (!array_key_exists('room_id', $values)) {
+            $values['room_id'] = \App::make(Room::class)->id;
+        }
 
         return static::unguarded(function() use ($values) {
             return new static($values);

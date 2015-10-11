@@ -64,18 +64,11 @@ class SyncGitterUsers extends Command
      */
     public function handle(Repository $config, Container $container)
     {
-        $room   = Room::getId($this->argument('room'));
-        $token  = $config->get('gitter.token');
+        $client     = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $room       = $container->make(Room::class);
 
 
-        $client = new Client($token);
-        $container->bind(Client::class, $client);
-
-        $room   = new Room($client, $room);
-        $container->bind(Room::class, $room);
-
-
-        $users      = $client->request('room.users', ['roomId' => $room]);
+        $users      = $client->request('room.users', ['roomId' => $room->id]);
         $process    = new CircleProgress();
 
         $message    = "\r%s<comment>[%s/%s]</comment> %s%80s";

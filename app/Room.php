@@ -12,6 +12,7 @@ namespace App;
 
 use App\Gitter\Client;
 use App\Gitter\Http\Stream;
+use App\Gitter\Middleware\Storage;
 use InvalidArgumentException;
 
 /**
@@ -48,15 +49,24 @@ class Room
     public $id;
 
     /**
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
      * Room constructor.
-     * @param Client $client
      * @param string $roomId
      *
      */
-    public function __construct(Client $client, $roomId)
+    public function __construct($roomId)
     {
-        $this->client = $client;
-        $this->id = $roomId;
+        $this->client = \App::make(Client::class);
+        $this->id     = static::getId($roomId);
+
+        $this->storage = new Storage(\App::make('app'));
+        foreach (\Config::get('gitter.middlewares') as $middleware => $priority) {
+            $this->storage->add($middleware, $priority);
+        }
     }
 
     /**
@@ -66,7 +76,7 @@ class Room
     public function listen()
     {
         $client = $this->client
-            ->stream('messages', ['roomId' => $this->roomId])
+            ->stream('messages', ['roomId' => $this->id])
             ->on(Stream::EVENT_MESSAGE, function($stream, $data) {
                 $this->onMessage(Message::fromGitterObject($data));
             })
@@ -81,7 +91,7 @@ class Room
      */
     public function onMessage(Message $message)
     {
-        var_dump($message);
+        $this->storage->handle($message);
     }
 
     /**
@@ -94,11 +104,16 @@ class Room
     }
 
     /**
-     * @TODO I do not know if it works
+     * @TODO I do not know if it works too
      * @param Stream $stream
      */
     public function onError(Stream $stream)
     {
         $stream->reconnect();
+    }
+
+    public function write($text)
+    {
+
     }
 }

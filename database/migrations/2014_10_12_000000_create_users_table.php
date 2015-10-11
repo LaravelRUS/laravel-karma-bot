@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $t->string('login');
             $t->string('email')->nullable()->unique();
             $t->string('password', 60)->nullable();
-            $t->integer('karma')->default(0)->index();
             $t->rememberToken();
             $t->timestamps();
         });

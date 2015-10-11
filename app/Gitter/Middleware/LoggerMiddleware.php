@@ -12,8 +12,7 @@
 
 namespace App\Gitter\Middleware;
 
-use App\Gitter\Logger;
-use App\Gitter\Models\MessageObject;
+use App\Message;
 use Illuminate\Contracts\Config\Repository;
 
 /**
@@ -36,18 +35,17 @@ class LoggerMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param $data
+     * @param Message $message
      * @return mixed
      */
-    public function handle($data)
+    public function handle(Message $message)
     {
-        $message = $data;
-        if ($data instanceof MessageObject) {
-            $message = $data->user->name . ': ' . $data->text;
-        }
+
+        $text = $message->user->name . ': ' . $message->text;
+
         #$this->log->write($message);
 
 
-        return $data;
+        return $message;
     }
 }

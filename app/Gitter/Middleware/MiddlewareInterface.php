@@ -11,7 +11,7 @@
 
 namespace App\Gitter\Middleware;
 
-use App\Gitter\Models\Model;
+use App\Message;
 
 /**
  * Interface MiddlewareInterface
@@ -23,5 +23,5 @@ interface MiddlewareInterface
      * @param $inputData
      * @return mixed
      */
-    public function handle($inputData);
+    public function handle(Message $inputData);
 }

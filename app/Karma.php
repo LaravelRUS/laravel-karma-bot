@@ -10,9 +10,19 @@
  */
 namespace App;
 
+use Carbon\Carbon;
+
 /**
  * Class Karma
  * @package App
+ *
+ * @property-read int $id
+ * @property string $room_id
+ * @property string $message_id
+ * @property int $user_id
+ * @property int $user_target_id
+ * @property string $status
+ * @property Carbon $created_at
  */
 class Karma extends \Eloquent
 {
@@ -27,10 +37,22 @@ class Karma extends \Eloquent
     /**
      * @var array
      */
-    public $timestamps = ['created_at'];
+    public $timestamps = false;
 
     /**
      * @var array
      */
     protected $guarded = ['id', 'created_at'];
+
+    /**
+     * Boot
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (Karma $karma) {
+            $karma->created_at = $karma->freshTimestamp();
+        });
+    }
 }
