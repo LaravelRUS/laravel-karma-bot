@@ -145,6 +145,10 @@ class Validator
     protected function validateText(Message $message, array $words = [])
     {
         if (count($words)) {
+            if ($message->user->login === \Auth::user()->login) {
+                return false;
+            }
+
 
             // Если "@Some спасибо"
             $escaped = implode('|', array_map(function ($word) { return preg_quote($word); }, $words));
