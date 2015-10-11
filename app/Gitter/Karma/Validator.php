@@ -147,8 +147,9 @@ class Validator
             // Если "спасибо" в начале или конце предложения
             $escapedText = $message->text;
             $escapedText = mb_strtolower($escapedText);
-            $escapedText = preg_replace('/@([0-9a-zA-Z\- \/_?:.,\s]+) /isu', '', $escapedText);
+            $escapedText = preg_replace('/@([0-9a-zA-Z\- \/_?:.,\s]+)\s+/isu', '', $escapedText);
             $escapedText = preg_replace('/[.,-\/#!$%\^&\*;:{}=\-_`~()]/su', '', $escapedText);
+            $escapedText = trim($escapedText);
 
             $atStart     = preg_match(sprintf('/^%s/isu', $escaped), $escapedText);
             $atEnd       = preg_match(sprintf('/%s$/isu', $escaped), $escapedText);
