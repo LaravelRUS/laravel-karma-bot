@@ -30,6 +30,14 @@ class KarmaRenderMiddleware implements MiddlewareInterface
                 : \Lang::get('karma.count.empty', $args);
 
             $message->italic($karmaMessage);
+
+            $achievements = [];
+            foreach ($message->user->achievements as $achieve) {
+                $achievements[] = $achieve->name;
+            }
+            if (count($achievements)) {
+                $message->italic('- Достижения: ' . implode(', ', $achievements));
+            }
         }
 
 

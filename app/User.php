@@ -35,6 +35,10 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property-read int $thanks
  * @property-read Carbon $last_karma_time
  *
+ * === Relations ===
+ *
+ * @property-read Achieve[] $achievements
+ *
  */
 class User extends \Eloquent implements
     AuthenticatableContract,
@@ -69,6 +73,14 @@ class User extends \Eloquent implements
     protected static function boot()
     {
         parent::boot();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function achievements()
+    {
+        return $this->hasMany(Achieve::class, 'user_id', 'id');
     }
 
     /**
