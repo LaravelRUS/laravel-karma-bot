@@ -78,10 +78,10 @@ class SyncGitterMessages extends Command
         $this->karma = new Validator();
 
 
-        $request = $this->cursor($client, $room);
-        $count = 1;   // Start number
-        $page = 0;   // Current page
-        $chunk = 100; // Per page
+        $request     = $this->cursor($client, $room);
+        $count       = 1;   // Start number
+        $page        = 0;   // Current page
+        $chunk       = 100; // Per page
 
 
         Karma::query()
@@ -141,6 +141,8 @@ class SyncGitterMessages extends Command
             }
         }
 
-        $this->output->write(sprintf("\r <comment>[%s]</comment> %s%80s", $count, $message->text, ''));
+        if ($status->isIncrement() || $status->isDecrement()) {
+            $this->output->writeln(sprintf('<comment>[%s]</comment> %s%80s', $count, trim($message->text), ''));
+        }
     }
 }

@@ -71,7 +71,7 @@ class SyncGitterUsers extends Command
         $users      = $client->request('room.users', ['roomId' => $room->id]);
         $process    = new CircleProgress();
 
-        $message    = "\r%s<comment>[%s/%s]</comment> %s%80s";
+        $message    = "\r %s <comment>[%s/%s]</comment> %s%80s";
 
         $count      = count($users);
         $current    = 1;

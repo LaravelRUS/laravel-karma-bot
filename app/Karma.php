@@ -23,6 +23,12 @@ use Carbon\Carbon;
  * @property int $user_target_id
  * @property string $status
  * @property Carbon $created_at
+ *
+ * === Relations ===
+ *
+ * @property-read User $user
+ * @property-read User $target
+ *
  */
 class Karma extends \Eloquent
 {
@@ -54,5 +60,21 @@ class Karma extends \Eloquent
         static::creating(function (Karma $karma) {
             $karma->created_at = $karma->freshTimestamp();
         });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function target()
+    {
+        return $this->belongsTo(User::class, 'user_target_id', 'id');
     }
 }

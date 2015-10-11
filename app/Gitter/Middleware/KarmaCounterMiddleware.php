@@ -41,6 +41,7 @@ class KarmaCounterMiddleware implements MiddlewareInterface
     public function handle(Message $message)
     {
         $state = $this->validator->validate($message);
+
         if ($state->isIncrement()) {
             foreach ($message->mentions as $user) {
                 $message->user->addKarmaTo($user, $message);
@@ -54,6 +55,21 @@ class KarmaCounterMiddleware implements MiddlewareInterface
                 $message->italic($state->getTranslation($user, $user->karma));
             }
         }
+
+
+        if (trim(mb_strtolower($message->text)) === 'карма') {
+            $args = [
+                'user' => $message->user->login,
+                'karma' => $message->user->karma
+            ];
+
+            $karmaMessage = $args['karma']
+                ? \Lang::get('karma.count.message', $args)
+                : \Lang::get('karma.count.empty', $args);
+
+            $message->italic($karmaMessage);
+        }
+
 
         return $message;
     }

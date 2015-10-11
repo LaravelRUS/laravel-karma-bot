@@ -32,6 +32,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  *
  * @property-read string $karma_text
  * @property-read int $karma
+ * @property-read int $thanks
  *
  */
 class User extends \Eloquent implements
@@ -79,6 +80,18 @@ class User extends \Eloquent implements
         return
             $query->where('status', Karma::STATUS_INCREMENT)->count() -
             $query->where('status', Karma::STATUS_DECREMENT)->count();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThanksAttribute()
+    {
+        return Karma::query()
+            ->where('user_id', $this->id)
+            ->where('status', Karma::STATUS_INCREMENT)
+            ->count();
+
     }
 
     /**
