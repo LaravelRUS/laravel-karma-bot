@@ -13,6 +13,8 @@
 namespace App\Gitter\Http;
 
 /**
+ * @TODO Перенести в роуты
+ *
  * Class UrlStorage
  * @package App\Gitter\Http
  */

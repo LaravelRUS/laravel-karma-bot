@@ -14,23 +14,15 @@ use App\Gitter\Karma\Validator;
 class KarmaCounterMiddleware implements MiddlewareInterface
 {
     /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
      * @var Validator
      */
     protected $validator;
 
     /**
      * KarmaCounterMiddleware constructor.
-     * @param Client $client
      */
-    public function __construct(Client $client)
+    public function __construct()
     {
-        $this->client = $client;
-
         $this->validator = new Validator();
     }
 
@@ -46,6 +38,10 @@ class KarmaCounterMiddleware implements MiddlewareInterface
             foreach ($message->mentions as $user) {
                 $message->user->addKarmaTo($user, $message);
                 $message->italic($state->getTranslation($user, $user->karma));
+
+                if ($user->id === \Auth::user()->id) {
+                    $message->answer(\Lang::get('gitter.bot'));
+                }
             }
         }
 

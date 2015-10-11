@@ -11,7 +11,9 @@
         "react/socket-client": "^0.4.4",
         "react/http-client": "^0.4.6",
         "barryvdh/laravel-ide-helper": "2.1.*",
-        "guzzlehttp/guzzle": "^6.1"
+        "guzzlehttp/guzzle": "^6.1",
+
+        "big-shark/sql-to-builder": "dev-master@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

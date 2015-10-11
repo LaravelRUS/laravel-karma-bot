@@ -14,27 +14,6 @@ use App\Gitter\Karma\Validator;
 class KarmaRenderMiddleware implements MiddlewareInterface
 {
     /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
-     * @var Validator
-     */
-    protected $validator;
-
-    /**
-     * KarmaCounterMiddleware constructor.
-     * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-
-        $this->validator = new Validator();
-    }
-
-    /**
      * @param Message $message
      * @return mixed
      */

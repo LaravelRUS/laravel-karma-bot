@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
+ * @property-read string $escaped_text
+ *
  */
 class Message extends Model
 {
@@ -67,10 +69,23 @@ class Message extends Model
     }
 
     /**
+     * @return mixed|string
+     */
+    public function getEscapedTextAttribute()
+    {
+        $text = $this->text;
+        $text = mb_strtolower($text);
+        $text = str_replace(["\n", "\r"], ' ', $text);
+        $text = trim($text);
+
+        return $text;
+    }
+
+    /**
      * @param $text
      * @return $this
      */
-    public function write($text)
+    public function answer($text)
     {
         $client = \App::make(Client::class);
         $room   = \App::make(Room::class);
@@ -88,7 +103,7 @@ class Message extends Model
      */
     public function pre($text)
     {
-        return $this->write($this->decorate('`', $text));
+        return $this->answer($this->decorate('`', $text));
     }
 
     /**
@@ -98,7 +113,7 @@ class Message extends Model
      */
     public function code($code, $lang = '')
     {
-        return $this->write(
+        return $this->answer(
             '```' . $lang . "\n" . $code . "\n" . '```'
         );
     }
@@ -109,7 +124,7 @@ class Message extends Model
      */
     public function italic($text)
     {
-        return $this->write($this->decorate('_', $text));
+        return $this->answer($this->decorate('_', $text));
     }
 
     /**
@@ -118,7 +133,7 @@ class Message extends Model
      */
     public function bold($text)
     {
-        return $this->write($this->decorate('**', $text));
+        return $this->answer($this->decorate('**', $text));
     }
 
     /**
