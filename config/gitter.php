@@ -14,7 +14,7 @@ return [
     ],
 
     'middlewares' => [
-        App\Gitter\Middleware\LoggerMiddleware::class       => Storage::PRIORITY_MAXIMAL,
         App\Gitter\Middleware\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
+        App\Gitter\Middleware\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
     ],
 ];

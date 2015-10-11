@@ -6,12 +6,12 @@ use App\Gitter\Client;
 use App\Gitter\Karma\Validator;
 
 /**
- * Проверяет "спасибо" и выводит инкремент.
+ * Проверяет слово "карма" и выводит статус
  *
- * Class KarmaCounterMiddleware
+ * Class KarmaRenderMiddleware
  * @package App\Gitter\Middleware
  */
-class KarmaCounterMiddleware implements MiddlewareInterface
+class KarmaRenderMiddleware implements MiddlewareInterface
 {
     /**
      * @var Client
@@ -40,14 +40,19 @@ class KarmaCounterMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $state = $this->validator->validate($message);
+        if (trim(mb_strtolower($message->text)) === 'карма') {
+            $args = [
+                'user' => $message->user->login,
+                'karma' => $message->user->karma
+            ];
 
-        if ($state->isIncrement()) {
-            foreach ($message->mentions as $user) {
-                $message->user->addKarmaTo($user, $message);
-                $message->italic($state->getTranslation($user, $user->karma));
-            }
+            $karmaMessage = $args['karma']
+                ? \Lang::get('karma.count.message', $args)
+                : \Lang::get('karma.count.empty', $args);
+
+            $message->italic($karmaMessage);
         }
+
 
         return $message;
     }

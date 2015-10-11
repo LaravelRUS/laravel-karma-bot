@@ -118,20 +118,4 @@ class User extends \Eloquent implements
             'status'         => Karma::STATUS_INCREMENT,
         ]);
     }
-
-    /**
-     * @param User $user
-     * @param Message $message
-     * @return static
-     */
-    public function robKarmaTo(User $user, Message $message)
-    {
-        return Karma::create([
-            'room_id'        => \App::make(Room::class)->id,
-            'message_id'     => $message->gitter_id,
-            'user_id'        => $this->id,
-            'user_target_id' => $user->id,
-            'status'         => Karma::STATUS_DECREMENT,
-        ]);
-    }
 }

@@ -98,6 +98,10 @@ class StatsGitterKarma extends Command
         $this->render($thanks, 'Сказали спасибо');
     }
 
+    /**
+     * @param $collection
+     * @param $title
+     */
     protected function render($collection, $title)
     {
         $this->line(str_repeat('=', 77));
