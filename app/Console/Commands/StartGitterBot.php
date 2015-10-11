@@ -48,6 +48,11 @@ class StartGitterBot extends Command
      */
     protected $container;
 
+    /**
+     * @var string
+     */
+    protected $pid;
+
 
     /**
      * Execute the console command.
@@ -63,6 +68,8 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container)
     {
+        $this->makePidFile();
+
         $started = Carbon::now();
         $client  = Client::make($config->get('gitter.token'), $this->argument('room'));
         $stream  = $container->make(Room::class)->listen();
@@ -82,5 +89,26 @@ class StartGitterBot extends Command
         });
 
         $client->run();
+
+        $this->removePidFile();
+    }
+
+    /**
+     * Create pid file
+     */
+    protected function makePidFile()
+    {
+        $this->pid = storage_path(date('Y_m_d_tis.pid'));
+        file_put_contents($this->pid, getmypid());
+    }
+
+    /**
+     * Delete pid file
+     */
+    protected function removePidFile()
+    {
+        if (is_file($this->pid)) {
+            unlink($this->pid);
+        }
     }
 }
