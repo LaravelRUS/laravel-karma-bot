@@ -12,8 +12,9 @@ namespace App\Subscribers;
 
 use App\Room;
 use App\Achieve;
-use App\Gitter\Subscriber\SubscriberInterface;
 use Illuminate\Config\Repository;
+use App\Gitter\Subscriber\SubscriberInterface;
+use App\Subscribers\Achievements\KarmaAchieve;
 
 /**
  * Class AchieveSubscriber
@@ -22,12 +23,18 @@ use Illuminate\Config\Repository;
 class AchieveSubscriber implements SubscriberInterface
 {
     /**
+     * @var array
+     */
+    protected $achievements = [
+        KarmaAchieve::class
+    ];
+
+    /**
      * AchieveSubscriber constructor.
      */
-    public function __construct(Repository $repository)
+    public function __construct()
     {
-        $achievements = $repository->get('gitter.achievements');
-        foreach ($achievements as $achieve) {
+        foreach ($this->achievements as $achieve) {
             $instance = new $achieve;
             $instance->handle();
         }

@@ -35,10 +35,4 @@ return [
         // Подписывается на создание ачивки и отправляет сообщеньку в чат
         App\Subscribers\AchieveSubscriber::class,
     ],
-
-
-    // Achievements
-    'achievements' => [
-        App\Achieve\KarmaAchieve::class
-    ]
 ];

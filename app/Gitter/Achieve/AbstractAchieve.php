@@ -8,12 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Achieve;
+namespace App\Gitter\Achieve;
 
-use App\Achieve;
 use App\User;
+use App\Achieve;
+use App\Gitter\Subscriber\SubscriberInterface;
 
-abstract class AbstractAchieve implements AchieveInterface
+abstract class AbstractAchieve implements
+    AchieveInterface,
+    SubscriberInterface
 {
     /**
      * @var User
