@@ -18,6 +18,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 
 
 /**
@@ -94,7 +95,11 @@ class StartGitterPool extends Command
     {
         foreach ($this->config->get('gitter.rooms') as $key => $id) {
             system('php artisan gitter:users ' . $key);
-            system('nohup php artisan gitter:listen ' . $key . ' &');
+
+            $process = new Process('nohup php artisan gitter:listen ' . $key . ' &');
+            $process->run();
+
+            $this->line('Starting ' . $key . ' => ' . $id . ' listener.');
         }
     }
 
