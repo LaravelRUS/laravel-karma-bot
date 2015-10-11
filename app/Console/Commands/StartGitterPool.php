@@ -116,6 +116,7 @@ class StartGitterPool extends Command
         foreach ($finder as $file) {
             $pid = file_get_contents($file->getRealpath());
             system('kill ' . $pid);
+            unlink($file->getRealpath());
         }
     }
 }
