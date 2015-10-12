@@ -58,6 +58,9 @@ class Validator
             'выпей йаду',
             'узбагойзя'
         ];
+
+
+
     }
 
 
@@ -154,7 +157,7 @@ class Validator
 
             // Если "@Some спасибо"
             $escaped = implode('|', array_map(function ($word) { return preg_quote($word); }, $words));
-            $pattern = sprintf('/@([0-9a-zA-Z_]+)\s+%s\b/iu', $escaped);
+            $pattern = sprintf('/@([0-9a-zA-Z_]+)\s+(?:%s)\b/iu', $escaped);
 
             if (preg_match($pattern, $message->text)) {
                 return true;
