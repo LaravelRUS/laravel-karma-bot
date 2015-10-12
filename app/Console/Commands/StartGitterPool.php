@@ -70,14 +70,12 @@ class StartGitterPool extends Command
         $action = $this->argument('action');
         switch ($action) {
             case 'start':
+            case 'restart':
+                $this->stop();
                 $this->start();
                 break;
             case 'stop':
                 $this->stop();
-                break;
-            case 'restart':
-                $this->stop();
-                $this->start();
                 break;
             default:
                 throw new \InvalidArgumentException('Action ' . $action . ' not found');
