@@ -1,6 +1,7 @@
 @extends('layout.master')
 
-@section('content')
+@section('headers')
+    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
     <style>
         html, body {
             height: 100%;
@@ -30,6 +31,9 @@
             font-size: 96px;
         }
     </style>
+@stop
+
+@section('content')
     <div class="container">
         <div class="content">
             <div class="title">Laravel 5</div>
