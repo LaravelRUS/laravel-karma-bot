@@ -122,6 +122,18 @@ class Room
     }
 
     /**
+     * @param \Exception $e
+     */
+    protected function logException(\Exception $e)
+    {
+        \Log::error(
+            $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . "\n" .
+            $e->getTraceAsString() . "\n" .
+            str_repeat('=', 80) . "\n"
+        );
+    }
+
+    /**
      * @param Message $message
      */
     public function onMessage(Message $message)
@@ -129,11 +141,7 @@ class Room
         try {
             $this->middlewares->handle($message);
         } catch (\Exception $e) {
-            \Log::error(
-                $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . "\n" .
-                $e->getTraceAsString() . "\n" .
-                str_repeat('=', 80) . "\n"
-            );
+            $this->logException($e);
         }
     }
 
@@ -147,12 +155,12 @@ class Room
     }
 
     /**
-     * @TODO I do not know if it works too
      * @param Stream $stream
+     * @param \Exception $e
      */
-    public function onError(Stream $stream)
+    public function onError(Stream $stream, \Exception $e)
     {
-        $stream->reconnect();
+        $this->logException($e);
     }
 
     /**
