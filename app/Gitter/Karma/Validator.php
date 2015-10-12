@@ -170,8 +170,8 @@ class Validator
             $escapedText = preg_replace('/[.,-\/#!$%\^&\*;:{}=\-_`~()]/su', '', $escapedText);
             $escapedText = trim($escapedText);
 
-            $atStart     = preg_match(sprintf('/^%s/isu', $escaped), $escapedText);
-            $atEnd       = preg_match(sprintf('/%s$/isu', $escaped), $escapedText);
+            $atStart     = preg_match(sprintf('/^(?:%s)/isu', $escaped), $escapedText);
+            $atEnd       = preg_match(sprintf('/(?:%s)$/isu', $escaped), $escapedText);
 
             if ($atStart || $atEnd) {
                 return true;
