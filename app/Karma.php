@@ -48,7 +48,7 @@ class Karma extends \Eloquent
     /**
      * @var array
      */
-    protected $guarded = ['id', 'created_at'];
+    protected $guarded = ['id'];
 
     /**
      * Boot
@@ -58,7 +58,9 @@ class Karma extends \Eloquent
         parent::boot();
 
         static::creating(function (Karma $karma) {
-            $karma->created_at = $karma->freshTimestamp();
+            if (!$karma->created_at) {
+                $karma->created_at = $karma->freshTimestamp();
+            }
 
             \Event::fire('karma.add', ['karma' => $karma]);
         });

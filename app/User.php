@@ -147,6 +147,7 @@ class User extends \Eloquent implements
             'user_id'        => $this->id,
             'user_target_id' => $user->id,
             'status'         => Karma::STATUS_INCREMENT,
+            'created_at'     => $message->created_at,
         ]);
     }
 }
