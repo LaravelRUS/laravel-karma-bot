@@ -33,7 +33,7 @@ class Karma100Achieve extends AbstractAchieve
                     ->create(
                         'Сотня!',
                         'Наберите 100 кармы',
-                        'https://raw.githubusercontent.com/SerafimArts/GitterBot/php_version/resources/achieve/karma-100.gif'
+                        'https://raw.githubusercontent.com/LaravelRUS/GitterBot/master/resources/achieve/karma-100.gif'
                     );
             }
         });
