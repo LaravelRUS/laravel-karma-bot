@@ -36,7 +36,7 @@ export default class Model {
 
             try {
                 (new Request(this.request))
-                    .get(`Загрузка данных ${this.name}`)
+                    .get(`Загрузка данных моделей`)
                     .then(items => {
                         items.forEach(item => {
                             var instance = new this(item);
