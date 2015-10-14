@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
-    <title>@section('title') GitterBot @show</title>
+    <title>@section('title') Laravel Karma @show</title>
 
     <script>var config = {!! json_encode([
         'csrf' => csrf_token(),
@@ -10,6 +10,10 @@
     ]) !!};</script>
     <script src="{{ asset_ts('assets/app.js') }}"></script>
     <link rel="stylesheet" href="{{ asset_ts('assets/app.css') }}" />
+
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
 </head>
 <body>
     @yield('content')

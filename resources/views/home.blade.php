@@ -9,7 +9,7 @@
     </section>
 
     <header>
-        <a class="logo" href="{{ URL::to('/') }}">Laravel<span>\Gitter</span></a>
+        <a class="logo" href="{{ URL::to('/') }}">Laravel<span>\Karma</span></a>
 
         <nav>
             <a href="http://laravel.su/docs">Документация</a>
