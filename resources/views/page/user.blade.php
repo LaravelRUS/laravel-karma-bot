@@ -3,6 +3,9 @@
         <h1 data-bind="text: error"></h1>
     <!--/ko-->
 
+    <!--ko ifnot: user()-->
+        <article class="preloader-section"></article>
+    <!--/ko-->
     <!--ko if: user()-->
         <!--ko ifnot: user().loaded-->
             <article class="preloader-section"></article>
