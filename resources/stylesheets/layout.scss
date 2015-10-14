@@ -1,0 +1,321 @@
+@charset "utf-8";
+
+$font: (
+  size: 14px,
+  weight: 400,
+  family: ("FiraSans", Helvetica, Arial, sans-serif),
+  mono:   ("FiraMono", "Consolas", "Menlo", "Courier", monospace)
+);
+
+
+@import "vendor/font-awesome";
+@import "vendor/normalize";
+@import "vendor/utils";
+@import "ui";
+
+html,
+body {
+  @extend .font-optimize;
+  min-height: 100%;
+  color: #333;
+
+  font: {
+    family: map-get($font, family);
+    size: 14px;
+    weight: 400;
+  }
+}
+
+
+body {
+  overflow-y: scroll;
+  background: #f1f1f1;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  a {
+    color: #f4645f;
+    text-decoration: underline;
+
+    &:hover {
+      color: darken(#f4645f, 10%);
+    }
+  }
+
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  h1 {
+    display: block;
+    text-align: center;
+    font-size: 38px;
+  }
+
+  h1, h2, h3 {
+    font-weight: 100;
+    color: #525252;
+  }
+
+  h3 {
+    font-weight: 300;
+  }
+}
+
+
+.profile {
+  padding: 20px 0;
+
+  .breadcumbs {
+    @include clear;
+    margin-bottom: 20px;
+    width: 100%;
+    float: left;
+    clear: both;
+    text-align: right;
+
+    .separator,
+    .label {
+      display: inline-block;
+      text-decoration: none;
+      line-height: 16px;
+      height: 28px;
+      padding: 6px 0.833em;
+    }
+  }
+
+  .profile-badge {
+    width: 200px;
+    padding: 15px 30px;
+    border-radius: 3px;
+    background: #27272b;
+    float: left;
+    color: #fff;
+
+    figure {
+      border-radius: 2px;
+      padding: 10px;
+      margin: 10px 0 15px 0;
+      width: 140px;
+      height: 140px;
+      box-shadow: inset 0 0 0 10px #565656;
+
+      img {
+        width: 120px;
+        height: 120px;
+        border-radius: 2px;
+      }
+    }
+
+    h1,
+    h2 {
+      white-space: nowrap;
+      width: 180px;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 24px;
+      text-align: left;
+      color: #f4645f;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 16px;
+    }
+
+    .achievements {
+      background: #f1f1f1;
+      padding: 0 10px;
+      border-radius: 2px;
+      margin-top: 10px;
+      @include clear;
+
+      .achieve {
+        @include clear;
+        height: 46px;
+        padding: 10px 0;
+        font-size: 14px;
+        line-height: 24px;
+        color: #525252;
+
+        img {
+          width: 24px;
+          height: 24px;
+          border-radius: 2px;
+          float: left;
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .profile-content {
+    float: left;
+    width: 860px;
+    margin-left: 40px;
+
+    h2 {
+      margin: 0 0 10px 0;
+    }
+
+    .segment {
+      background: #fff;
+      border-radius: 3px;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+    }
+
+    .profile-list {
+      max-height: 300px;
+      overflow: auto;
+
+      .profile-list-item {
+        margin: 10px 5px;
+        width: 395px;
+        float: left;
+        cursor: pointer;
+        border-radius: 2px;
+        padding: 10px;
+        box-shadow: 0 0 0 2px rgba(#f4645f, 0);
+
+
+
+        img {
+          width: 48px;
+          height: 48px;
+          border-radius: 2px;
+          float: left;
+          margin-right: 12px;
+        }
+
+        h3,
+        time,
+        .description {
+          margin: 0;
+          display: block;
+          float: left;
+          width: 300px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+
+        h3 {
+          font-size: 18px;
+        }
+
+        .description,
+        time {
+          color: #999;
+          font-size: 11px;
+          font-style: italic;
+        }
+
+        &:hover {
+          transition: box-shadow .2s $swift;
+          box-shadow: 0 0 0 2px #f4645f;
+
+          h3 {
+            color: #f4645f;
+          }
+        }
+      }
+    }
+  }
+}
+
+.users {
+  @include clear;
+
+  .user {
+    @include clear;
+    float: left;
+    border-radius: 2px;
+    padding: 10px 10px;
+    width: 530px;
+    margin: 0 10px 30px 10px;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 0 2px rgba(#f4645f, 0);
+
+    &:hover {
+      transition: box-shadow .2s $swift;
+      box-shadow: 0 0 0 2px #f4645f;
+    }
+
+    img {
+      width: 80px;
+      height: 80px;
+      float: left;
+      border-radius: 2px;
+      margin: 0 10px 0 0;
+      background: #f0f0f0;
+      box-shadow: 0 0 0 2px #fff;
+    }
+
+    .highlight {
+      color: darken(#f4645f, 20%);
+    }
+
+    .name,
+    .login,
+    nav {
+      display: block;
+      width: 420px;
+      float: left;
+      clear: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .name,
+    .login {
+      font-weight: 300;
+      color: #525252;
+      font-size: 22px;
+    }
+
+    .name {
+      font-size: 14px;
+    }
+
+    nav {
+      margin-top: 10px;
+      padding: 5px 0 0 0;
+      box-shadow: 0 -1px 0 #dee0df;
+
+      .separator,
+      a {
+        float: right;
+        color: #888;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #f4645f;
+        text-decoration: underline;
+      }
+
+      .separator {
+        font-weight: 100;
+        margin: 0 10px;
+      }
+    }
+  }
+}
+
+@import "layout/header";
+@import "layout/search";
+
+
+

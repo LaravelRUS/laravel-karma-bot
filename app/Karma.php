@@ -32,9 +32,6 @@ use Carbon\Carbon;
  */
 class Karma extends \Eloquent
 {
-    const STATUS_INCREMENT = 'inc';
-    const STATUS_DECREMENT = 'dec';
-
     /**
      * @var string
      */

@@ -31,13 +31,14 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * === Accessors ===
  *
  * @property-read string $karma_text
- * @property-read int $karma
- * @property-read int $thanks
+ * @property-read string $thanks_text
  * @property-read Carbon $last_karma_time
  *
  * === Relations ===
  *
  * @property-read Achieve[] $achievements
+ * @property-read Karma[] $karma
+ * @property-read Karma[] $thanks
  *
  */
 class User extends \Eloquent implements
@@ -84,27 +85,36 @@ class User extends \Eloquent implements
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getKarmaAttribute()
+    public function karma()
     {
-        $query = Karma::query()->where('user_target_id', $this->id);
-
-        return
-            $query->where('status', Karma::STATUS_INCREMENT)->count() -
-            $query->where('status', Karma::STATUS_DECREMENT)->count();
+        return $this->hasMany(Karma::class, 'user_target_id', 'id');
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getThanksAttribute()
+    public function getKarmaTextAttribute()
     {
-        return Karma::query()
-            ->where('user_id', $this->id)
-            ->where('status', Karma::STATUS_INCREMENT)
-            ->count();
+        $karma = $this->karma->count();
+        return ($karma > 0 ? '+' : '') . $karma;
+    }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function thanks()
+    {
+        return $this->hasMany(Karma::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getThanksTextAttribute()
+    {
+        return $this->thanks->count();
     }
 
     /**
@@ -126,15 +136,6 @@ class User extends \Eloquent implements
     }
 
     /**
-     * @return string
-     */
-    public function getKarmaTextAttribute()
-    {
-        return ($this->karma > 0 ? '+' : '') .
-        $this->karma;
-    }
-
-    /**
      * @param User $user
      * @param Message $message
      * @return static
@@ -146,7 +147,6 @@ class User extends \Eloquent implements
             'message_id'     => $message->gitter_id,
             'user_id'        => $this->id,
             'user_target_id' => $user->id,
-            'status'         => Karma::STATUS_INCREMENT,
             'created_at'     => $message->created_at,
         ]);
     }

@@ -22,22 +22,25 @@ class KarmaRenderMiddleware implements MiddlewareInterface
             $args = [
                 'user' => $message->user->login,
                 'karma' => $message->user->karma_text,
-                'thanks' => $message->user->thanks
+                'thanks' => $message->user->thanks_text
             ];
 
             $karmaMessage = $args['karma']
                 ? \Lang::get('karma.count.message', $args)
                 : \Lang::get('karma.count.empty', $args);
 
-            $message->italic($karmaMessage);
 
             $achievements = [];
             foreach ($message->user->achievements as $achieve) {
                 $achievements[] = '"' . $achieve->title . '"';
             }
+
             if (count($achievements)) {
-                $message->italic('- Достижения: ' . implode(', ', $achievements));
+                $karmaMessage .= ("\n" . '- Достижения: ' . implode(', ', $achievements));
             }
+
+
+            $message->italic($karmaMessage);
         }
 
 

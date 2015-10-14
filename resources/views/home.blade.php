@@ -1,42 +1,24 @@
 @extends('layout.master')
 
-@section('headers')
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            display: table;
-            font-weight: 100;
-            font-family: 'Lato';
-        }
-
-        .container {
-            text-align: center;
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .content {
-            text-align: center;
-            display: inline-block;
-        }
-
-        .title {
-            font-size: 96px;
-        }
-    </style>
-@stop
-
 @section('content')
-    <div class="container">
-        <div class="content">
-            <div class="title">Laravel 5</div>
-        </div>
-    </div>
+    <section data-controller="Controllers/RequestNotifiesController" data-bind="foreach: messages">
+        <article class="preloader" data-bind="attr: {class: 'preloader ' + (visible()?'visible':'')}">
+            <!--ko text: text--><!--/ko-->
+            <span class="circle"></span>
+        </article>
+    </section>
+
+    <header>
+        <a class="logo" href="{{ URL::to('/') }}">Laravel<span>\Gitter</span></a>
+
+        <nav>
+            <a href="http://laravel.su/docs">Документация</a>
+            <a href="https://gitter.im/LaravelRUS/chat">Чат</a>
+            <a href="http://vk.com/laravel_rus">Сообщество</a>
+            <a href="http://laravel.su/users">Пользователи</a>
+        </nav>
+    </header>
+
+    @include('page.search')
+    @include('page.user')
 @stop

@@ -1,0 +1,15 @@
+input[type=text],
+input[type=password] {
+  height: $ui-height;
+  line-height: $ui-height;
+  border-radius: 1px;
+  padding: 0 10px;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 0 1px #dee0df;
+  transition: .2s $swift;
+
+  &:focus {
+    box-shadow: 0 0 0 1px #f4645f;
+  }
+}

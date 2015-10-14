@@ -15,8 +15,8 @@ class CreateKarmaTable extends Migration
     {
         Schema::create('karma', function(Blueprint $t){
             $stats = [
-                Karma::STATUS_INCREMENT,
-                Karma::STATUS_DECREMENT
+                'inc',
+                'dec'
             ];
 
             $t->increments('id');
@@ -24,7 +24,7 @@ class CreateKarmaTable extends Migration
             $t->string('message_id');
             $t->integer('user_id')->index();
             $t->integer('user_target_id')->index();
-            $t->enum('status', $stats)->default(Karma::STATUS_INCREMENT);
+            $t->enum('status', $stats)->default('inc');
             $t->timestamp('created_at');
         });
     }

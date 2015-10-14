@@ -1,0 +1,16 @@
+.search {
+  padding: 30px 8px;
+
+  input[type=text] {
+    $height: ($ui-height * 2);
+    line-height: $height;
+    height: $height;
+    width: 100%;
+    font-size: 22px;
+    padding: 0 30px;
+
+    @include placeholder {
+      font-weight: 100;
+    }
+  }
+}

@@ -8,11 +8,11 @@ var debug   = require('gulp-debug');
  |                              Всякие утилиты
  |--------------------------------------------------------------------------
  */
+
 var utils = {
     concat:     require('gulp-concat'),
     sourcemaps: require('gulp-sourcemaps'),
     commonjs:   require('gulp-wrap-commonjs'),
-    del:        require('del'),
     prefixes:   require('gulp-autoprefixer')
 };
 
@@ -21,6 +21,7 @@ var utils = {
  |        Минификаторы для стилей, скриптов, картинок и мб ещё чего
  |--------------------------------------------------------------------------
  */
+
 var minify = {
     css:  require('gulp-minify-css'),
     js:   require('gulp-uglify'),
@@ -29,32 +30,10 @@ var minify = {
 
 /*
  |--------------------------------------------------------------------------
- |                          Компиляторы разных языков
- |--------------------------------------------------------------------------
- */
-var compilers = {
-    coffee: require('gulp-coffee'),
-    sass:   require('gulp-sass'),
-    babel:  require('gulp-babel')
-};
-
-/*
- |--------------------------------------------------------------------------
- |                                Пути
- |--------------------------------------------------------------------------
- */
-var path = {
-    base:    'app/',
-    storage: 'storage/framework/cache',
-    publish: 'public/assets'
-};
-
-
-/*
- |--------------------------------------------------------------------------
  |                            Сам компилятор
  |--------------------------------------------------------------------------
  */
+
 var Compiler = (function () {
     // Окружения
     Compiler.ENV_LOCAL      = 'local';
@@ -66,27 +45,32 @@ var Compiler = (function () {
 
     /**
      * @param format Тип данных
-     * @param env Окружение
+     * @param options Окружение
      * @constructor
      */
-    function Compiler(format, env) {
-        this.storage      = path.storage + '/' + this.hash() + '/';
+    function Compiler(format, options) {
+        this.options = {
+            // Environment
+            env: options.env || Compiler.ENV_LOCAL,
+
+            // Storage path
+            storage: (options.storage || 'storage') + '/' + this.hash() + '/',
+
+            // Public path
+            publish: options.publish || 'out',
+
+            // Default namespace (CommonJS default path)
+            base: options.commonJsBase || 'app',
+
+            // File paths
+            paths: options.paths || []
+        };
+
         this.format       = format || Compiler.EXT_SCRIPT;
-        this.environment  = env || this.getEnvironment();
         this.streams      = [];
         this.files        = [];
         this.prependFiles = [];
     }
-
-    /**
-     * @returns {*}
-     */
-    Compiler.prototype.getEnvironment = function() {
-        if (argv.production != null) {
-            return argv.production;
-        }
-        return Compiler.ENV_LOCAL;
-    };
 
     /**
      * Prepend files in result (shims as example)
@@ -112,7 +96,7 @@ var Compiler = (function () {
      * @returns {string}
      */
     Compiler.prototype.hash = function () {
-        return Math.floor((1 + Math.random()) * 0x100)
+        return Math.floor((1 + Math.random()) * 0x10)
             .toString(16);
     };
 
@@ -125,13 +109,36 @@ var Compiler = (function () {
      * @returns {Compiler}
      */
     Compiler.prototype.add = function (files, compiler, wrap) {
-        if (wrap == null) {
+        var self = this;
+
+        if (typeof wrap === 'undefined' || wrap == null) {
             wrap = true;
         }
 
+        if (typeof files === 'undefined' || files == null) {
+            throw new Error('Files not exists');
+        }
+
+        if (!(files instanceof Array)) {
+            files = [files];
+        }
+
+
+        // Appends base paths
+        var newFileList = files.slice();
+        for (var i = 0; i < this.options.paths.length; i++) {
+            var path = this.options.paths[i];
+
+            for (var j = 0; j < files.length; j++) {
+                newFileList.push(path + '/' + files[j]);
+            }
+        }
+        files = newFileList;
+
+
         var name = 'id' + (this.streams.length + 1) + '_' +
             this.hash() + this.hash() + '.' + this.format;
-        this.files.push(this.storage + name);
+        this.files.push(this.options.storage + name);
 
         var stream = gulp
             .src(files)
@@ -151,10 +158,11 @@ var Compiler = (function () {
             stream = stream
                 .pipe(utils.commonjs({
                     pathModifier: function (path) {
+                        var commonJsBase = new RegExp('.*?\/' + (self.options.base || 'src') + '\/', 'g');
                         return path
                             .replace(/\\/g, '/')
-                            .replace(/.*?\/javascripts\//g, '')
-                            .replace(/\.js$/, '');
+                            .replace(commonJsBase, '')
+                            .replace(/\.js|\.es6|\.jsx$/, '');
                     }
                 }));
         }
@@ -189,6 +197,12 @@ var Compiler = (function () {
         var streams = this.streams.length;
         var current = 0;
 
+        if (typeof callback === 'undefined' || !(callback instanceof Function)) {
+            callback = function (output) {
+                console.log('File was be published at:', output);
+            };
+        }
+
         // On all streams was finish
         var finish = function () {
             var stream = gulp
@@ -204,29 +218,29 @@ var Compiler = (function () {
                 .pipe(utils.concat(outputName));
 
             // Minify
-            if (self.environment === Compiler.ENV_PRODUCTION) {
-                if (this.format === Compiler.EXT_SCRIPT) {
-                    stream = stream.pipe(minify.js())
+            if (self.options.env === Compiler.ENV_PRODUCTION) {
+                if (self.format === Compiler.EXT_SCRIPT) {
+                    stream = stream.pipe(minify.js());
 
-                } else if (this.format === Compiler.EXT_STYLE) {
-                    stream = stream.pipe(minify.css())
+                } else if (self.format === Compiler.EXT_STYLE) {
+                    stream = stream.pipe(minify.css());
                 }
             }
 
             stream = stream.pipe(utils.sourcemaps.write('./'));
 
             // Gzip
-            if (self.environment === Compiler.ENV_PRODUCTION) {
+            if (self.options.env === Compiler.ENV_PRODUCTION) {
                 stream = stream
-                    .pipe(gulp.dest(path.publish))
+                    .pipe(gulp.dest(self.options.publish))
                     .pipe(minify.gzip());
             }
 
             stream = stream
-                .pipe(gulp.dest(path.publish))
+                .pipe(gulp.dest(self.options.publish))
                 .on('finish', function () {
                     if (callback != null) {
-                        callback(path.publish + '/' + outputName);
+                        callback(self.options.publish + '/' + outputName);
                     }
                 });
 
@@ -238,7 +252,7 @@ var Compiler = (function () {
          */
         this.streams.forEach(function (stream, index) {
             stream
-                .pipe(gulp.dest(self.storage))
+                .pipe(gulp.dest(self.options.storage))
                 .on('finish', function () {
                     current++;
                     if (streams === current) {
@@ -251,66 +265,112 @@ var Compiler = (function () {
         return this;
     };
 
+
+    /*
+     |--------------------------------------------------------------------------
+     |                                  COMPILERS
+     |--------------------------------------------------------------------------
+     */
+
+
     /**
      * @param files
-     * @param wrap
+     * @param commonJsWrap
      * @returns {*}
      */
-    Compiler.prototype.js = function (files, wrap) {
+    Compiler.prototype.js = function (files, commonJsWrap) {
         return this.add(files, function (stream) {
             return stream;
-        }, wrap);
+        }, commonJsWrap || false);
     };
 
     /**
      * @param files
-     * @param wrap
      * @returns {*}
      */
-    Compiler.prototype.coffee = function (files, wrap) {
+    Compiler.prototype.css = function (files) {
         return this.add(files, function (stream) {
+            return stream;
+        }, false);
+    };
+
+    /**
+     * @param files
+     * @param commonJsWrap
+     * @returns {*}
+     */
+    Compiler.prototype.coffee = function (files, commonJsWrap) {
+        return this.add(files, function (stream) {
+            var coffee = require('gulp-coffee');
+
             return stream.pipe(
-                compilers.coffee({bare: true}).on('error', function (error) {
+                coffee({bare: true}).on('error', function (error) {
                     console.log('Coffee Error:', error.message);
                 })
             );
-        }, wrap);
+        }, commonJsWrap || false);
     };
 
     /**
      * @param files
-     * @param wrap
-     * @param optional
+     * @param options
      * @returns {Compiler}
      */
-    Compiler.prototype.babel = function (files, wrap, optional) {
-        this.prepend(require.resolve('babel-core/browser-polyfill'));
+    Compiler.prototype.babel = function (files, options) {
+        options = {
+            modules:   (options.modules || 'common'),
+            optional:  (options.optional || []),
+            blacklist: (options.blacklist || []),
+            plugins:   (options.plugins || []),
+            loose:     (options.loose || [])
+        };
+
+        if (this.options.env === Compiler.ENV_PRODUCTION) {
+            options.optional.push('minification.removeConsole');
+            options.optional.push('minification.removeDebugger');
+        }
 
         return this.add(files, function (stream) {
+            var babel = require('gulp-babel');
+
             return stream.pipe(
-                compilers.babel({
-                    modules:  'common',
-                    optional: optional
-                }).on('error', function (error) {
-                    console.log('Babel Error:', error.message);
+                babel(options).on('error', function (error) {
+                    console.log('Babel Error:', error.message, '[opt]: ', options);
                 })
             );
-        }, wrap);
+        }, options.modules === 'common');
     };
 
     /**
      * @param files
-     * @param wrap
      * @returns {*}
      */
-    Compiler.prototype.sass = function (files, wrap) {
+    Compiler.prototype.sass = function (files) {
         return this.add(files, function (stream) {
+            var sass = require('gulp-sass');
+
             return stream.pipe(
-                compilers.sass().on('error', function (error) {
+                sass().on('error', function (error) {
                     console.log('Sass Error:', error.message);
                 })
             );
-        }, wrap);
+        }, false);
+    };
+
+    /**
+     * @param files
+     * @returns {*}
+     */
+    Compiler.prototype.less = function (files) {
+        return this.add(files, function (stream) {
+            var less = require('gulp-less');
+
+            return stream.pipe(
+                less({}).on('error', function (error) {
+                    console.log('Less Error:', error.message);
+                })
+            );
+        }, false);
     };
 
     return Compiler;
@@ -321,6 +381,66 @@ var Compiler = (function () {
  *         TASKS (EXAMPLE)       *
  * ============================= */
 
-gulp.task('make', function () {
+// Compiler options
+var options = {
+    env:          Compiler.ENV_PRODUCTION,
+    storage:      'storage/assets',
+    publish:      'public/assets',
+    commonJsBase: 'javascripts',
+    paths:        [
+        'resources/stylesheets',
+        'resources/javascripts'
+    ]
+};
+
+// Example babel options
+var babel = {
+    optional: [
+        'es7.decorators',
+        'es7.classProperties',
+        'es7.objectRestSpread',
+        'es7.functionBind',
+        'es7.trailingFunctionCommas'
+    ],
+    loose:    [
+        'es6.classes'
+    ]
+};
+
+
+gulp.task('scripts', function () {
+    var compiler = new Compiler(Compiler.EXT_SCRIPT, options);
+
+    compiler = compiler.js([
+        // Babel runtime
+        require.resolve('babel-core/browser-polyfill'),
+        // CommonJS core for browsers
+        require.resolve('commonjs-require/commonjs-require'),
+        // KnockoutJS
+        require.resolve('knockout/build/output/knockout-latest'),
+        // Jquery
+        require.resolve('jquery/dist/jquery')
+    ]);
+
+    compiler = compiler.babel([
+        'resources/javascripts/**/*.js'
+    ], babel);
+
+    compiler.build('app.js', function (output) {
+        console.log('File was be published at:', output);
+    });
+});
+
+
+gulp.task('styles', function () {
+    var compiler = new Compiler(Compiler.EXT_STYLE, options);
+
+    compiler = compiler.sass('layout.scss');
+
+    compiler.build('app.css');
+});
+
+
+gulp.task('default', ['scripts', 'styles'], function () {
 
 });

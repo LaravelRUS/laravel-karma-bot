@@ -1,0 +1,63 @@
+@mixin font($path, $name, $weight: 400, $style: normal, $variant: normal) {
+  @font-face {
+    font-family: $name;
+    font-style: $style;
+    font-weight: $weight;
+    font-variant: $variant;
+    src: url("#{$path}.eot") format('eot');
+    src:
+      local($name),
+      url("#{$path}.eot?#iefix") format('embedded-opentype'),
+      url("#{$path}.woff2") format('woff2'),
+      url("#{$path}.woff") format('woff'),
+      url("#{$path}.ttf") format('ttf');
+    text-rendering: optimizeLegibility;
+  }
+}
+
+// Fira
+@include font('/fonts/fira-4.1/FiraSans-ExtraLight',        'FiraSans', 100);
+@include font('/fonts/fira-4.1/FiraSans-ExtraLightItalic',  'FiraSans', 100, italic);
+@include font('/fonts/fira-4.1/FiraSans-Light',             'FiraSans', 200);
+@include font('/fonts/fira-4.1/FiraSans-LightItalic',       'FiraSans', 200, italic);
+@include font('/fonts/fira-4.1/FiraSans-Book',              'FiraSans', 300);
+@include font('/fonts/fira-4.1/FiraSans-BookItalic',        'FiraSans', 300, italic);
+@include font('/fonts/fira-4.1/FiraSans-Regular',           'FiraSans', 400);
+@include font('/fonts/fira-4.1/FiraSans-Italic',            'FiraSans', 400, italic);
+@include font('/fonts/fira-4.1/FiraMono-Regular',           'FiraMono', 400, mono);
+@include font('/fonts/fira-4.1/FiraSans-Medium',            'FiraSans', 500);
+@include font('/fonts/fira-4.1/FiraSans-MediumItalic',      'FiraSans', 500, italic);
+@include font('/fonts/fira-4.1/FiraMono-Medium',            'FiraMono', 500, mono);
+@include font('/fonts/fira-4.1/FiraSans-SemiBold',          'FiraSans', 600);
+@include font('/fonts/fira-4.1/FiraSans-SemiBoldItalic',    'FiraSans', 600, italic);
+@include font('/fonts/fira-4.1/FiraSans-Bold',              'FiraSans', 700);
+@include font('/fonts/fira-4.1/FiraMono-Bold',              'FiraMono', 700, mono);
+@include font('/fonts/fira-4.1/FiraSans-BoldItalic',        'FiraSans', 700, italic);
+@include font('/fonts/fira-4.1/FiraSans-ExtraBold',         'FiraSans', 800);
+@include font('/fonts/fira-4.1/FiraSans-ExtraBoldItalic',   'FiraSans', 800, italic);
+@include font('/fonts/fira-4.1/FiraSans-Heavy',             'FiraSans', 900);
+@include font('/fonts/fira-4.1/FiraSans-HeavyItalic',       'FiraSans', 900, italic);
+
+// Icons
+@include font('/fonts/semantic-ui/icons',                   'Icons',    400, normal,  normal);
+
+/**
+ * Extended styles
+ */
+
+.font-fractions {
+  -moz-font-feature-settings: "frac=1";
+  font-feature-settings: "frac" 1;
+}
+
+.font-ligatures {
+  -moz-font-feature-settings: "kern=1,liga=1,calt=1";
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
+.font-optimize {
+  @extend .font-ligatures;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,103 @@
+.label {
+  display: inline-block;
+  line-height: $ui-height - 12px;
+  min-height: $ui-height;
+  vertical-align: baseline;
+  margin: 0 .14285714em;
+  background-color: #e8e8e8;
+  padding: 6px .833em;
+  color: rgba(#000, .6);
+  text-transform: none;
+  font-weight: 300;
+  font-size: 12px;
+  position: relative;
+  border-radius: 2px;
+  transition: background .1s ease;
+
+  &.red {
+    background-color: #db2828;
+    color: #fff
+  }
+
+  &.orange {
+    background-color: #f4645f;
+    color: #fff;
+  }
+
+  &.yellow {
+    background-color: #eaae00;
+    color: #fff;
+  }
+
+  &.olive {
+    background-color: #a7bd0d;
+    color: #fff;
+  }
+
+  &.green {
+    background-color: #16ab39;
+    color: #fff;
+  }
+
+  &.teal {
+    background-color: #009c95;
+    color: #fff;
+  }
+
+  &.light-blue {
+    background-color: #20b4d0;
+    color: #fff;
+  }
+
+  &.blue {
+    background-color: #1678c2;
+    color: #fff;
+  }
+
+  &.violet {
+    background-color: #5829bb;
+    color: #fff;
+  }
+
+  &.purple {
+    background-color: #9627ba;
+    color: #fff;
+  }
+
+  &.pink {
+    background-color: #e61a8d;
+    color: #fff;
+  }
+
+  &.brown {
+    background-color: #975b33;
+    color: #fff;
+  }
+
+  &.black {
+    background-color: #27292a;
+    color: #fff;
+  }
+}
+
+a.label {
+  &:before {
+    content: '';
+    background: rgba(#fff, 1);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border-radius: 2px;
+    transition: .3s $swift;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover {
+    &:before {
+      opacity: .3;
+    }
+  }
+}
