@@ -44,5 +44,6 @@ export default class SearchController extends BaseController {
      */
     load(user: User) {
         user.profile();
+        return true;
     }
 }
