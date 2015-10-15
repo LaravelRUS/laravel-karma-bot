@@ -23,7 +23,9 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                 return $message;
             }
 
-            $answer = count($message->mentions) && trim($matches[1])
+            $hasMentions = count($message->mentions) && $message->mentions[0]->login !== \Auth::user()->login;
+
+            $answer = trim($matches[1]) && $hasMentions
                 ? \Lang::get('google.personal', [
                     'user' => $message->mentions[0]->login,
                     'query' => urlencode($matches[2])
