@@ -13,4 +13,35 @@
       font-weight: 100;
     }
   }
+
+  h1 {
+    display: block;
+  }
+
+  .search-error {
+    text-align: center;
+  }
+
+  .search-description {
+    color: #ccc;
+    font-size: 28px;
+    text-align: left;
+    font-style: italic;
+    transition: color .3s $swift;
+
+    &:before {
+      position: relative;
+      margin: 0 15px 0 25px;
+      top: -10px;
+      @include fa-icon;
+      transform: rotate(180deg);
+      content: $fa-var-level-down;
+      font-weight: 100;
+      transition: margin .3s $swift;
+    }
+  }
+
+  input:focus + .search-description {
+    color: #999;
+  }
 }

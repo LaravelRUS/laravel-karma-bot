@@ -1,16 +1,16 @@
 <section class="content" data-controller="Controllers/SearchController" data-bind="if: visible">
     <article class="search">
         <input type="text" data-bind="value: query, valueUpdate: 'input'" placeholder="Поиск по участникам" />
-    </article>
 
-    <!--ko ifnot: users().length-->
-        <!--ko if: query().trim().length > 0 -->
-            <h1>По вашему запросу ничего не найдено</h1>
+        <!--ko ifnot: users().length-->
+            <!--ko if: query().trim().length > 0 -->
+                <h1 class="search-error">По вашему запросу ничего не найдено</h1>
+            <!--/ko-->
+            <!--ko ifnot: query().trim().length > 0 -->
+                <h1 class="search-description">Введите имя пользователя</h1>
+            <!--/ko-->
         <!--/ko-->
-        <!--ko ifnot: query().trim().length > 0 -->
-            <h1>Введите имя пользователя</h1>
-        <!--/ko-->
-    <!--/ko-->
+    </article>
 
     <section class="users" data-bind="foreach: users">
 
