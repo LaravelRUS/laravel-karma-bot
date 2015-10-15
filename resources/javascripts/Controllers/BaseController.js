@@ -39,16 +39,9 @@ export default class BaseController {
      * Router matches and event subscribe
      */
     matchRouter() {
-        Router.current.subscribe((route:Route) => {
-            if (route) {
-                this.onRouteChange(route);
-            }
-        });
-
-        var route = null;
-        if (route = Router.current()) {
+        Router.subscribe((route:Route) => {
             this.onRouteChange(route);
-        }
+        });
     }
 
     /**

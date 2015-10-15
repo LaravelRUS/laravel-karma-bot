@@ -11,6 +11,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -32,11 +33,15 @@ class ApiController extends Controller
      */
     public function getUser($gitterId)
     {
+        $formatRelations = function(HasMany $query) {
+            return $query->orderBy('created_at', 'desc');
+        };
+
         return User::query()
             ->with([
-                'karma' => function(HasMany $q) { return $q->orderBy('created_at', 'desc'); },
-                'thanks' => function(HasMany $q) { return $q->orderBy('created_at', 'desc'); },
-                'achievements'  => function(HasMany $q) { return $q->orderBy('created_at', 'desc'); }
+                'karma'         => $formatRelations,
+                'thanks'        => $formatRelations,
+                'achievements'  => $formatRelations
             ])
             ->where('gitter_id', $gitterId)
             ->first();

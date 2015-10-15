@@ -383,7 +383,9 @@ var Compiler = (function () {
 
 // Compiler options
 var options = {
-    env:          Compiler.ENV_PRODUCTION,
+    env:          argv.production
+        ? Compiler.ENV_PRODUCTION
+        : Compiler.ENV_LOCAL,
     storage:      'storage/assets',
     publish:      'public/assets',
     commonJsBase: 'javascripts',
@@ -442,5 +444,6 @@ gulp.task('styles', function () {
 
 
 gulp.task('default', ['scripts', 'styles'], function () {
-
+    console.log('Build environment: ' + options.env);
+    console.log('Build path: ' + options.publish);
 });

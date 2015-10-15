@@ -1,5 +1,6 @@
 <?php
-Route::get('/{user?}', 'HomeController@index')
+Route::get('/', 'HomeController@index');
+Route::get('/user/{user?}', 'HomeController@index')
     ->where('user', '[a-zA-Z0-9_\-]+');
 
 Route::group(['prefix' => 'api'], function() {

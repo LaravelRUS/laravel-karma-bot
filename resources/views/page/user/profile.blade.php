@@ -1,32 +1,5 @@
 <section class="profile">
-    <nav class="breadcumbs">
-        <a href="#" class="label orange" data-bind="click: $root.home">К поиску</a>
-        <span class="separator">&laquo;</span>
-        <span class="label white" data-bind="text: login">User Login</span>
-    </nav>
-
-    <aside class="profile-badge">
-        <figure>
-            <img src="https://github.com/identicons/jasonlong.png" alt="User" data-bind="attr: {
-                src: avatar,
-                alt: name
-            }" />
-        </figure>
-
-        <h1 data-bind="text: login">User Login</h1>
-        <h2 data-bind="text: name">User Name</h2>
-
-        <!--ko if: achievements.items().length-->
-        <section class="achievements" data-bind="foreach: achievements.items">
-            <article class="achieve" data-bind="attr: {
-                title: description + '\nПолучено ' + created_at.toLocaleString()
-            }">
-                <img data-bind="attr: {src: image, alt: title}" />
-                <!--ko text: title--><!--/ko-->
-            </article>
-        </section>
-        <!--/ko-->
-    </aside>
+    @include('page.user.aside')
 
     <section class="profile-content">
         <h2>Карма: <!--ko text: karma.length--><!--/ko--></h2>

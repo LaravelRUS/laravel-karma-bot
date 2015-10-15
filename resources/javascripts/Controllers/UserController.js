@@ -43,7 +43,7 @@ export default class UserController extends BaseController {
     onShow() {
         // Fix for window with empty args
         if (!this.args.user) {
-            this.args.user = window.location.pathname.substr(1);
+            this.args.user = Router.current().matches[1];
         }
 
         User.ready(state => {

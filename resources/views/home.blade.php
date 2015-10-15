@@ -8,8 +8,17 @@
         </article>
     </section>
 
-    <header>
-        <a class="logo" href="{{ URL::to('/') }}">Laravel<span>\Karma</span></a>
+    <header data-controller="Controllers/HeaderController">
+        <a class="logo" href="{{ URL::to('/') }}" data-bind="click: home">
+            Laravel<span>\Karma</span>
+        </a>
+
+        <nav class="breadcumbs">
+            <!--ko if: url-->
+            <span class="separator">&raquo;</span>
+            <span class="label" data-bind="text: '@' + url()">@user</span>
+            <!--/ko-->
+        </nav>
 
         <nav>
             <a href="http://laravel.su/docs">Документация</a>

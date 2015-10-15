@@ -86,6 +86,7 @@ class Karma extends \Eloquent
      */
     public function getCreatedAtAttribute($time)
     {
-        return new Carbon($time);
+        return (new Carbon($time))
+            ->toIso8601String();
     }
 }

@@ -102,6 +102,22 @@ export default class Router {
     }
 
     /**
+     * @param callback
+     */
+    static subscribe(callback) {
+        (callback => {
+            if (this.current()) {
+                callback(this.current());
+            }
+            this.current.subscribe(route => {
+                if (this.current()) {
+                    callback(this.current());
+                }
+            });
+        })(callback);
+    }
+
+    /**
      * @param route
      * @returns {Route}
      */
