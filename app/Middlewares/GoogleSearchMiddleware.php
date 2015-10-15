@@ -18,7 +18,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
     {
         $text = $message->escaped_text;
 
-        if (preg_match('/^(@.*?\s)?погугли\s(.*?)$/isu', $text, $matches)) {
+        if (preg_match('/^(@.*?\s)?(?:погугли|гугли)\s(.*?)$/isu', $text, $matches)) {
             if (!trim($matches[2])) {
                 return $message;
             }
@@ -29,10 +29,10 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                 ? \Lang::get('google.personal', [
                     'user' => $message->mentions[0]->login,
                     'query' => urlencode($matches[2])
-                  ])
+                ])
                 : \Lang::get('google.common', [
                     'query' => urlencode($matches[2])
-                  ]);
+                ]);
 
             $message->answer($answer);
         }
