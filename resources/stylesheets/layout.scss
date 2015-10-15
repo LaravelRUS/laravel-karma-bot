@@ -19,7 +19,7 @@ body {
   @extend .font-optimize;
   min-height: 100%;
   color: #333;
-  width: $width;
+  min-width: $width;
 
   font: {
     family: map-get($font, family);
