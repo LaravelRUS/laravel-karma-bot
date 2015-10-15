@@ -26,7 +26,16 @@ export default class Application {
 
         this.searchControllers();
 
-        User.load();
+        User.load()
+            .ready((model: User) => {
+                User.collection = User.collection
+                    .sort((user:User) => {
+                        return parseInt(user.thanks_count) || 0;
+                    }, -1)
+                    .sort((user:User) => {
+                        return parseInt(user.karma_count) || 0;
+                    }, -1);
+            })
     }
 
     /**

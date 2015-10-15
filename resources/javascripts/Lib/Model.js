@@ -17,7 +17,7 @@ export default class Model {
     static collection = new Collection([]);
 
     /**
-     * @returns {Collection}
+     * @returns {Model}
      */
     static load() {
 
@@ -51,7 +51,7 @@ export default class Model {
             }
         }
 
-        return Model.collection;
+        return this;
     }
 
     /**
@@ -60,10 +60,10 @@ export default class Model {
     static ready(callback) {
         (callback => {
             if (this.loaded()) {
-                callback();
+                callback(this);
             }
             var subscription = Model.loaded.subscribe(state => {
-                callback();
+                callback(this);
                 subscription.dispose();
             });
         })(callback);

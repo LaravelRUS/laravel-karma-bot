@@ -78,7 +78,7 @@ class ApiController extends Controller
         return (new User())
             ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
             ->each(function (User $user) use ($karmaStorage, $thanksStorage) {
-                $user->karma_count = $karmaStorage[$user->id] ?? 0;
+                $user->karma_count  = $karmaStorage[$user->id] ?? 0;
                 $user->thanks_count = $thanksStorage[$user->id] ?? 0;
             });
     }

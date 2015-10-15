@@ -30,9 +30,6 @@ export default class SearchController extends BaseController {
                     .each((user:User) => {
                         user.doHighlight(query);
                     })
-                    .sort((user:User) => {
-                        return user.karma_count;
-                    }, -1)
                     .toArray();
 
 
