@@ -33,7 +33,7 @@ class Karma500Achieve extends AbstractAchieve
                     ->create(
                         'Благодетель',
                         'Наберите 500 кармы',
-                        'https://raw.githubusercontent.com/LaravelRUS/GitterBot/master/resources/achieve/karma-500.gif'
+                        'http://karma.laravel.su/img/achievements/karma-500.gif'
                     );
             }
         });

@@ -33,7 +33,7 @@ class Karma50Achieve extends AbstractAchieve
                     ->create(
                         'Полсотни',
                         'Наберите 50 кармы',
-                        'https://raw.githubusercontent.com/LaravelRUS/GitterBot/master/resources/achieve/karma-50.gif'
+                        'http://karma.laravel.su/img/achievements/karma-50.gif'
                     );
             }
         });
