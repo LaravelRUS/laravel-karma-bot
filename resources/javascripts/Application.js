@@ -21,7 +21,8 @@ export default class Application {
     constructor() {
         this.router.add('/', 'home');
         this.router.add('/user/{user}', 'user').where('user', '.*?');
-        this.router.match();
+
+        this.router.boot();
 
         this.searchControllers();
 

@@ -83,6 +83,11 @@ export class Route {
  */
 export default class Router {
     /**
+     * @type {boolean}
+     */
+    static booted = false;
+
+    /**
      * @type {Array}
      */
     static routes = [];
@@ -91,6 +96,25 @@ export default class Router {
      * @type {Route}
      */
     static current = ko.observable();
+
+    /**
+     * Boot router
+     *
+     * @returns {*}
+     */
+    static boot() {
+        if (!Router.booted) {
+            Router.booted = true;
+            window.addEventListener('popstate', () => {
+                Router.match();
+            }, false);
+        }
+
+        Router.match();
+
+        return Router;
+    }
+
 
     /**
      * @param pattern
@@ -109,7 +133,7 @@ export default class Router {
             if (this.current()) {
                 callback(this.current());
             }
-            this.current.subscribe(route => {
+            Router.current.subscribe(route => {
                 if (this.current()) {
                     callback(this.current());
                 }
@@ -122,7 +146,7 @@ export default class Router {
      * @returns {Route}
      */
     static addRoute(route:Route) {
-        this.routes.push(route);
+        Router.routes.push(route);
         return route;
     }
 
@@ -131,8 +155,8 @@ export default class Router {
      * @returns {*}
      */
     static get(name) {
-        for (var i = 0; i < this.routes.length; i++) {
-            var route = this.routes[i];
+        for (var i = 0; i < Router.routes.length; i++) {
+            var route = Router.routes[i];
             if (route.name === name) {
                 return route;
             }
@@ -144,8 +168,8 @@ export default class Router {
      * @returns {*}
      */
     static match() {
-        for (var i = 0; i < this.routes.length; i++) {
-            var route = this.routes[i];
+        for (var i = 0; i < Router.routes.length; i++) {
+            var route = Router.routes[i];
             if (route.match()) {
                 this.current(route);
                 return route;
