@@ -19,42 +19,34 @@ abstract class AbstractAchieve implements
     SubscriberInterface
 {
     /**
-     * @var User
+     * Achieve title
+     * @var string
      */
-    protected $user;
+    public $title = 'undefined';
+
+    /**
+     * Achieve description
+     * @var string
+     */
+    public $description = 'undefined';
+
+    /**
+     * Achieve image link
+     * @var string
+     */
+    public $image = '/img/achievements/karma-10.gif';
 
     /**
      * @param User $user
-     * @return $this
-     */
-    public function forUser(User $user)
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * @param $title
-     * @param $description
-     * @param $image
      * @return static
      * @throws \LogicException
      */
-    public function create($title, $description, $image)
+    public function create(User $user)
     {
-        if ($this->user === null) {
-            throw new \LogicException('Can not add achieve. User missing.');
-        }
-
         $achieve = Achieve::create([
             'name'        => static::class,
-            'user_id'     => $this->user->id,
-            'title'       => $title,
-            'description' => $description,
-            'image'       => $image,
+            'user_id'     => $user->id
         ]);
-
-        $this->user = null;
 
         return $achieve;
     }

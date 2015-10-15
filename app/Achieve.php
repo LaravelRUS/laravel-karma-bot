@@ -11,6 +11,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use App\Gitter\Achieve\AbstractAchieve;
 
 /**
  * Class Achieve
@@ -19,10 +20,18 @@ use Carbon\Carbon;
  * @property-read int $id
  * @property string $name
  * @property int $user_id
- * @property string $title
- * @property string $description
- * @property string $image
- * @property Carbon $created_at
+ *
+ * === Relations ===
+ *
+ * @property-read User $user
+ *
+ * === Accessors ===
+ *
+ * @property-read string $title
+ * @property-read string $description
+ * @property-read string $image
+ * @property string $created_at
+ * @property-read AbstractAchieve $achieve
  *
  */
 class Achieve extends \Eloquent
@@ -43,6 +52,16 @@ class Achieve extends \Eloquent
     protected $guarded = ['id', 'created_at'];
 
     /**
+     * @var array
+     */
+    protected $appends = ['title', 'description', 'image'];
+
+    /**
+     * @var AbstractAchieve
+     */
+    protected $cachedAchieve = null;
+
+    /**
      * Boot
      */
     public static function boot()
@@ -50,7 +69,9 @@ class Achieve extends \Eloquent
         parent::boot();
 
         static::creating(function (Achieve $achieve) {
-            $achieve->created_at = $achieve->freshTimestamp();
+            if (!$achieve->created_at) {
+                $achieve->created_at = $achieve->freshTimestamp();
+            }
 
             if (static::has($achieve->user, $achieve->name)) {
                 return false;
@@ -81,6 +102,41 @@ class Achieve extends \Eloquent
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return AbstractAchieve
+     */
+    public function getAchieveAttribute()
+    {
+        if ($this->cachedAchieve === null) {
+            $this->cachedAchieve = new $this->name;
+        }
+        return $this->cachedAchieve;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleAttribute()
+    {
+        return $this->achieve->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescriptionAttribute()
+    {
+        return $this->achieve->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageAttribute()
+    {
+        return $this->achieve->image;
     }
 
     /**

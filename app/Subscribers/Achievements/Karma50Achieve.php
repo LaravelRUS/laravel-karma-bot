@@ -20,6 +20,21 @@ use App\Gitter\Achieve\AbstractAchieve;
 class Karma50Achieve extends AbstractAchieve
 {
     /**
+     * @var string
+     */
+    public $title = 'Любитель сладкого';
+
+    /**
+     * @var string
+     */
+    public $description = 'Наберите 50 кармы';
+
+    /**
+     * @var string
+     */
+    public $image = 'http://karma.laravel.su/img/achievements/karma-50.gif';
+
+    /**
      * @throws \LogicException
      */
     public function handle()
@@ -28,13 +43,7 @@ class Karma50Achieve extends AbstractAchieve
             $count = $karma->target->karma;
 
             if ($count === 50) {
-                $this
-                    ->forUser($karma->target)
-                    ->create(
-                        'Полсотни',
-                        'Наберите 50 кармы',
-                        'http://karma.laravel.su/img/achievements/karma-50.gif'
-                    );
+                $this->create($karma->target);
             }
         });
     }

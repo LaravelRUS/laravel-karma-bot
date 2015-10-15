@@ -20,6 +20,21 @@ use App\Gitter\Achieve\AbstractAchieve;
 class Karma500Achieve extends AbstractAchieve
 {
     /**
+     * @var string
+     */
+    public $title = 'Рэмбо';
+
+    /**
+     * @var string
+     */
+    public $description = 'Наберите 500 кармы';
+
+    /**
+     * @var string
+     */
+    public $image = 'http://karma.laravel.su/img/achievements/karma-500.gif';
+
+    /**
      * @throws \LogicException
      */
     public function handle()
