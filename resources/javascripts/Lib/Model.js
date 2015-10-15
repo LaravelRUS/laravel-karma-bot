@@ -96,11 +96,11 @@ export default class Model {
         this.properties = properties;
 
         if (properties.created_at) {
-            properties.created_at = new Date(properties.created_at);
+            properties.created_at = new Date(properties.created_at.date);
         }
 
         if (properties.updated_at) {
-            properties.updated_at = new Date(properties.updated_at);
+            properties.updated_at = new Date(properties.updated_at.date);
         }
 
         for (var key in properties) {

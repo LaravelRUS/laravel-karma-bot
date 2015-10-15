@@ -12,6 +12,7 @@ namespace App;
 
 use Carbon\Carbon;
 use App\Gitter\Achieve\AbstractAchieve;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Achieve
@@ -145,7 +146,13 @@ class Achieve extends \Eloquent
      */
     public function getCreatedAtAttribute($time)
     {
-        return (new Carbon($time))
-            ->toIso8601String();
+        return new class($time) extends Carbon implements Arrayable {
+            public function toArray() {
+                return [
+                    'date' => $this->toIso8601String(),
+                    'timezone' => $this->timezone,
+                ];
+            }
+        };
     }
 }

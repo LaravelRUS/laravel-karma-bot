@@ -11,6 +11,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Karma
@@ -89,7 +90,13 @@ class Karma extends \Eloquent
      */
     public function getCreatedAtAttribute($time)
     {
-        return (new Carbon($time))
-            ->toIso8601String();
+        return new class($time) extends Carbon implements Arrayable {
+            public function toArray() {
+                return [
+                    'date' => $this->toIso8601String(),
+                    'timezone' => $this->timezone,
+                ];
+            }
+        };
     }
 }
