@@ -10,9 +10,11 @@
  */
 namespace App\Http\Controllers;
 
+use App\Karma;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Response;
 
 /**
  * Class ApiController
@@ -20,6 +22,34 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class ApiController extends Controller
 {
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getUsersTop()
+    {
+        return \Cache::remember('top.karma', 1, function() {
+            $karmaStorage = [];
+
+            $karma = (new Karma())
+                ->selectRaw('user_target_id, count(*) as count')
+                ->groupBy('user_target_id')
+                ->orderBy('count', 'desc')
+                ->take(10)
+                ->get()
+                ->each(function ($item) use (&$karmaStorage) {
+                    $karmaStorage[$item->user_target_id] = $item->count;
+                });
+
+
+            return (new User())
+                ->whereIn('id', $karma->pluck('user_target_id'))
+                ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
+                ->each(function (User $user) use ($karmaStorage) {
+                    $user->karma_count = $karmaStorage[$user->id];
+                });
+        });
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
