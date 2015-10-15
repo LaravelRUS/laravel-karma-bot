@@ -12,6 +12,7 @@
         "react/http-client": "^0.4.6",
         "barryvdh/laravel-ide-helper": "2.1.*",
         "guzzlehttp/guzzle": "^6.1",
+        "predis/predis": "~1.0",
 
         "big-shark/sql-to-builder": "dev-master@dev"
     },
