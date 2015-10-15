@@ -76,6 +76,20 @@ export default class Collection {
 
     /**
      * @param callback
+     * @param type
+     * @return {Collection}
+     */
+    sort(callback, type = 1) {
+        type = type > 0 ? 1 : -1;
+        return new Collection(this.items().sort((a, b) => {
+            return callback(a) > callback(b)
+                ? 1 * type
+                : -1 * type;
+        }));
+    }
+
+    /**
+     * @param callback
      * @returns {Collection}
      */
     each(callback) {

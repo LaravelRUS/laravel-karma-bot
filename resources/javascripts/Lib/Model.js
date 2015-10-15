@@ -22,13 +22,13 @@ export default class Model {
     static load() {
 
         if (!this.loaded()) {
-            for (var key in this.collection) {
-                if (this.collection[key] instanceof Function) {
+            for (var key in Model.collection) {
+                if (Model.collection[key] instanceof Function) {
                     (method => {
                         Object.defineProperty(this, method, {
                             enumerable:   false,
                             configurable: false,
-                            get:          () => this.collection[method]
+                            get:          () => Model.collection[method]
                         });
                     })(key);
                 }
@@ -40,7 +40,7 @@ export default class Model {
                     .then(items => {
                         items.forEach(item => {
                             var instance = new this(item);
-                            this.collection.add(instance);
+                            Model.collection.add(instance);
                         });
 
                         this.loaded(true);
@@ -51,7 +51,7 @@ export default class Model {
             }
         }
 
-        return this.collection;
+        return Model.collection;
     }
 
     /**
@@ -62,7 +62,7 @@ export default class Model {
             if (this.loaded()) {
                 callback();
             }
-            var subscription = this.loaded.subscribe(state => {
+            var subscription = Model.loaded.subscribe(state => {
                 callback();
                 subscription.dispose();
             });
@@ -73,14 +73,14 @@ export default class Model {
      * @returns {*}
      */
     static [Symbol.iterator]() {
-        return this.collection[Symbol.iterator]();
+        return Model.collection[Symbol.iterator]();
     }
 
     /**
      * @returns {Collection}
      */
     static query() {
-        return this.collection;
+        return Model.collection;
     }
 
     /**
@@ -152,6 +152,7 @@ export default class Model {
     /**
      * @return {string}
      */
+
     toString() {
         return JSON.stringify(this.properties);
     }

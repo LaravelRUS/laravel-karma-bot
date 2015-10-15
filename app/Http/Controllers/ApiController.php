@@ -45,7 +45,7 @@ class ApiController extends Controller
                 ->whereIn('id', $karma->pluck('user_target_id'))
                 ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
                 ->each(function (User $user) use ($karmaStorage) {
-                    $user->karma_count = $karmaStorage[$user->id];
+                    $user->karma_count = $karmaStorage[$user->id] ?? 0;
                 });
         });
     }
@@ -55,7 +55,32 @@ class ApiController extends Controller
      */
     public function getUsers()
     {
-        return User::get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url']);
+        $karmaStorage = [];
+        $thanksStorage = [];
+
+        (new Karma())
+            ->selectRaw('user_target_id, count(*) as count')
+            ->groupBy('user_target_id')
+            ->get()
+            ->each(function ($item) use (&$karmaStorage) {
+                $karmaStorage[$item->user_target_id] = $item->count;
+            });
+
+        (new Karma())
+            ->selectRaw('user_id, count(*) as count')
+            ->groupBy('user_id')
+            ->get()
+            ->each(function ($item) use (&$thanksStorage) {
+                $thanksStorage[$item->user_id] = $item->count;
+            });
+
+
+        return (new User())
+            ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
+            ->each(function (User $user) use ($karmaStorage, $thanksStorage) {
+                $user->karma_count = $karmaStorage[$user->id] ?? 0;
+                $user->thanks_count = $thanksStorage[$user->id] ?? 0;
+            });
     }
 
     /**

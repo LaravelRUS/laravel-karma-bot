@@ -9,8 +9,10 @@
     width: 530px;
     margin: 0 10px 30px 10px;
     background: #fff;
+    position: relative;
     cursor: pointer;
     box-shadow: 0 0 0 2px rgba(#f4645f, 0);
+    overflow: hidden;
 
     &:hover {
       transition: box-shadow .2s $swift;
@@ -52,6 +54,22 @@
 
     .name {
       font-size: 14px;
+    }
+
+    .user-karma{
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      width: 24px;
+      height: 24px;
+      color: #fff;
+      background: #f4645f;
+      border-radius: 2px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 25px;
+      font-weight: 300;
+      font-style: italic;
     }
 
     nav {

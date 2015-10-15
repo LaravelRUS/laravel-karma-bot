@@ -12,17 +12,24 @@
         <!--/ko-->
     </article>
 
+
     <section class="users" data-bind="foreach: users">
 
         <article class="user" data-bind="click: $parent.load">
             <img src="https://github.com/identicons/jasonlong.png" alt="User" data-bind="attr: {
-                    src: avatar,
-                    alt: name
-                }" />
+                src: avatar,
+                alt: name
+            }" />
 
             <span class="login" data-bind="html: highlight.login">User Login</span>
 
             <span class="name" data-bind="html: highlight.name">User Name</span>
+
+
+            <div class="user-karma" data-bind="text: (karma_count || '0'), attr: {
+                title: 'Карма: ' + (karma_count || '0') +
+                        '\nБлагодарностей: ' + (thanks_count || '0')
+            }"></div>
 
             <nav>
                 <a href="http://laravel.su/users" target="_blank"

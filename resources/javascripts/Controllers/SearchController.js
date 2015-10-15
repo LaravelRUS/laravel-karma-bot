@@ -26,9 +26,15 @@ export default class SearchController extends BaseController {
             query = query.toString().trim();
 
             if (query.length) {
-                var users = User.search(query).each((user:User) => {
-                    user.doHighlight(query);
-                }).toArray();
+                var users = User.search(query)
+                    .each((user:User) => {
+                        user.doHighlight(query);
+                    })
+                    .sort((user:User) => {
+                        return user.karma_count;
+                    }, -1)
+                    .toArray();
+
 
                 this.users(users);
             } else {
