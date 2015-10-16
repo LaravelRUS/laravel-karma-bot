@@ -21,6 +21,7 @@ use App\Subscribers\Achievements\Karma50Achieve;
 use App\Subscribers\Achievements\Karma100Achieve;
 use App\Subscribers\Achievements\Karma500Achieve;
 use App\Subscribers\Achievements\Thanks20Achieve;
+use App\Subscribers\Achievements\Thanks50Achieve;
 
 /**
  * Class AchieveSubscriber
