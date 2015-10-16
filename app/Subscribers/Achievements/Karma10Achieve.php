@@ -14,25 +14,25 @@ use App\Karma;
 use App\Gitter\Achieve\AbstractAchieve;
 
 /**
- * Class Karma100Achieve
+ * Class Karma10Achieve
  * @package App\Achieve
  */
-class Karma100Achieve extends AbstractAchieve
+class Karma10Achieve extends AbstractAchieve
 {
     /**
      * @var string
      */
-    public $title = 'Благодетель';
+    public $title = 'Находчивый';
 
     /**
      * @var string
      */
-    public $description = 'Наберите 100 кармы';
+    public $description = 'Наберите 10 кармы';
 
     /**
      * @var string
      */
-    public $image = 'http://karma.laravel.su/img/achievements/karma-100.gif';
+    public $image = 'http://karma.laravel.su/img/achievements/karma-10.gif';
 
     /**
      * @throws \LogicException
@@ -40,9 +40,10 @@ class Karma100Achieve extends AbstractAchieve
     public function handle()
     {
         Karma::created(function (Karma $karma) {
+
             $count = $karma->target->karma->count();
 
-            if ($count === 100) {
+            if ($count === 10) {
                 $this->create($karma->target, $karma->created_at);
             }
         });

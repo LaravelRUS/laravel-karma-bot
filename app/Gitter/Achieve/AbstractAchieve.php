@@ -12,6 +12,7 @@ namespace App\Gitter\Achieve;
 
 use App\User;
 use App\Achieve;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 use App\Gitter\Subscriber\SubscriberInterface;
@@ -64,14 +65,16 @@ abstract class AbstractAchieve implements
 
     /**
      * @param User $user
+     * @param Carbon|null $createdAt
      * @return Achieve
      * @throws \LogicException
      */
-    public function create(User $user): Achieve
+    public function create(User $user, Carbon $createdAt = null): Achieve
     {
         $achieve = Achieve::create([
             'name'        => $this->name,
-            'user_id'     => $user->id
+            'user_id'     => $user->id,
+            'created_at'  => $createdAt ?: Carbon::now()
         ]);
 
         return $achieve;

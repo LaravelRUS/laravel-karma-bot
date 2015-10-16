@@ -14,25 +14,25 @@ use App\Karma;
 use App\Gitter\Achieve\AbstractAchieve;
 
 /**
- * Class KarmaAchieve
+ * Class Thanks20Achieve
  * @package App\Achieve
  */
-class KarmaAchieve extends AbstractAchieve
+class Thanks20Achieve extends AbstractAchieve
 {
     /**
      * @var string
      */
-    public $title = 'Находчивый';
+    public $title = 'Благодарный';
 
     /**
      * @var string
      */
-    public $description = 'Наберите 10 кармы';
+    public $description = 'Сказать 20 раз спасибо';
 
     /**
      * @var string
      */
-    public $image = 'http://karma.laravel.su/img/achievements/karma-10.gif';
+    public $image = 'http://karma.laravel.su/img/achievements/thanks-20.gif';
 
     /**
      * @throws \LogicException
@@ -40,10 +40,10 @@ class KarmaAchieve extends AbstractAchieve
     public function handle()
     {
         Karma::created(function (Karma $karma) {
-            $count = $karma->target->karma;
+            $count = $karma->user->thanks->count();
 
-            if ($count === 10) {
-                $this->create($karma->target);
+            if ($count === 20) {
+                $this->create($karma->user, $karma->created_at);
             }
         });
     }

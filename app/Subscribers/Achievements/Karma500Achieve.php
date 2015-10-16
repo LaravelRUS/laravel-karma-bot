@@ -40,16 +40,10 @@ class Karma500Achieve extends AbstractAchieve
     public function handle()
     {
         Karma::created(function (Karma $karma) {
-            $count = $karma->target->karma;
+            $count = $karma->target->karma->count();
 
             if ($count === 500) {
-                $this
-                    ->forUser($karma->target)
-                    ->create(
-                        'Благодетель',
-                        'Наберите 500 кармы',
-                        'http://karma.laravel.su/img/achievements/karma-500.gif'
-                    );
+                $this->create($karma->target, $karma->created_at);
             }
         });
     }

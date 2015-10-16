@@ -40,10 +40,10 @@ class Karma50Achieve extends AbstractAchieve
     public function handle()
     {
         Karma::created(function (Karma $karma) {
-            $count = $karma->target->karma;
+            $count = $karma->target->karma->count();
 
             if ($count === 50) {
-                $this->create($karma->target);
+                $this->create($karma->target, $karma->created_at);
             }
         });
     }

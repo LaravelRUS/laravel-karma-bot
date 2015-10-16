@@ -66,19 +66,18 @@ class Validator
 
     /**
      * @param Message $message
-     * @param bool $ignoreTimeout
      * @return Status
      */
-    public function validate(Message $message, $ignoreTimeout = false)
+    public function validate(Message $message)
     {
         // Check karma increment
-        $status = $this->validateMessage($message, Status::STATUS_INCREMENT, $this->likes, $ignoreTimeout);
+        $status = $this->validateMessage($message, Status::STATUS_INCREMENT, $this->likes);
         if (!$status->isNothing()) {
             return $status;
         }
 
         // Check karma decrement
-        $status = $this->validateMessage($message, Status::STATUS_DECREMENT, $this->dislikes, $ignoreTimeout);
+        $status = $this->validateMessage($message, Status::STATUS_DECREMENT, $this->dislikes);
         if (!$status->isNothing()) {
             return $status;
         }
@@ -90,17 +89,16 @@ class Validator
      * @param Message $message
      * @param $validStatus
      * @param array $words
-     * @param bool $ignoreTimeout
      * @return Status
      */
-    protected function validateMessage(Message $message, $validStatus, array $words = [], $ignoreTimeout = false)
+    protected function validateMessage(Message $message, $validStatus, array $words = [])
     {
         if ($this->validateText($message, $words)) {
             if (!$this->validateUser($message)) {
                 return new Status(Status::STATUS_SELF);
             }
 
-            if (!$ignoreTimeout && !$this->validateTimeout($message)) {
+            if (!$this->validateTimeout($message)) {
                 return new Status(Status::STATUS_TIMEOUT);
             }
 

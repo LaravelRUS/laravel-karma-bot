@@ -50,7 +50,7 @@ class Achieve extends \Eloquent
     /**
      * @var array
      */
-    protected $guarded = ['id', 'created_at'];
+    protected $guarded = ['id'];
 
     /**
      * @var array

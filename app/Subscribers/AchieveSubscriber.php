@@ -15,7 +15,7 @@ use App\Achieve;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use App\Gitter\Subscriber\SubscriberInterface;
-use App\Subscribers\Achievements\KarmaAchieve;
+use App\Subscribers\Achievements\Karma10Achieve;
 use App\Subscribers\Achievements\Karma50Achieve;
 use App\Subscribers\Achievements\Karma100Achieve;
 use App\Subscribers\Achievements\Karma500Achieve;
@@ -34,7 +34,7 @@ class AchieveSubscriber implements
      * @var array
      */
     protected $achievements = [
-        KarmaAchieve::class,
+        Karma10Achieve::class,
         Karma50Achieve::class,
         Karma100Achieve::class,
         Karma500Achieve::class,
@@ -51,7 +51,7 @@ class AchieveSubscriber implements
     public function __construct()
     {
         foreach ($this->achievements as $achieve) {
-            $this->instances[] = $instance = new $achieve;
+            $this->instances[] = ($instance = new $achieve);
             $instance->handle();
         }
     }

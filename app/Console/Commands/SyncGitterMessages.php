@@ -129,7 +129,7 @@ class SyncGitterMessages extends Command
      */
     protected function onMessage(Message $message, $count)
     {
-        $status = $this->karma->validate($message, true);
+        $status = $this->karma->validate($message);
 
         if ($status->isIncrement()) {
             foreach ($message->mentions as $user) {
