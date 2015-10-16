@@ -28,29 +28,43 @@ class KarmaRenderMiddleware implements MiddlewareInterface
 
             $karmaMessage = [];
 
+            // Karma info
             $karmaMessage[] = $args['karma']
                 ? \Lang::get('karma.count.message', $args)
-                : \Lang::get('karma.count.empty', $args);
+                : \Lang::get('karma.count.empty',   $args);
 
-
-            $achievements = [];
-            foreach ($message->user->achievements as $achieve) {
-                $achievements[] = '"' . $achieve->title . '"';
+            // If has achievements
+            $achievements = $this->getAchievements($message);
+            if ($achievements) {
+                $karmaMessage[] = $achievements;
             }
 
-            if (count($achievements)) {
-                $karmaMessage[] = \Lang::get('karma.achievements', [
-                    'achievements' => implode(', ', $achievements)
-                ]);
-            }
-
-            $karmaMessage[] = \Lang::get('karma.account', ['user' => $message->user->login]);
-
-
+            // Profile link
+            $karmaMessage[] = \Lang::get('karma.account', $args);
+            
             $message->italic(implode("\n", $karmaMessage));
         }
 
-
         return $message;
+    }
+
+    /**
+     * @param Message $message
+     * @return null|string
+     */
+    protected function getAchievements(Message $message)
+    {
+        $achievements = [];
+        foreach ($message->user->achievements as $achieve) {
+            $achievements[] = '"' . $achieve->title . '"';
+        }
+
+        if (count($achievements)) {
+            return \Lang::get('karma.achievements', [
+                'achievements' => implode(', ', $achievements)
+            ]);
+        }
+
+        return null;
     }
 }
