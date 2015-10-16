@@ -22,6 +22,7 @@ use App\Subscribers\Achievements\Karma100Achieve;
 use App\Subscribers\Achievements\Karma500Achieve;
 use App\Subscribers\Achievements\Thanks20Achieve;
 use App\Subscribers\Achievements\Thanks50Achieve;
+use App\Subscribers\Achievements\Thanks100Achieve;
 
 /**
  * Class AchieveSubscriber
@@ -42,6 +43,7 @@ class AchieveSubscriber implements
         Karma500Achieve::class,
         Thanks20Achieve::class,
         Thanks50Achieve::class,
+        Thanks100Achieve::class,
     ];
 
     /**
