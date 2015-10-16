@@ -41,6 +41,7 @@ class AchieveSubscriber implements
         Karma100Achieve::class,
         Karma500Achieve::class,
         Thanks20Achieve::class,
+        Thanks50Achieve::class,
     ];
 
     /**
