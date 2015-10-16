@@ -12,7 +12,7 @@
             class: 'achieve ' + (users > 0 ? '' : 'achieve-disabled')
         }">
             <img src="#" data-bind="attr: {
-                src: image,
+                src: image + '?v=2',
                 alt: title
             }"/>
             <h2 data-bind="text: title">Achieve</h2>
