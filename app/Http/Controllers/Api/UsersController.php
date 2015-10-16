@@ -8,20 +8,54 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Karma;
 use App\User;
-use Carbon\Carbon;
+use App\Karma;
+use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Http\Response;
 
 /**
- * Class ApiController
+ * Class UsersController
  * @package App\Http\Controllers
  */
-class ApiController extends Controller
+class UsersController extends Controller
 {
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function index()
+    {
+        return \Cache::remember('users', 1, function() {
+            $karmaStorage = [];
+            $thanksStorage = [];
+
+            (new Karma())
+                ->selectRaw('user_target_id, count(user_id) as count')
+                ->groupBy('user_target_id')
+                ->get()
+                ->each(function ($item) use (&$karmaStorage) {
+                    $karmaStorage[$item->user_target_id] = $item->count;
+                });
+
+            (new Karma())
+                ->selectRaw('user_id, count(user_target_id) as count')
+                ->groupBy('user_id')
+                ->get()
+                ->each(function ($item) use (&$thanksStorage) {
+                    $thanksStorage[$item->user_id] = $item->count;
+                });
+
+
+            return (new User())
+                ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
+                ->each(function (User $user) use ($karmaStorage, $thanksStorage) {
+                    $user->karma_count  = $karmaStorage[$user->id] ?? 0;
+                    $user->thanks_count = $thanksStorage[$user->id] ?? 0;
+                });
+        });
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
@@ -46,41 +80,6 @@ class ApiController extends Controller
                 ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
                 ->each(function (User $user) use ($karmaStorage) {
                     $user->karma_count = $karmaStorage[$user->id] ?? 0;
-                });
-        });
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function getUsers()
-    {
-        return \Cache::remember('users', 1, function() {
-            $karmaStorage = [];
-            $thanksStorage = [];
-
-            (new Karma())
-                ->selectRaw('user_target_id, count(*) as count')
-                ->groupBy('user_target_id')
-                ->get()
-                ->each(function ($item) use (&$karmaStorage) {
-                    $karmaStorage[$item->user_target_id] = $item->count;
-                });
-
-            (new Karma())
-                ->selectRaw('user_id, count(*) as count')
-                ->groupBy('user_id')
-                ->get()
-                ->each(function ($item) use (&$thanksStorage) {
-                    $thanksStorage[$item->user_id] = $item->count;
-                });
-
-
-            return (new User())
-                ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
-                ->each(function (User $user) use ($karmaStorage, $thanksStorage) {
-                    $user->karma_count  = $karmaStorage[$user->id] ?? 0;
-                    $user->thanks_count = $thanksStorage[$user->id] ?? 0;
                 });
         });
     }

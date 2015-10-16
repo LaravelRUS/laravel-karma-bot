@@ -60,7 +60,8 @@ export default class UserController extends BaseController {
 
             } else {
                 try {
-                    user.load(user => this.user(user));
+                    user.loadProfile()
+                        .then((user:User) => this.user(user));
 
                 } catch (e) {
                     console.log(e);
@@ -68,6 +69,13 @@ export default class UserController extends BaseController {
                 }
             }
         });
+    }
+
+    /**
+     * Go to achievements page
+     */
+    achievements() {
+        Router.get('achievements').move();
     }
 
     /**

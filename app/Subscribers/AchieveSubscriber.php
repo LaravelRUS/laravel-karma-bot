@@ -12,17 +12,23 @@ namespace App\Subscribers;
 
 use App\Room;
 use App\Achieve;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use App\Gitter\Subscriber\SubscriberInterface;
 use App\Subscribers\Achievements\KarmaAchieve;
 use App\Subscribers\Achievements\Karma50Achieve;
 use App\Subscribers\Achievements\Karma100Achieve;
 use App\Subscribers\Achievements\Karma500Achieve;
+use Illuminate\Support\Collection;
 
 /**
  * Class AchieveSubscriber
  * @package App\Subscribers
  */
-class AchieveSubscriber implements SubscriberInterface
+class AchieveSubscriber implements
+    SubscriberInterface,
+    Arrayable,
+    Jsonable
 {
     /**
      * @var array
@@ -35,14 +41,27 @@ class AchieveSubscriber implements SubscriberInterface
     ];
 
     /**
+     * @var array
+     */
+    protected $instances = [];
+
+    /**
      * AchieveSubscriber constructor.
      */
     public function __construct()
     {
         foreach ($this->achievements as $achieve) {
-            $instance = new $achieve;
+            $this->instances[] = $instance = new $achieve;
             $instance->handle();
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAchievementInstances(): array
+    {
+        return $this->instances;
     }
 
     /**
@@ -60,5 +79,32 @@ class AchieveSubscriber implements SubscriberInterface
                 '> ![' . $achieve->title . '](' . $achieve->image . ')'
             );
         });
+    }
+
+    /**
+     * @return Collection
+     */
+    public function toCollection(): Collection
+    {
+        return new Collection($this->getAchievementInstances());
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this
+            ->toCollection()
+            ->toArray();
+    }
+
+    /**
+     * @param int $options
+     * @return string
+     */
+    public function toJson($options = 0): string
+    {
+        return json_encode($this->toArray(), $options);
     }
 }

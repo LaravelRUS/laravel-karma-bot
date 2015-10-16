@@ -10,7 +10,10 @@
     <h2 data-bind="text: name">User Name</h2>
 
     <!--ko if: achievements.items().length-->
-    <section class="achievements" data-bind="foreach: achievements.items">
+    <section class="profile-achievements" data-bind="
+        click: $root.achievements,
+        foreach: achievements.items
+    ">
         <article class="achieve" data-bind="attr: {
             title: title + '\nПолучено ' + created_at.toLocaleString()
         }">

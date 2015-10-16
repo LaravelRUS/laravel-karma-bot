@@ -19,15 +19,12 @@ export default class Application {
      * @constructor
      */
     constructor() {
-        this.router.add('/', 'home');
-        this.router.add('/user/{user}', 'user').where('user', '.*?');
-
-        this.router.boot();
+        this.bootRoutes();
 
         this.searchControllers();
 
         User.load()
-            .ready((model: User) => {
+            .then((model: User) => {
                 User.collection = User.collection
                     .sort((user:User) => {
                         return parseInt(user.thanks_count) || 0;
@@ -36,6 +33,14 @@ export default class Application {
                         return parseInt(user.karma_count) || 0;
                     }, -1);
             })
+    }
+
+    bootRoutes() {
+        this.router.add('/', 'home');
+        this.router.add('/user/{user}', 'user').where('user', '.*?');
+        this.router.add('/achievements', 'achievements');
+
+        this.router.boot();
     }
 
     /**

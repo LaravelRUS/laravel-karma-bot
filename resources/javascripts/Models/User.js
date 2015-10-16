@@ -13,6 +13,11 @@ export default class User extends Model {
     /**
      * @type {string}
      */
+    static title   = 'Пользователи';
+
+    /**
+     * @type {string}
+     */
     static request = '/api/users.json';
 
     /**
@@ -60,19 +65,19 @@ export default class User extends Model {
     /**
      * Load additional data
      */
-    load(callback = function(){}) {
-        var url = `/api/user/${this.gitter_id}.json`;
-        (new Request(url))
-            .get(`Загрузка пользователя ${this.login}`)
-            .then(result => {
-                this.properties['achievements'] = new Collection(result.achievements).of(Achieve);
-                this.properties['karma']        = new Collection(result.karma).of(Karma);
-                this.properties['thanks']       = new Collection(result.thanks).of(Thank);
+    async loadProfile() {
 
-                this.loaded(true);
+        if (!this.loaded()) {
+            var url = `/api/user/${this.gitter_id}.json`;
+            var result = await (new Request(url))
+                .get(`Загрузка пользователя ${this.login}`);
 
-                callback(this);
-            });
+            this.properties['achievements'] = new Collection(result.achievements).of(Achieve);
+            this.properties['karma']        = new Collection(result.karma).of(Karma);
+            this.properties['thanks']       = new Collection(result.thanks).of(Thank);
+        }
+
+        this.loaded(true);
 
         return this;
     }
@@ -81,6 +86,8 @@ export default class User extends Model {
      * @returns {User}
      */
     profile() {
+        // @TODO Fix for update route. Надо что-то придумать, что бы
+        //  отправлять эвент обновления одинакового роута (user) с другим аргументом
         Router.get('home').move();
         Router.get('user').move({user: this.route});
         return this;

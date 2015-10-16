@@ -7,44 +7,96 @@ import Collection from "/Lib/Collection";
  */
 export default class Model {
     /**
-     * @type {boolean}
+     * @type {array}
      */
-    static loaded = ko.observable(false);
+    static modelsLoaded = [];
 
     /**
-     * @type {Collection}
+     * @returns {*}
      */
-    static collection = new Collection([]);
+    static get loaded() {
+        if (!Model.modelsLoaded[this.name]) {
+            Model.modelsLoaded[this.name] = ko.observable(false);
+        }
+        return Model.modelsLoaded[this.name];
+    }
 
     /**
-     * @returns {Model}
+     * @type {array}
      */
-    static load() {
+    static modelsBooted = [];
 
-        if (!this.loaded()) {
-            for (var key in Model.collection) {
-                if (Model.collection[key] instanceof Function) {
+    /**
+     * @returns {*}
+     */
+    static get booted() {
+        if (!Model.modelsBooted[this.name]) {
+            Model.modelsBooted[this.name] = ko.observable(false);
+        }
+        return Model.modelsBooted[this.name];
+    }
+
+    /**
+     * @type {Array}
+     */
+    static modelsCollection = [];
+
+    /**
+     * @returns {*}
+     */
+    static get collection() {
+        if (!Model.modelsCollection[this.name]) {
+            Model.modelsCollection[this.name] = new Collection([]);
+        }
+        return Model.modelsCollection[this.name];
+    }
+
+    /**
+     * @param {Collection} collection
+     */
+    static set collection(collection: Collection) {
+        Model.modelsCollection[this.name] = collection;
+    }
+
+    /**
+     * Boot model
+     */
+    static boot() {
+        if (!this.booted()) {
+            // Переносим методы коллекции в модель
+            for (var key in this.collection) {
+                if (this.collection[key] instanceof Function) {
                     (method => {
                         Object.defineProperty(this, method, {
-                            enumerable:   false,
+                            enumerable: false,
                             configurable: false,
-                            get:          () => Model.collection[method]
+                            get: () => this.collection[method]
                         });
                     })(key);
                 }
             }
 
-            try {
-                (new Request(this.request))
-                    .get(`Загрузка данных моделей`)
-                    .then(items => {
-                        items.forEach(item => {
-                            var instance = new this(item);
-                            Model.collection.add(instance);
-                        });
+            this.booted(true);
+        }
+    }
 
-                        this.loaded(true);
-                    });
+    /**
+     * @returns {Model}
+     */
+    static async load() {
+        this.boot();
+
+        if (!this.loaded()) {
+            try {
+                var items = await (new Request(this.request))
+                    .get(`Загрузка данных ${this.title}`);
+
+                items.forEach(item => {
+                    var instance = new this(item);
+                    this.collection.add(instance);
+                });
+
+                this.loaded(true);
 
             } catch (e) {
                 throw new Error(e.message);
@@ -58,11 +110,13 @@ export default class Model {
      * @param callback
      */
     static ready(callback) {
+        this.boot();
+
         (callback => {
             if (this.loaded()) {
                 callback(this);
             }
-            var subscription = Model.loaded.subscribe(state => {
+            var subscription = this.loaded.subscribe(state => {
                 callback(this);
                 subscription.dispose();
             });
@@ -73,14 +127,14 @@ export default class Model {
      * @returns {*}
      */
     static [Symbol.iterator]() {
-        return Model.collection[Symbol.iterator]();
+        return this.collection[Symbol.iterator]();
     }
 
     /**
      * @returns {Collection}
      */
     static query() {
-        return Model.collection;
+        return this.collection;
     }
 
     /**
@@ -93,6 +147,8 @@ export default class Model {
      * @param properties
      */
     constructor(properties = {}) {
+        this.constructor.boot();
+
         this.properties = properties;
 
         if (properties.created_at) {

@@ -47,10 +47,11 @@
       color: rgba(#fff, .4);
     }
 
-    .achievements {
+    .profile-achievements {
       padding: 0;
       margin: 10px 0 5px 0;
       text-align: center;
+      cursor: pointer;
       @include clear;
 
       .achieve {
