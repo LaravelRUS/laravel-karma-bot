@@ -27,7 +27,7 @@ class Karma10Achieve extends AbstractAchieve
     /**
      * @var string
      */
-    public $description = 'Наберите 10 кармы';
+    public $description = 'Набрать 10 кармы';
 
     /**
      * @var string

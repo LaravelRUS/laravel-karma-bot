@@ -27,7 +27,7 @@ class Thanks50Achieve extends AbstractAchieve
     /**
      * @var string
      */
-    public $description = 'Сказать 50 раз спасибо';
+    public $description = 'Сказать 50 раз "спасибо".';
 
     /**
      * @var string
