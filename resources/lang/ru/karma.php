@@ -5,6 +5,8 @@ return [
     'timeout'   => 'Карма @:user не потревожена. Слишком часто её пошатывали.',
     'self'      => 'Так не честно @:user. Нельзя добавлять карму самому себе.',
     'bot'       => '*шикос* :thumbsup:',
+    'achievements' => '- Достижения: :achievements',
+    'account'   => '- [Профиль :user на laravel.su](http://karma.laravel.su/user/:user)',
 
     'count'     => [
         'message' => '@:user, Ваша карма **:karma**. Вы благодарили **:thanks** раз.',

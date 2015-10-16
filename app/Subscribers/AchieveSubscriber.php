@@ -81,10 +81,12 @@ class AchieveSubscriber implements
             $room = \App::make(Room::class);
 
             $room->write(
-                '> #### ' . $achieve->title . "\n" .
-                '> Поздравляем тебя @' . $achieve->user->login . '!' . "\n" .
-                '> Вы выполнили условие: _"' . $achieve->description . '"_. С чем и поздравляем =)' . "\n" .
-                '> ![' . $achieve->title . '](' . $achieve->image . ')'
+                \Lang::get('achieve.receiving', [
+                    'user' => $achieve->user->login,
+                    'title' => $achieve->title,
+                    'description' => $achieve->description,
+                    'image' => $achieve->image,
+                ])
             );
         });
     }

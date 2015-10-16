@@ -20,12 +20,15 @@ class KarmaRenderMiddleware implements MiddlewareInterface
     {
         if (trim(mb_strtolower($message->text)) === 'карма') {
             $args = [
-                'user' => $message->user->login,
-                'karma' => $message->user->karma_text,
+                'user'   => $message->user->login,
+                'karma'  => $message->user->karma_text,
                 'thanks' => $message->user->thanks_text
             ];
 
-            $karmaMessage = $args['karma']
+
+            $karmaMessage = [];
+
+            $karmaMessage[] = $args['karma']
                 ? \Lang::get('karma.count.message', $args)
                 : \Lang::get('karma.count.empty', $args);
 
@@ -36,17 +39,15 @@ class KarmaRenderMiddleware implements MiddlewareInterface
             }
 
             if (count($achievements)) {
-                $karmaMessage .= ("\n" . '- Достижения: ' . implode(', ', $achievements));
+                $karmaMessage[] = \Lang::get('karma.achievements', [
+                    'achievements' => implode(', ', $achievements)
+                ]);
             }
 
-            $karmaMessage .= "\n" . sprintf(
-                '- [Профиль %s на laravel.su](http://karma.laravel.su/user/%s)',
-                $message->user->login,
-                $message->user->login
-            );
+            $karmaMessage[] = \Lang::get('karma.account', ['user' => $message->user->login]);
 
 
-            $message->italic($karmaMessage);
+            $message->italic(implode("\n", $karmaMessage));
         }
 
 
