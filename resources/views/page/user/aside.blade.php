@@ -10,15 +10,18 @@
     <h2 data-bind="text: name">User Name</h2>
 
     <!--ko if: achievements.items().length-->
-    <section class="profile-achievements" data-bind="
-        click: $root.achievements,
-        foreach: achievements.items
-    ">
-        <article class="achieve" data-bind="attr: {
-            title: title + '\nПолучено ' + created_at.toLocaleString()
-        }">
-            <img data-bind="attr: {src: image, alt: title}" />
-        </article>
+    <section class="profile-achievements">
+        <!--ko foreach: achievements.items-->
+            <article class="achieve" data-bind="attr: {
+                title: title + '\nПолучено ' + created_at.toLocaleString()
+            }">
+                <img data-bind="attr: {src: image, alt: title}" />
+            </article>
+        <!--/ko-->
+
+        <a href="#" data-bind="click: $root.achievements">
+            к списку &raquo;
+        </a>
     </section>
     <!--/ko-->
 </aside>
