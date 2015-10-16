@@ -7,7 +7,7 @@ return [
     'output'      => true,
 
     'rooms'       => [
-        'debug' => env('GITTER_DEBUG_ROOM', '5617cdcad33f749381a8d5e5'), // Debug
+        //'debug' => env('GITTER_DEBUG_ROOM', '5617cdcad33f749381a8d5e5'), // Debug
         'chat'  => '52f9b90e5e986b0712ef6b9d', // Laravel Chat
         'site'  => '54053e51163965c9bc201c26', // Laravel Site
         'bot'   => '560281040fc9f982beb1908a', // Laravel Gitter Bot
