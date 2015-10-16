@@ -12,14 +12,15 @@ namespace App\Subscribers;
 
 use App\Room;
 use App\Achieve;
-use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
 use App\Gitter\Subscriber\SubscriberInterface;
 use App\Subscribers\Achievements\Karma10Achieve;
 use App\Subscribers\Achievements\Karma50Achieve;
 use App\Subscribers\Achievements\Karma100Achieve;
 use App\Subscribers\Achievements\Karma500Achieve;
-use Illuminate\Support\Collection;
+use App\Subscribers\Achievements\Thanks20Achieve;
 
 /**
  * Class AchieveSubscriber
@@ -38,6 +39,7 @@ class AchieveSubscriber implements
         Karma50Achieve::class,
         Karma100Achieve::class,
         Karma500Achieve::class,
+        Thanks20Achieve::class,
     ];
 
     /**
