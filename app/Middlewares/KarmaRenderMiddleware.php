@@ -39,6 +39,12 @@ class KarmaRenderMiddleware implements MiddlewareInterface
                 $karmaMessage .= ("\n" . '- Достижения: ' . implode(', ', $achievements));
             }
 
+            $karmaMessage .= "\n" . sprintf(
+                '- [Профиль %s на laravel.su](http://karma.laravel.su/user/%s)',
+                $message->user->login,
+                $message->user->login
+            );
+
 
             $message->italic($karmaMessage);
         }
