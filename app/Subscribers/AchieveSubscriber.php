@@ -82,7 +82,7 @@ class AchieveSubscriber implements
 
             $room->write(
                 '> #### ' . $achieve->title . "\n" .
-                '> *Поздравляем тебя @' . $achieve->user->login . '!' . "\n" .
+                '> Поздравляем тебя @' . $achieve->user->login . '!' . "\n" .
                 '> Вы выполнили условие: _"' . $achieve->description . '"_. С чем и поздравляем =)' . "\n" .
                 '> ![' . $achieve->title . '](' . $achieve->image . ')'
             );
