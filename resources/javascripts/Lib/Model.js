@@ -1,3 +1,4 @@
+import Md5 from "/Lib/Md5";
 import Request from "/Lib/Request";
 import Collection from "/Lib/Collection";
 
@@ -7,6 +8,16 @@ import Collection from "/Lib/Collection";
  */
 export default class Model {
     /**
+     * Get class id
+     */
+    static get id() {
+        if (!this.md5) {
+            this.md5 = Md5(this.toString());
+        }
+        return this.md5;
+    }
+
+    /**
      * @type {array}
      */
     static modelsLoaded = [];
@@ -15,10 +26,10 @@ export default class Model {
      * @returns {*}
      */
     static get loaded() {
-        if (!Model.modelsLoaded[this.name]) {
-            Model.modelsLoaded[this.name] = ko.observable(false);
+        if (!Model.modelsLoaded[this.id]) {
+            Model.modelsLoaded[this.id] = ko.observable(false);
         }
-        return Model.modelsLoaded[this.name];
+        return Model.modelsLoaded[this.id];
     }
 
     /**
@@ -30,10 +41,10 @@ export default class Model {
      * @returns {*}
      */
     static get booted() {
-        if (!Model.modelsBooted[this.name]) {
-            Model.modelsBooted[this.name] = ko.observable(false);
+        if (!Model.modelsBooted[this.id]) {
+            Model.modelsBooted[this.id] = ko.observable(false);
         }
-        return Model.modelsBooted[this.name];
+        return Model.modelsBooted[this.id];
     }
 
     /**
@@ -45,17 +56,17 @@ export default class Model {
      * @returns {*}
      */
     static get collection() {
-        if (!Model.modelsCollection[this.name]) {
-            Model.modelsCollection[this.name] = new Collection([]);
+        if (!Model.modelsCollection[this.id]) {
+            Model.modelsCollection[this.id] = new Collection([]);
         }
-        return Model.modelsCollection[this.name];
+        return Model.modelsCollection[this.id];
     }
 
     /**
      * @param {Collection} collection
      */
     static set collection(collection: Collection) {
-        Model.modelsCollection[this.name] = collection;
+        Model.modelsCollection[this.id] = collection;
     }
 
     /**
