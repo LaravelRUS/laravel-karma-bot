@@ -41,7 +41,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
 
             // Profile link
             $karmaMessage[] = \Lang::get('karma.account', $args);
-            
+
             $message->italic(implode("\n", $karmaMessage));
         }
 
