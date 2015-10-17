@@ -34,33 +34,9 @@ class Validator
      */
     public function __construct()
     {
-        $this->likes = [
-            'спасибо',
-            'спс',
-            'спасибки',
-            'спасибище',
-            'благодарю',
-            'thanks',
-            'thx',
-            'благодарствую',
-            'храни тебя господь',
-            'вот благодарочка',
-            'благодарочка',
-            'спасибо большое',
-            'большое спасибо',
-        ];
-
-        $this->dislikes = [
-            'иди нафиг',
-            'достал',
-            'убейся',
-            'успокойся',
-            'выпей йаду',
-            'узбагойзя'
-        ];
-
-
-
+        $this->likes    = \Config::get('thanks.likes');
+        // Temporary remove dislikes
+        //$this->dislikes = \Config::get('thanks.dislikes');
     }
 
 
@@ -77,10 +53,10 @@ class Validator
         }
 
         // Check karma decrement
-        $status = $this->validateMessage($message, Status::STATUS_DECREMENT, $this->dislikes);
-        if (!$status->isNothing()) {
-            return $status;
-        }
+        //$status = $this->validateMessage($message, Status::STATUS_DECREMENT, $this->dislikes);
+        //if (!$status->isNothing()) {
+        //    return $status;
+        //}
 
         return new Status(Status::STATUS_NOTHING);
     }
