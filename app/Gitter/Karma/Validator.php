@@ -34,9 +34,9 @@ class Validator
      */
     public function __construct()
     {
-        $this->likes    = \Config::get('thanks.likes');
+        $this->likes    = \Lang::get('thanks.likes');
         // Temporary remove dislikes
-        //$this->dislikes = \Config::get('thanks.dislikes');
+        //$this->dislikes = \Lang::get('thanks.dislikes');
     }
 
 
