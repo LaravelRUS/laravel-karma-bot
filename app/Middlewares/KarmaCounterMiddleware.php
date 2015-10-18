@@ -39,7 +39,7 @@ class KarmaCounterMiddleware implements MiddlewareInterface
                 $message->user->addKarmaTo($user, $message);
                 $message->italic($state->getTranslation($user, $user->karma_text));
 
-                if ($user->id === \Auth::user()->id) {
+                if ($state->isIncrement() && $user->id === \Auth::user()->id) {
                     $message->answer(\Lang::get('karma.bot'));
                 }
             }

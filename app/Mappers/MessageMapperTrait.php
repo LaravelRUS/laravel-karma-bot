@@ -39,8 +39,12 @@ trait MessageMapperTrait
             ->rename('id', 'gitter_id')
             ->value('editedAt', function($val)  { return !!$val;                            }, 'edited')
             ->value('fromUser', function($user) { return User::fromGitterObject($user);     }, 'user')
-            ->value('sent',     function($date) { return new Carbon($date);                 }, 'created_at')
-            ->value('editedAt', function($date) { return new Carbon($date);                 }, 'updated_at')
+            ->value('sent',     function($date) {
+                return (new Carbon($date))->setTimezone('Europe/Moscow');
+            }, 'created_at')
+            ->value('editedAt', function($date) {
+                return (new Carbon($date))->setTimezone('Europe/Moscow');
+            }, 'updated_at')
             ->value('mentions', function($mentions) {
                 return static::parseMentions($mentions);
             })
