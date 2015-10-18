@@ -43,6 +43,8 @@ class KarmaRenderMiddleware implements MiddlewareInterface
             $karmaMessage[] = \Lang::get('karma.account', $args);
 
             $message->italic(implode("\n", $karmaMessage));
+
+            return false;
         }
 
         return $message;

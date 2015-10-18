@@ -42,6 +42,8 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                 ]);
 
             $message->answer($answer);
+
+            return false;
         }
 
         return $message;

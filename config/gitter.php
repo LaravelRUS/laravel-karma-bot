@@ -16,9 +16,6 @@ return [
 
     // Middlewares
     'middlewares' => [
-        // Подсчёт "спасибок"
-        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
-
         // Вывод кармы по запросу
         App\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
 
@@ -27,6 +24,9 @@ return [
 
         // Google поисковик
         App\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
+
+        // Подсчёт "спасибок"
+        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
     ],
 
 
