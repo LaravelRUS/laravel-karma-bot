@@ -24,7 +24,7 @@ class SqlBuilderMiddleware implements MiddlewareInterface
                 $builder = new BuilderClass($text);
                 $message->code($builder->convert(), 'php');
 
-                return false;
+                return null;
 
             } catch (\Exception $e) {
                 $message->pre('SQL Builder error: ' . $e->getMessage());

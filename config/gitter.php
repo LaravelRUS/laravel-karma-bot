@@ -26,7 +26,7 @@ return [
         App\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
 
         // Подсчёт "спасибок"
-        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_DEFAULT,
+        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
     ],
 
 

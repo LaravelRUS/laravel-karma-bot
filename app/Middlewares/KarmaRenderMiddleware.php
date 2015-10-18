@@ -44,7 +44,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
 
             $message->italic(implode("\n", $karmaMessage));
 
-            return false;
+            return null;
         }
 
         return $message;

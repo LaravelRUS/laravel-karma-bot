@@ -43,7 +43,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
 
             $message->answer($answer);
 
-            return false;
+            return null;
         }
 
         return $message;
