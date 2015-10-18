@@ -36,7 +36,9 @@ class KarmaCounterMiddleware implements MiddlewareInterface
 
         if (!$state->isNothing()) {
             foreach ($message->mentions as $user) {
-                $message->user->addKarmaTo($user, $message);
+                if ($state->isIncrement()) {
+                    $message->user->addKarmaTo($user, $message);
+                }
                 $message->italic($state->getTranslation($user, $user->karma_text));
 
                 if ($state->isIncrement() && $user->id === \Auth::user()->id) {
