@@ -49,7 +49,7 @@ class Validator
 
         foreach ($message->mentions as $mention) {
             // Ignore bot
-            if (in_array(\Auth::user()->login, [$mention->login, $message->user->login], false)) {
+            if (in_array(\Auth::user()->login, [$message->user->login], false)) {
                 continue;
             }
 
