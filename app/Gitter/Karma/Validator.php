@@ -13,6 +13,7 @@ namespace App\Gitter\Karma;
 use App\User;
 use App\Message;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class Validator
@@ -108,26 +109,10 @@ class Validator
      */
     protected function validateText(Message $message, User $mention)
     {
-        // Если "@Some спасибо"
-        $escaped = implode('|', array_map(function ($word) {
-            return preg_quote($word);
-        }, $this->likes));
-        $pattern = sprintf('/@([0-9a-zA-Z_]+)\s+(?:%s)\b/iu', $escaped);
-
-        if (preg_match($pattern, $message->text)) {
-            return true;
-        }
-
-        // Если "спасибо" в начале или конце предложения
-        $escapedText = $message->text;
-        $escapedText = mb_strtolower($escapedText);
-        $escapedText = preg_replace('/@\w+\s+/iu', '', $escapedText);
-        $escapedText = preg_replace('/\W/iu', '', $escapedText);
+        $escapedText = mb_strtolower($message->text);
+        $escapedText = preg_replace('/\@[a-z0-9\-_]+/iu', '', $escapedText);
         $escapedText = trim($escapedText);
 
-        $atStart = preg_match(sprintf('/^(?:%s)/isu', $escaped), $escapedText);
-        $atEnd = preg_match(sprintf('/(?:%s)$/isu', $escaped), $escapedText);
-
-        return $atStart || $atEnd;
+        return Str::endsWith($escapedText, $this->likes) || Str::startsWith($escapedText, $this->likes);
     }
 }
