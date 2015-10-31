@@ -65,15 +65,15 @@ class Validator
      */
     protected function validateMessage(Message $message, User $mention)
     {
-        if (!$this->validateUser($message, $mention)) {
-            return new Status($mention, Status::STATUS_SELF);
-        }
-
-        if (!$this->validateTimeout($message, $mention)) {
-            return new Status($mention, Status::STATUS_TIMEOUT);
-        }
-
         if ($this->validateText($message, $mention)) {
+            if (!$this->validateUser($message, $mention)) {
+                return new Status($mention, Status::STATUS_SELF);
+            }
+
+            if (!$this->validateTimeout($message, $mention)) {
+                return new Status($mention, Status::STATUS_TIMEOUT);
+            }
+
             return new Status($mention, Status::STATUS_INCREMENT);
         }
 
