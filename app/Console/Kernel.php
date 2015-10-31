@@ -20,9 +20,7 @@ class Kernel extends ConsoleKernel
 
         \App\Console\Commands\StartGitterBot::class,
         \App\Console\Commands\SyncGitterUsers::class,
-        \App\Console\Commands\SyncGitterMessages::class,
-
-        \App\Console\Commands\StatsGitterKarma::class,
+        \App\Console\Commands\SyncGitterMessages::class
     ];
 
     /**
