@@ -32,7 +32,6 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  *
  * @property-read string $karma_text
  * @property-read string $thanks_text
- * @property-read Carbon $last_karma_time
  *
  * === Relations ===
  *
@@ -119,14 +118,15 @@ class User extends \Eloquent implements
     }
 
     /**
+     * @param $roomId
      * @return Carbon
      */
-    public function getLastKarmaTimeAttribute()
+    public function getLastKarmaTimeForRoom($roomId)
     {
         $result = Karma::query()
             ->where('user_target_id', $this->id)
+            ->where('room_id', $roomId)
             ->orderBy('created_at', 'desc')
-            ->take(1)
             ->first();
 
         if ($result) {

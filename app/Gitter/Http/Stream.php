@@ -95,6 +95,7 @@ class Stream
 
                 if (json_last_error() === JSON_ERROR_NONE) {
                     $this->events->fire(static::EVENT_MESSAGE, [$this, $data]);
+
                 } else {
                     $this->events->fire(static::EVENT_ERROR, [
                         $this,
@@ -105,14 +106,6 @@ class Stream
         });
 
         $this->connect();
-    }
-
-    /**
-     * @return \React\HttpClient\Request
-     */
-    public function reconnect()
-    {
-        return $this->connect();
     }
 
     /**
@@ -149,16 +142,11 @@ class Stream
     }
 
     /**
-     * @param string|array $events
-     * @param $listener
-     * @param int $priority
-     * @return $this
+     * @return \React\HttpClient\Request
      */
-    public function on($events, $listener, $priority = 0)
+    public function reconnect()
     {
-        $this->events->listen($events, $listener, $priority);
-
-        return $this;
+        return $this->connect();
     }
 
     /**
@@ -169,6 +157,19 @@ class Stream
     public function subscribe(callable $callback): Stream
     {
         $this->on(static::EVENT_MESSAGE, $callback);
+
+        return $this;
+    }
+
+    /**
+     * @param string|array $events
+     * @param $listener
+     * @param int $priority
+     * @return $this
+     */
+    public function on($events, $listener, $priority = 0)
+    {
+        $this->events->listen($events, $listener, $priority);
 
         return $this;
     }

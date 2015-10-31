@@ -15,12 +15,11 @@ use Lang;
 
 class Status
 {
-    const STATUS_NOTHING = 2;
-    const STATUS_INCREMENT = 4;
-    const STATUS_DECREMENT = 8;
-    const STATUS_TIMEOUT = 16;
-    const STATUS_SELF = 32;
-    const STATUS_NO_USER = 64;
+    const STATUS_NOTHING    = 2;
+    const STATUS_INCREMENT  = 4;
+    const STATUS_TIMEOUT    = 8;
+    const STATUS_SELF       = 16;
+    const STATUS_NO_USER    = 32;
 
     /**
      * @var int
@@ -57,14 +56,6 @@ class Status
     public function isIncrement()
     {
         return $this->status === static::STATUS_INCREMENT;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDecrement()
-    {
-        return $this->status === static::STATUS_DECREMENT;
     }
 
     /**
@@ -119,9 +110,6 @@ class Status
         switch ($this->status) {
             case static::STATUS_INCREMENT:
                 return Lang::get('karma.increment', $args);
-
-            case static::STATUS_DECREMENT:
-                return Lang::get('karma.decrement', $args);
 
             case static::STATUS_TIMEOUT:
                 return Lang::get('karma.timeout', $args);

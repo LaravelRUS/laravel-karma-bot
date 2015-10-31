@@ -46,16 +46,6 @@ class Message extends Model
     use MessageMapperTrait;
 
     /**
-     * @param array $options
-     * @throws LogicException
-     * @return void
-     */
-    final public function save(array $options = [])
-    {
-        throw new LogicException('Can not save message');
-    }
-
-    /**
      * @param $value
      * @return Carbon
      */
