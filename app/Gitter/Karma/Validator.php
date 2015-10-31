@@ -44,6 +44,10 @@ class Validator
 
         // If has no mentions
         if (!count($message->mentions)) {
+            if ($this->validateText($message)) {
+                $response->push(new Status($message->user, Status::STATUS_NO_USER));
+            }
+
             return $response;
         }
 
@@ -66,7 +70,7 @@ class Validator
      */
     protected function validateMessage(Message $message, User $mention)
     {
-        if ($this->validateText($message, $mention)) {
+        if ($this->validateText($message)) {
             if (!$this->validateUser($message, $mention)) {
                 return new Status($mention, Status::STATUS_SELF);
             }
@@ -104,10 +108,9 @@ class Validator
 
     /**
      * @param Message $message
-     * @param User $mention
      * @return bool
      */
-    protected function validateText(Message $message, User $mention)
+    protected function validateText(Message $message)
     {
         $escapedText = mb_strtolower($message->text);
         $escapedText = preg_replace('/\@[a-z0-9\-_]+/iu', '', $escapedText);

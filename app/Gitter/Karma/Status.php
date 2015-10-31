@@ -20,6 +20,7 @@ class Status
     const STATUS_DECREMENT = 8;
     const STATUS_TIMEOUT = 16;
     const STATUS_SELF = 32;
+    const STATUS_NO_USER = 64;
 
     /**
      * @var int
@@ -83,6 +84,15 @@ class Status
     }
 
     /**
+     * @return bool
+     */
+    public function isNoUser()
+    {
+        return $this->status === static::STATUS_NO_USER;
+    }
+
+
+    /**
      * @return int
      */
     public function getStatus()
@@ -110,14 +120,17 @@ class Status
             case static::STATUS_INCREMENT:
                 return Lang::get('karma.increment', $args);
 
-            case status::STATUS_DECREMENT:
+            case static::STATUS_DECREMENT:
                 return Lang::get('karma.decrement', $args);
 
-            case status::STATUS_TIMEOUT:
+            case static::STATUS_TIMEOUT:
                 return Lang::get('karma.timeout', $args);
 
-            case status::STATUS_SELF:
+            case static::STATUS_SELF:
                 return Lang::get('karma.self', $args);
+
+            case static::STATUS_NO_USER:
+                return Lang::get('karma.nouser', $args);
         }
 
         return null;
