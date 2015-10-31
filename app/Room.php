@@ -61,9 +61,9 @@ class Room
      */
     public function __construct($roomId)
     {
-        $this->client       = \App::make(Client::class);
-        $this->id           = static::getId($roomId);
-        $this->middlewares  = $this->createMiddlewaresStorage();
+        $this->client = \App::make(Client::class);
+        $this->id = static::getId($roomId);
+        $this->middlewares = $this->createMiddlewaresStorage();
 
         $this->createSubscribersStorage();
     }
@@ -78,7 +78,7 @@ class Room
         $subscribers = \Config::get('gitter.subscribers');
 
 
-        $storage    = new Subscribers($container);
+        $storage = new Subscribers($container);
         foreach ($subscribers as $subscriber) {
             $storage->add($subscriber);
         }

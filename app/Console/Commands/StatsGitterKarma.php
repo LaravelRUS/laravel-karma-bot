@@ -57,17 +57,15 @@ class StatsGitterKarma extends Command
         foreach ($query as $record) {
             $karma[] = (object)[
                 'user'  => $record->target,
-                'count' => $record->target->karma
+                'count' => $record->target->karma,
             ];
         }
 
         $karma = $karma
-            ->sortBy(function($item) {
+            ->sortBy(function ($item) {
                 return $item->count;
             }, SORT_REGULAR, true)
             ->take(10);
-
-
 
 
         $this->render($karma, 'Получили благодарностей');
@@ -85,12 +83,12 @@ class StatsGitterKarma extends Command
         foreach ($query as $record) {
             $thanks[] = (object)[
                 'user'  => $record->user,
-                'count' => $record->user->thanks
+                'count' => $record->user->thanks,
             ];
         }
 
         $thanks = $thanks
-            ->sortBy(function($item) {
+            ->sortBy(function ($item) {
                 return $item->count;
             }, SORT_REGULAR, true)
             ->take(10);

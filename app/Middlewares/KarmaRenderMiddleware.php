@@ -22,7 +22,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
             $args = [
                 'user'   => $message->user->login,
                 'karma'  => $message->user->karma_text,
-                'thanks' => $message->user->thanks_text
+                'thanks' => $message->user->thanks_text,
             ];
 
 
@@ -31,7 +31,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
             // Karma info
             $karmaMessage[] = $args['karma']
                 ? \Lang::get('karma.count.message', $args)
-                : \Lang::get('karma.count.empty',   $args);
+                : \Lang::get('karma.count.empty', $args);
 
             // If has achievements
             $achievements = $this->getAchievements($message);
@@ -63,7 +63,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
 
         if (count($achievements)) {
             return \Lang::get('karma.achievements', [
-                'achievements' => implode(', ', $achievements)
+                'achievements' => implode(', ', $achievements),
             ]);
         }
 

@@ -32,42 +32,42 @@ class UrlStorage
         /* ---------------------
          *        Streams
          * --------------------- */
-        'events'            => 'https://stream.gitter.im/v1/rooms/{roomId}/events',
-        'messages'          => 'https://stream.gitter.im/v1/rooms/{roomId}/chatMessages',
+        'events'         => 'https://stream.gitter.im/v1/rooms/{roomId}/events',
+        'messages'       => 'https://stream.gitter.im/v1/rooms/{roomId}/chatMessages',
 
         /* ---------------------
          *       Messages
          * --------------------- */
         // Additional arguments: limit, afterId, beforeId, skip
-        'message.list'      => 'https://api.gitter.im/v1/rooms/{roomId}/chatMessages',
+        'message.list'   => 'https://api.gitter.im/v1/rooms/{roomId}/chatMessages',
         // POST: {"text": "message text"}
-        'message.send'      => 'https://api.gitter.im/v1/rooms/{roomId}/chatMessages',
+        'message.send'   => 'https://api.gitter.im/v1/rooms/{roomId}/chatMessages',
         // PUT: {"text": "new text"}
-        'message.update'    => 'https://api.gitter.im/v1/rooms/{roomId}/chatMessages/{messageId}',
+        'message.update' => 'https://api.gitter.im/v1/rooms/{roomId}/chatMessages/{messageId}',
 
 
         /* ---------------------
          *        Rooms
          * --------------------- */
-        'room.list'         => 'https://api.gitter.im/v1/rooms',
-        'room.info'         => 'https://api.gitter.im/v1/rooms/{roomId}',
-        'room.users'        => 'https://api.gitter.im/v1/rooms/{roomId}/users',
-        'room.channels'     => 'https://api.gitter.im/v1/rooms/{roomId}/channels',
+        'room.list'      => 'https://api.gitter.im/v1/rooms',
+        'room.info'      => 'https://api.gitter.im/v1/rooms/{roomId}',
+        'room.users'     => 'https://api.gitter.im/v1/rooms/{roomId}/users',
+        'room.channels'  => 'https://api.gitter.im/v1/rooms/{roomId}/channels',
         // POST: {"uri": "username/repo"}
-        'room.join'         => 'https://api.gitter.im/v1/rooms/{roomId}',
+        'room.join'      => 'https://api.gitter.im/v1/rooms/{roomId}',
 
 
         /* ---------------------
          *          User
          * --------------------- */
-        'user'              => 'https://api.gitter.im/v1/user/{userId}',
-        'user.current'      => 'https://api.gitter.im/v1/user',
-        'user.rooms'        => 'https://api.gitter.im/v1/user/{userId}/rooms',
-        'user.orgs'         => 'https://api.gitter.im/v1/user/{userId}/orgs',
-        'user.repos'        => 'https://api.gitter.im/v1/user/{userId}/repos',
-        'user.channels'     => 'https://api.gitter.im/v1/user/{userId}/channels',
+        'user'           => 'https://api.gitter.im/v1/user/{userId}',
+        'user.current'   => 'https://api.gitter.im/v1/user',
+        'user.rooms'     => 'https://api.gitter.im/v1/user/{userId}/rooms',
+        'user.orgs'      => 'https://api.gitter.im/v1/user/{userId}/orgs',
+        'user.repos'     => 'https://api.gitter.im/v1/user/{userId}/repos',
+        'user.channels'  => 'https://api.gitter.im/v1/user/{userId}/channels',
         // POST: {"chat": [chatId, chatId]}
-        'message.unread'    => 'https://api.gitter.im/v1/user/{userId}/rooms/{roomId}/unreadItems',
+        'message.unread' => 'https://api.gitter.im/v1/user/{userId}/rooms/{roomId}/unreadItems',
     ];
 
 
@@ -109,7 +109,7 @@ class UrlStorage
         $url .= '?';
 
         foreach ($args as $key => $value) {
-            $value  = urlencode($value);
+            $value = urlencode($value);
             $search = sprintf('{%s}', $key);
 
             if (!str_contains($url, $search)) {
@@ -117,6 +117,7 @@ class UrlStorage
             }
             $url = str_replace($search, $value, $url);
         }
+
         return $url;
     }
 }

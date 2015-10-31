@@ -25,17 +25,17 @@ use App\Gitter\Support\StreamBuffer;
 class Stream
 {
     // Message part (chunk)
-    const EVENT_CHUNK   = 'chunk';
+    const EVENT_CHUNK = 'chunk';
     // Full message string
-    const EVENT_DATA    = 'data';
+    const EVENT_DATA = 'data';
     // Parsed as json data
     const EVENT_MESSAGE = 'message';
     // Connection
     const EVENT_CONNECT = 'connect';
     // Errors
-    const EVENT_ERROR   = 'error';
+    const EVENT_ERROR = 'error';
     // End
-    const EVENT_END     = 'end';
+    const EVENT_END = 'end';
 
     /**
      * @var StreamBuffer
@@ -98,7 +98,7 @@ class Stream
                 } else {
                     $this->events->fire(static::EVENT_ERROR, [
                         $this,
-                        new \LogicException(json_last_error_msg())
+                        new \LogicException(json_last_error_msg()),
                     ]);
                 }
             }
@@ -169,6 +169,7 @@ class Stream
     public function subscribe(callable $callback): Stream
     {
         $this->on(static::EVENT_MESSAGE, $callback);
+
         return $this;
     }
 }

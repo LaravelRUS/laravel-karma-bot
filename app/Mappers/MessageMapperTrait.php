@@ -34,18 +34,21 @@ trait MessageMapperTrait
             'read_by', 'urls', 'mentions', 'issues', 'meta', 'created_at', 'updated_at', 'room_id'];
 
         $values = (new AttributeMapper($attributes))
-
             ->rename('readBy', 'read_by')
             ->rename('id', 'gitter_id')
-            ->value('editedAt', function($val)  { return !!$val;                            }, 'edited')
-            ->value('fromUser', function($user) { return User::fromGitterObject($user);     }, 'user')
-            ->value('sent',     function($date) {
+            ->value('editedAt', function ($val) {
+                return !!$val;
+            }, 'edited')
+            ->value('fromUser', function ($user) {
+                return User::fromGitterObject($user);
+            }, 'user')
+            ->value('sent', function ($date) {
                 return (new Carbon($date))->setTimezone('Europe/Moscow');
             }, 'created_at')
-            ->value('editedAt', function($date) {
+            ->value('editedAt', function ($date) {
                 return (new Carbon($date))->setTimezone('Europe/Moscow');
             }, 'updated_at')
-            ->value('mentions', function($mentions) {
+            ->value('mentions', function ($mentions) {
                 return static::parseMentions($mentions);
             })
             ->only($fields)
@@ -55,7 +58,7 @@ trait MessageMapperTrait
             $values['room_id'] = \App::make(Room::class)->id;
         }
 
-        return static::unguarded(function() use ($values) {
+        return static::unguarded(function () use ($values) {
             return new static($values);
         });
     }

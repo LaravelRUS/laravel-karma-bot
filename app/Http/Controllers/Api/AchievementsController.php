@@ -27,7 +27,7 @@ class AchievementsController extends Controller
      */
     public function index()
     {
-        return \Cache::remember('achievements', 10, function() {
+        return \Cache::remember('achievements', 10, function () {
             $achieveStorage = [];
 
             (new Achieve())

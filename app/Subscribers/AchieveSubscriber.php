@@ -82,10 +82,10 @@ class AchieveSubscriber implements
 
             $room->write(
                 \Lang::get('achieve.receiving', [
-                    'user' => $achieve->user->login,
-                    'title' => $achieve->title,
+                    'user'        => $achieve->user->login,
+                    'title'       => $achieve->title,
                     'description' => $achieve->description,
-                    'image' => $achieve->image,
+                    'image'       => $achieve->image,
                 ])
             );
         });

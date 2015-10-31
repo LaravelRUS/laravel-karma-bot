@@ -40,7 +40,7 @@ trait UserMapperTrait
 
         $user = static::where('gitter_id', $values['gitter_id'])->first();
         if (!$user) {
-            $user = static::unguarded(function() use ($values) {
+            $user = static::unguarded(function () use ($values) {
                 return static::create($values);
             });
         }

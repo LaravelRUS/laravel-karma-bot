@@ -10,8 +10,9 @@
  */
 namespace App\Gitter\Karma;
 
+use App\User;
 use App\Message;
-use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * Class Validator
@@ -25,133 +26,108 @@ class Validator
     protected $likes = [];
 
     /**
-     * @var array
-     */
-    protected $dislikes = [];
-
-    /**
      * Validator constructor.
      */
     public function __construct()
     {
-        $this->likes    = \Lang::get('thanks.likes');
-        // Temporary remove dislikes
-        //$this->dislikes = \Lang::get('thanks.dislikes');
+        $this->likes = \Lang::get('thanks.likes');
     }
-
 
     /**
      * @param Message $message
-     * @return Status
+     * @return Status[]|Collection
      */
     public function validate(Message $message)
     {
-        // Check karma increment
-        $status = $this->validateMessage($message, Status::STATUS_INCREMENT, $this->likes);
-        if (!$status->isNothing()) {
-            return $status;
+        $response = new Collection([]);
+
+        // If has no mentions
+        if (!count($message->mentions)) {
+            return $response;
         }
 
-        // Check karma decrement
-        //$status = $this->validateMessage($message, Status::STATUS_DECREMENT, $this->dislikes);
-        //if (!$status->isNothing()) {
-        //    return $status;
-        //}
+        foreach ($message->mentions as $mention) {
+            // Ignore bot
+            if (in_array(\Auth::user()->login, [$mention->login, $message->user->login], false)) {
+                continue;
+            }
 
-        return new Status(Status::STATUS_NOTHING);
+            $response->push($this->validateMessage($message, $mention));
+        }
+
+        return $response;
     }
 
     /**
      * @param Message $message
-     * @param $validStatus
-     * @param array $words
+     * @param User $mention
      * @return Status
      */
-    protected function validateMessage(Message $message, $validStatus, array $words = [])
+    protected function validateMessage(Message $message, User $mention)
     {
-        if ($this->validateText($message, $words)) {
-            if (!$this->validateUser($message)) {
-                return new Status(Status::STATUS_SELF);
-            }
-
-            if (!$this->validateTimeout($message)) {
-                return new Status(Status::STATUS_TIMEOUT);
-            }
-
-            return new Status($validStatus);
+        if (!$this->validateUser($message, $mention)) {
+            return new Status($mention, Status::STATUS_SELF);
         }
 
-        return new Status(Status::STATUS_NOTHING);
+        if (!$this->validateTimeout($message, $mention)) {
+            return new Status($mention, Status::STATUS_TIMEOUT);
+        }
+
+        if ($this->validateText($message, $mention)) {
+            return new Status($mention, Status::STATUS_INCREMENT);
+        }
+
+        return new Status($mention, Status::STATUS_NOTHING);
     }
 
     /**
      * @param Message $message
+     * @param User $mention
      * @return bool
      */
-    protected function validateUser(Message $message)
+    protected function validateUser(Message $message, User $mention)
     {
-        foreach ($message->mentions as $user) {
-            if ($message->user->login === $user->login) {
-                return false;
-            }
-        }
-
-        return true;
+        return $mention->login !== $message->user->login;
     }
 
     /**
      * @param Message $message
+     * @param User $mention
      * @return bool
      */
-    protected function validateTimeout(Message $message)
+    protected function validateTimeout(Message $message, User $mention)
     {
-        foreach ($message->mentions as $user) {
-            if ($user->last_karma_time->timestamp + 60 > Carbon::now()->timestamp) {
-                return false;
-            }
-        }
-        return true;
+        return $mention->last_karma_time->timestamp + 60 < $message->created_at->timestamp;
     }
 
 
     /**
-     * @TODO Анализировать каждое предложение (разбить по точке и новой строке)
-     *
-     * @param $message
-     * @param array $words
+     * @param Message $message
+     * @param User $mention
      * @return bool
      */
-    protected function validateText(Message $message, array $words = [])
+    protected function validateText(Message $message, User $mention)
     {
-        if (count($words)) {
-            if ($message->user->login === \Auth::user()->login) {
-                return false;
-            }
+        // Если "@Some спасибо"
+        $escaped = implode('|', array_map(function ($word) {
+            return preg_quote($word);
+        }, $this->likes));
+        $pattern = sprintf('/@([0-9a-zA-Z_]+)\s+(?:%s)\b/iu', $escaped);
 
-
-            // Если "@Some спасибо"
-            $escaped = implode('|', array_map(function ($word) { return preg_quote($word); }, $words));
-            $pattern = sprintf('/@([0-9a-zA-Z_]+)\s+(?:%s)\b/iu', $escaped);
-
-            if (preg_match($pattern, $message->text)) {
-                return true;
-            }
-
-            // Если "спасибо" в начале или конце предложения
-            $escapedText = $message->text;
-            $escapedText = mb_strtolower($escapedText);
-            $escapedText = preg_replace('/@([0-9a-zA-Z\- \/_?:.,\s]+)\s+/isu', '', $escapedText);
-            $escapedText = preg_replace('/[.,-\/#!$%\^&\*;:{}=\-_`~()]/su', '', $escapedText);
-            $escapedText = trim($escapedText);
-
-            $atStart     = preg_match(sprintf('/^(?:%s)/isu', $escaped), $escapedText);
-            $atEnd       = preg_match(sprintf('/(?:%s)$/isu', $escaped), $escapedText);
-
-            if ($atStart || $atEnd) {
-                return true;
-            }
+        if (preg_match($pattern, $message->text)) {
+            return true;
         }
 
-        return false;
+        // Если "спасибо" в начале или конце предложения
+        $escapedText = $message->text;
+        $escapedText = mb_strtolower($escapedText);
+        $escapedText = preg_replace('/@\w+\s+/iu', '', $escapedText);
+        $escapedText = preg_replace('/\W/iu', '', $escapedText);
+        $escapedText = trim($escapedText);
+
+        $atStart = preg_match(sprintf('/^(?:%s)/isu', $escaped), $escapedText);
+        $atEnd = preg_match(sprintf('/(?:%s)$/isu', $escaped), $escapedText);
+
+        return $atStart || $atEnd;
     }
 }

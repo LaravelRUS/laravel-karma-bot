@@ -43,6 +43,7 @@ class AttributeMapper implements Arrayable
         if ($this->has($key)) {
             unset($this->attributes[$key]);
         }
+
         return $this;
     }
 
@@ -81,6 +82,7 @@ class AttributeMapper implements Arrayable
                 $this->rename($key, $newName);
             }
         }
+
         return $this;
     }
 
@@ -92,6 +94,7 @@ class AttributeMapper implements Arrayable
     public function set($key, $value): AttributeMapper
     {
         $this->attributes[$key] = $value;
+
         return $this;
     }
 
@@ -125,6 +128,7 @@ class AttributeMapper implements Arrayable
     public function only(array $values): AttributeMapper
     {
         $this->attributes = Arr::only($this->attributes, $values);
+
         return $this;
     }
 

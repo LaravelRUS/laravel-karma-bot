@@ -23,8 +23,8 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                 return $message;
             }
 
-            $hasMentions  = count($message->mentions);
-            $mention      = null;
+            $hasMentions = count($message->mentions);
+            $mention = null;
 
             if ($hasMentions) {
                 $mention = $message->mentions[0]->login === \Auth::user()->login
@@ -35,10 +35,10 @@ class GoogleSearchMiddleware implements MiddlewareInterface
             $answer = trim($matches[1]) && $mention
                 ? \Lang::get('google.personal', [
                     'user'  => $mention->login,
-                    'query' => urlencode($matches[2])
+                    'query' => urlencode($matches[2]),
                 ])
                 : \Lang::get('google.common', [
-                    'query' => urlencode($matches[2])
+                    'query' => urlencode($matches[2]),
                 ]);
 
             $message->answer($answer);

@@ -15,11 +15,11 @@ use Lang;
 
 class Status
 {
-    const STATUS_NOTHING    = 2;
-    const STATUS_INCREMENT  = 4;
-    const STATUS_DECREMENT  = 8;
-    const STATUS_TIMEOUT    = 16;
-    const STATUS_SELF       = 32;
+    const STATUS_NOTHING = 2;
+    const STATUS_INCREMENT = 4;
+    const STATUS_DECREMENT = 8;
+    const STATUS_TIMEOUT = 16;
+    const STATUS_SELF = 32;
 
     /**
      * @var int
@@ -27,11 +27,18 @@ class Status
     protected $status = self::STATUS_NOTHING;
 
     /**
+     * @var User
+     */
+    protected $user;
+
+    /**
      * Status constructor.
+     * @param User $mention
      * @param int $status
      */
-    public function __construct($status)
+    public function __construct(User $mention, $status = self::STATUS_NOTHING)
     {
+        $this->user = $mention;
         $this->status = $status;
     }
 
@@ -84,13 +91,20 @@ class Status
     }
 
     /**
-     * @param User $user
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
      * @param $karma
      * @return string|null
      */
-    public function getTranslation(User $user, $karma)
+    public function getTranslation($karma)
     {
-        $args = ['user' => $user->login, 'karma' => $karma];
+        $args = ['user' => $this->user->login, 'karma' => $karma];
 
         switch ($this->status) {
             case static::STATUS_INCREMENT:

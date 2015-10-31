@@ -49,8 +49,8 @@ class Storage
      */
     public function __construct(Container $container)
     {
-        $this->container    = $container;
-        $this->storage      = new PriorityList();
+        $this->container = $container;
+        $this->storage = new PriorityList();
     }
 
 

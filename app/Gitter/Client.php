@@ -41,14 +41,14 @@ class Client
     public static function make($token, $roomId)
     {
         $client = new Client($token);
-        App::singleton(Client::class, function() use ($client) {
+        App::singleton(Client::class, function () use ($client) {
             return $client;
         });
         App::alias(Client::class, 'gitter');
 
 
         $room = new Room($roomId);
-        App::singleton(Room::class, function() use ($room) {
+        App::singleton(Room::class, function () use ($room) {
             return $room;
         });
         App::alias(Room::class, 'room');
@@ -99,11 +99,11 @@ class Client
      */
     public function __construct($token)
     {
-        $this->token        = $token;
-        $this->loop         = EventLoop::create();
-        $this->dnsResolver  = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
-        $this->client       = (new HttpClient())->create($this->loop, $this->dnsResolver);
-        $this->urlStorage   = (new UrlStorage($token));
+        $this->token = $token;
+        $this->loop = EventLoop::create();
+        $this->dnsResolver = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
+        $this->client = (new HttpClient())->create($this->loop, $this->dnsResolver);
+        $this->urlStorage = (new UrlStorage($token));
 
 
         $this->authAs(null);
@@ -116,7 +116,7 @@ class Client
      */
     public function authAs($gitterUserId = null)
     {
-        $auth       = $this->request('user', ['userId' => $gitterUserId])[0];
+        $auth = $this->request('user', ['userId' => $gitterUserId])[0];
         $this->user = User::fromGitterObject($auth);
 
         \Auth::loginUsingId($this->user->id);
@@ -140,7 +140,7 @@ class Client
         return [
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token
+            'Authorization' => 'Bearer ' . $this->token,
         ];
     }
 
@@ -190,8 +190,13 @@ class Client
      */
     public function request($route, array $args = [], $content = null, $method = 'GET')
     {
-        return (new Request($this, $route, $args, $method))
-            ->sendParseJson($content);
+        try {
+            return (new Request($this, $route, $args, $method))
+                ->sendParseJson($content);
+
+        } catch (\Exception $e) {
+            return $this->request($route, $args, $content, $method);
+        }
     }
 
     /**
@@ -200,6 +205,7 @@ class Client
     public function run(): Client
     {
         $this->loop->run();
+
         return $this;
     }
 }

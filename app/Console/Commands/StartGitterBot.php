@@ -71,21 +71,21 @@ class StartGitterBot extends Command
         $this->makePidFile();
 
         $started = Carbon::now();
-        $client  = Client::make($config->get('gitter.token'), $this->argument('room'));
-        $stream  = $container->make(Room::class)->listen();
+        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $stream = $container->make(Room::class)->listen();
 
         $this->line(sprintf(' Gitter Bot %s started at %s', Client::VERSION, $started->toDateTimeString()));
 
-        $client->getEventLoop()->addPeriodicTimer(1, function() use ($started) {
+        $client->getEventLoop()->addPeriodicTimer(1, function () use ($started) {
             $memory = number_format(memory_get_usage(true) / 1000 / 1000, 2);
             $uptime = Carbon::now()->diff($started);
 
             $this->output->write("\r" . sprintf(
-                '[memory: %smb] [uptime: %s]%60s',
-                $memory,
-                $uptime->format('%Y.%M.%D %H:%I:%S'),
-                ''
-            ));
+                    '[memory: %smb] [uptime: %s]%60s',
+                    $memory,
+                    $uptime->format('%Y.%M.%D %H:%I:%S'),
+                    ''
+                ));
         });
 
         $client->run();

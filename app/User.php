@@ -98,6 +98,7 @@ class User extends \Eloquent implements
     public function getKarmaTextAttribute()
     {
         $karma = $this->karma->count();
+
         return ($karma > 0 ? '+' : '') . $karma;
     }
 

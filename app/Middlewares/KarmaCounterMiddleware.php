@@ -32,18 +32,21 @@ class KarmaCounterMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $state = $this->validator->validate($message);
+        $collection = $this->validator->validate($message);
 
-        if (!$state->isNothing()) {
-            foreach ($message->mentions as $user) {
-                if ($state->isIncrement()) {
-                    $message->user->addKarmaTo($user, $message);
-                }
-                $message->italic($state->getTranslation($user, $user->karma_text));
+        foreach ($collection as $state) {
+            $user = $state->getUser();
 
-                if ($state->isIncrement() && $user->id === \Auth::user()->id) {
+            if ($state->isIncrement()) {
+                $message->user->addKarmaTo($user, $message);
+
+                if ($user->id === \Auth::user()->id) {
                     $message->answer(\Lang::get('karma.bot'));
                 }
+            }
+
+            if (!$state->isNothing()) {
+                $message->italic($state->getTranslation($user->karma_text));
             }
         }
 

@@ -51,9 +51,9 @@ class Request
      */
     public function __construct(Client $client, $route, array $args, $method = 'GET')
     {
-        $this->url      = $client->getRouter()->route($route, $args);
-        $this->method   = $method;
-        $this->headers  = $client->getHeaders();
+        $this->url = $client->getRouter()->route($route, $args);
+        $this->method = $method;
+        $this->headers = $client->getHeaders();
     }
 
     /**
@@ -66,9 +66,9 @@ class Request
             'verify'  => false,
             'headers' => $this->headers,
 
-            'body'    => is_array($data) || is_object($data)
+            'body' => is_array($data) || is_object($data)
                 ? json_encode($data)
-                : $data
+                : $data,
         ]);
     }
 
@@ -88,6 +88,7 @@ class Request
     public function subscribe(callable $callback): Request
     {
         $this->callbacks[] = $callback;
+
         return $this;
     }
 }

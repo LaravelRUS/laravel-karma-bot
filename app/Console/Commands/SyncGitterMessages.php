@@ -73,16 +73,16 @@ class SyncGitterMessages extends Command
         $config->set('gitter.output', false);
         $this->warn('Be sure what users was be synced first!');
 
-        $client      = Client::make($config->get('gitter.token'), $this->argument('room'));
-        $room        = $container->make(Room::class);
+        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $room = $container->make(Room::class);
 
         $this->karma = new Validator();
 
 
-        $request     = $this->cursor($client, $room);
-        $count       = 1;   // Start number
-        $page        = 0;   // Current page
-        $chunk       = 1000; // Per page
+        $request = $this->cursor($client, $room);
+        $count = 1;   // Start number
+        $page = 0;   // Current page
+        $chunk = 1000; // Per page
 
 
         Karma::query()

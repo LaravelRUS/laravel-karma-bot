@@ -48,7 +48,7 @@ abstract class AbstractAchieve implements
     /**
      * @var null
      */
-    public $name  = null;
+    public $name = null;
 
     /**
      * @var array
@@ -72,9 +72,9 @@ abstract class AbstractAchieve implements
     public function create(User $user, Carbon $createdAt = null): Achieve
     {
         $achieve = Achieve::create([
-            'name'        => $this->name,
-            'user_id'     => $user->id,
-            'created_at'  => $createdAt ?: Carbon::now()
+            'name'       => $this->name,
+            'user_id'    => $user->id,
+            'created_at' => $createdAt ?: Carbon::now(),
         ]);
 
         return $achieve;
@@ -95,10 +95,10 @@ abstract class AbstractAchieve implements
     public function toArray(): array
     {
         return array_merge([
-            'name'          => $this->name,
-            'title'         => $this->title,
-            'description'   => $this->description,
-            'image'         => $this->image,
+            'name'        => $this->name,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'image'       => $this->image,
         ], $this->properties);
     }
 

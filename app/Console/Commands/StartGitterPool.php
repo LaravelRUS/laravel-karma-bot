@@ -64,7 +64,7 @@ class StartGitterPool extends Command
     public function handle(Repository $config, Container $container)
     {
         $this->container = $container;
-        $this->config    = $config;
+        $this->config = $config;
 
 
         $action = $this->argument('action');

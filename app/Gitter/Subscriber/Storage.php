@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace App\Gitter\Subscriber;
+
 use Illuminate\Contracts\Container\Container;
 
 /**

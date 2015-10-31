@@ -65,17 +65,17 @@ class SyncGitterUsers extends Command
     {
         $config->set('gitter.output', false);
 
-        $client     = Client::make($config->get('gitter.token'), $this->argument('room'));
-        $room       = $container->make(Room::class);
+        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $room = $container->make(Room::class);
 
 
-        $users      = $client->request('room.users', ['roomId' => $room->id]);
-        $process    = new CircleProgress();
+        $users = $client->request('room.users', ['roomId' => $room->id]);
+        $process = new CircleProgress();
 
-        $message    = "\r %s <comment>[%s/%s]</comment> %s%80s";
+        $message = "\r %s <comment>[%s/%s]</comment> %s%80s";
 
-        $count      = count($users);
-        $current    = 1;
+        $count = count($users);
+        $current = 1;
         foreach ($users as $user) {
             $user = User::fromGitterObject($user);
             $this->output->write(sprintf($message, $process->get(), $current, $count, $user->login, ''));

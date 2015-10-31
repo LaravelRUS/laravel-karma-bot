@@ -113,6 +113,7 @@ class Achieve extends \Eloquent
         if ($this->cachedAchieve === null) {
             $this->cachedAchieve = new $this->name;
         }
+
         return $this->cachedAchieve;
     }
 
@@ -146,10 +147,12 @@ class Achieve extends \Eloquent
      */
     public function getCreatedAtAttribute($time)
     {
-        return new class($time) extends Carbon implements Arrayable {
-            public function toArray() {
+        return new class($time) extends Carbon implements Arrayable
+        {
+            public function toArray()
+            {
                 return [
-                    'date' => $this->toIso8601String(),
+                    'date'     => $this->toIso8601String(),
                     'timezone' => $this->timezone,
                 ];
             }

@@ -26,7 +26,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return \Cache::remember('users', 1, function() {
+        return \Cache::remember('users', 1, function () {
             $karmaStorage = [];
             $thanksStorage = [];
 
@@ -50,7 +50,7 @@ class UsersController extends Controller
             return (new User())
                 ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
                 ->each(function (User $user) use ($karmaStorage, $thanksStorage) {
-                    $user->karma_count  = $karmaStorage[$user->id] ?? 0;
+                    $user->karma_count = $karmaStorage[$user->id] ?? 0;
                     $user->thanks_count = $thanksStorage[$user->id] ?? 0;
                 });
         });
@@ -61,7 +61,7 @@ class UsersController extends Controller
      */
     public function getUsersTop()
     {
-        return \Cache::remember('top.karma', 1, function() {
+        return \Cache::remember('top.karma', 1, function () {
             $karmaStorage = [];
 
             $karma = (new Karma())
@@ -89,15 +89,15 @@ class UsersController extends Controller
      */
     public function getUser($gitterId)
     {
-        $formatRelations = function(HasMany $query) {
+        $formatRelations = function (HasMany $query) {
             return $query->orderBy('created_at', 'desc');
         };
 
         return User::query()
             ->with([
-                'karma'         => $formatRelations,
-                'thanks'        => $formatRelations,
-                'achievements'  => $formatRelations
+                'karma'        => $formatRelations,
+                'thanks'       => $formatRelations,
+                'achievements' => $formatRelations,
             ])
             ->where('gitter_id', $gitterId)
             ->first();

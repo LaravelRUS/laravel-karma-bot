@@ -35,7 +35,7 @@ class StreamBuffer
     public function add($chunk): StreamBuffer
     {
         $chunks = explode("\n", $chunk);
-        $count  = count($chunks);
+        $count = count($chunks);
 
         if ($count === 1) {
             $this->data .= $chunk;
@@ -59,6 +59,7 @@ class StreamBuffer
     public function subscribe($callback): StreamBuffer
     {
         $this->callbacks[] = $callback;
+
         return $this;
     }
 
@@ -68,6 +69,7 @@ class StreamBuffer
     public function clear()
     {
         $this->data = '';
+
         return $this;
     }
 
