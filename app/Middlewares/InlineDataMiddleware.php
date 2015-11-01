@@ -24,7 +24,7 @@ class InlineDataMiddleware implements MiddlewareInterface
             sprintf('/([^`]%s|^%1$s)/iu', 'http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)')
         , $message->text);
 
-        if ($isImage || $isVideo) {
+        if (($isImage || $isVideo) && $message->user->login !== \Auth::user()->login) {
             // Move to lang files
             $answer = sprintf('@%s, просьба оборачивать в кавычки ссылки на видео и изображения.', $message->user->login);
             $message->italic($answer);
