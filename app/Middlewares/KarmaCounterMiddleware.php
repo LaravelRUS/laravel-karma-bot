@@ -1,6 +1,7 @@
 <?php
 namespace App\Middlewares;
 
+use App\Gitter\Middleware\Storage;
 use App\Message;
 use App\Gitter\Karma\Validator;
 use App\Gitter\Middleware\MiddlewareInterface;
@@ -33,6 +34,7 @@ class KarmaCounterMiddleware implements MiddlewareInterface
     public function handle(Message $message)
     {
         $collection = $this->validator->validate($message);
+        $hasAnswers = false;
 
         foreach ($collection as $state) {
             $user = $state->getUser();
@@ -48,10 +50,15 @@ class KarmaCounterMiddleware implements MiddlewareInterface
             }
 
             if (!$state->isNothing()) {
+                $hasAnswers = true;
                 $message->italic($state->getTranslation($user->karma_text));
             }
         }
 
-        return $message;
+        if (!$hasAnswers) {
+            return $message;
+        }
+
+        return Storage::SIGNAL_STOP;
     }
 }

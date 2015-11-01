@@ -113,10 +113,7 @@ class Validator
      */
     protected function validateText(Message $message)
     {
-        $escapedText = mb_strtolower($message->text);
-        $escapedText = preg_replace('/\@[a-z0-9\-_]+/iu', '', $escapedText);
-        $escapedText = preg_replace('/\W+/iu', '', $escapedText);
-        $escapedText = trim($escapedText);
+        $escapedText = $message->text_without_special_chars;
 
         return Str::endsWith($escapedText, $this->likes) || Str::startsWith($escapedText, $this->likes);
     }

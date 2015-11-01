@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  *
  * @property-read string $escaped_text
+ * @property-read string $text_without_special_chars
  *
  */
 class Message extends Model
@@ -59,6 +60,20 @@ class Message extends Model
     }
 
     /**
+     * @param callable $cb
+     * @return bool
+     */
+    public function hasMention(callable $cb)
+    {
+        foreach ($this->mentions as $mention) {
+            if ($cb($mention)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @return mixed|string
      */
     public function getEscapedTextAttribute()
@@ -69,6 +84,19 @@ class Message extends Model
         $text = trim($text);
 
         return $text;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getTextWithoutSpecialCharsAttribute()
+    {
+        $escapedText = $this->escaped_text;
+        $escapedText = preg_replace('/\@[a-z0-9\-_]+/iu', '', $escapedText);
+        $escapedText = preg_replace('/[^\s\w]/iu', '', $escapedText);
+        $escapedText = trim($escapedText);
+
+        return $escapedText;
     }
 
     /**
