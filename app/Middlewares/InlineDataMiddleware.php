@@ -25,8 +25,9 @@ class InlineDataMiddleware implements MiddlewareInterface
         , $message->text);
 
         if (($isImage || $isVideo) && $message->user->login !== \Auth::user()->login) {
-            // Move to lang files
-            $answer = sprintf('@%s, просьба оборачивать в кавычки ссылки на видео и изображения.', $message->user->login);
+            $answer = \Lang::get('gitter.inline', [
+                'user' => $message->user->login
+            ]);
             $message->italic($answer);
         }
 

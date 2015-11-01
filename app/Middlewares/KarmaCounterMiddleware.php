@@ -41,7 +41,9 @@ class KarmaCounterMiddleware implements MiddlewareInterface
                 $message->user->addKarmaTo($user, $message);
 
                 if ($user->id === \Auth::user()->id) {
-                    $message->answer(\Lang::get('karma.bot'));
+                    $message->answer(\Lang::get('karma.bot', [
+                        'user' => $user->login
+                    ]));
                 }
             }
 
