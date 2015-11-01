@@ -27,6 +27,9 @@ return [
 
         // Подсчёт "спасибок"
         App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
+
+        // Анализ ссылок на изображения и видео
+        App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
     ],
 
 
