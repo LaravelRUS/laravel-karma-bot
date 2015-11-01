@@ -6,6 +6,7 @@ use App\Message;
 use App\Gitter\Karma\Validator;
 use App\Gitter\Middleware\MiddlewareInterface;
 use App\User;
+use Illuminate\Support\Str;
 
 /**
  * Class PersonalAnswersMiddleware
@@ -44,11 +45,10 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
 
         // Hello all
-        $isHello = in_array($message->text_without_special_chars, [
+        $isHello = Str::contains($message->text_without_special_chars, [
             'привет всем',
-            'всем привет',
-            'здравствуйте'
-        ], false);
+            'всем привет'
+        ]);
 
         if ($isHello) {
             $id = array_rand(\Lang::get('personal.hello'));
@@ -56,6 +56,16 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             $message->italic(\Lang::get('personal.hello.' . $id, [
                 'user' => $message->user->login
             ]));
+        }
+
+        // Question
+        $isQuestion = Str::contains($message->text_without_special_chars, [
+            'можно задать вопрос',
+            'хочу задать вопрос'
+        ]);
+
+        if ($isQuestion) {
+            $message->italic(sprintf('@%s, и какой ответ ты ожидаешь услышать?', $message->user->login));
         }
 
         return $message;
