@@ -16,13 +16,18 @@ class InlineDataMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $isImage = preg_match('/[^\`]http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)/isu', $message->text);
-        $isVideo = preg_match('/[^`]http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)/isu', $message->text);
+        $isImage = preg_match(
+            sprintf('/([^`]%s|^%1$s)/iu', 'http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)')
+        , $message->text);
+
+        $isVideo = preg_match(
+            sprintf('/([^`]%s|^%1$s)/iu', 'http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)')
+        , $message->text);
 
         if ($isImage || $isVideo) {
             // Move to lang files
             $answer = sprintf('@%s, просьба оборачивать в кавычки ссылки на видео и изображения.', $message->user->login);
-            $message->answer($answer);
+            $message->italic($answer);
         }
 
         return $message;
