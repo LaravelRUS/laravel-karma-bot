@@ -17,11 +17,11 @@ class InlineDataMiddleware implements MiddlewareInterface
     public function handle(Message $message)
     {
         $isImage = preg_match(
-            sprintf('/([^`]%s|^%1$s)/iu', 'http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)')
+            sprintf('/([^`]%s|[^\[]%1$s|[^\(]%1$s|^%1$s)/iu', 'http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)')
         , $message->text);
 
         $isVideo = preg_match(
-            sprintf('/([^`]%s|^%1$s)/iu', 'http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)')
+            sprintf('/([^`]%s|[^\[]%1$s|[^\(]%1$s|^%1$s)/iu', 'http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)')
         , $message->text);
 
         if (($isImage || $isVideo) && $message->user->login !== \Auth::user()->login) {
