@@ -88,7 +88,6 @@ class StartGitterPool extends Command
     protected function start()
     {
         foreach ($this->config->get('gitter.rooms') as $key => $id) {
-            shell_exec('php artisan gitter:users ' . $key);
             shell_exec('nohup php artisan gitter:listen ' . $key . ' > /dev/null 2>&1 &');
 
             $this->line('Starting ' . $key . ' => ' . $id . ' listener.');
