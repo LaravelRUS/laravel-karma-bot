@@ -33,6 +33,10 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
+        if ($message->user->login === \Auth::user()->login) {
+            return $message;
+        }
+
         // Personal message
         $isBotMention = $message->hasMention(function(User $user) {
             return $user->login === \Auth::user()->login;
@@ -68,7 +72,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             if ($isQuestion) {
                 $message->italic(sprintf('@%s, и какой ответ ты ожидаешь услышать?', $message->user->login));
             }
-            
+
         }
 
         return $message;
