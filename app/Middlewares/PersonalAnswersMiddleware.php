@@ -43,7 +43,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
         });
 
         if ($isBotMention) {
-            $this->ai->handle($message);
+            //$this->ai->handle($message);
 
 
         } else {
