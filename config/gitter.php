@@ -32,7 +32,7 @@ return [
         App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
 
         // Ответы на персональные вопросы для бота
-        App\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
+        //App\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
     ],
 
 
