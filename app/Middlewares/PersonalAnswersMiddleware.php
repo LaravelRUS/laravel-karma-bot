@@ -49,10 +49,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
         } else {
 
             // Hello all
-            $isHello = Str::contains($message->text_without_special_chars, [
-                'привет всем',
-                'всем привет'
-            ]);
+            $isHello = Str::contains($message->text_without_special_chars, \Lang::get('personal.hello_query'));
 
             if ($isHello) {
                 $id = array_rand(\Lang::get('personal.hello'));
