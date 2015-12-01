@@ -17,12 +17,12 @@ class InlineDataMiddleware implements MiddlewareInterface
     public function handle(Message $message)
     {
         $isImage = preg_match(
-            sprintf('/([^`]%s|[^\[]%1$s|[^\(]%1$s|^%1$s)/iu', 'http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)')
-        , $message->text);
+            '/[^`]http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)/iu'
+        , ' ' . $message->text);
 
         $isVideo = preg_match(
-            sprintf('/([^`]%s|[^\[]%1$s|[^\(]%1$s|^%1$s)/iu', 'http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)')
-        , $message->text);
+            '/[^`]http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be).*?/iu'
+        , ' ' . $message->text);
 
         if (($isImage || $isVideo) && $message->user->login !== \Auth::user()->login) {
             $answer = \Lang::get('gitter.inline', [
