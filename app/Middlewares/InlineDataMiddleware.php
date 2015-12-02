@@ -17,7 +17,7 @@ class InlineDataMiddleware implements MiddlewareInterface
     public function handle(Message $message)
     {
         $isImage = preg_match(
-            '/[^`]http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp|gif)/iu'
+            '/[^`]http(?:s)?:\/\/.*?\.(?:jpg|png|jpeg|svg|bmp)/iu'
         , ' ' . $message->text);
 
         $isVideo = preg_match(
