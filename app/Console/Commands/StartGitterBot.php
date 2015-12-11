@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Support\Facades\Log;
 
 
 /**
@@ -88,9 +89,16 @@ class StartGitterBot extends Command
                 ));
         });
 
-        $client->run();
+        try {
+            $client->run();
 
-        $this->removePidFile();
+        } catch (\Exception $e) {
+            $this->handle($config, $container);
+
+        } finally {
+            $this->removePidFile();
+            
+        }
     }
 
     /**
