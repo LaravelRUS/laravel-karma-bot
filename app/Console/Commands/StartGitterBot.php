@@ -69,8 +69,6 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container)
     {
-        $this->makePidFile();
-
         $started = Carbon::now();
         $client = Client::make($config->get('gitter.token'), $this->argument('room'));
         $stream = $container->make(Room::class)->listen();
@@ -89,16 +87,13 @@ class StartGitterBot extends Command
                 ));
         });
 
-        try {
+        $startClient = function() use ($client) {
+            $this->makePidFile();
             $client->run();
+        };
 
-        } catch (\Exception $e) {
-            $this->handle($config, $container);
-
-        } finally {
-            $this->removePidFile();
-            
-        }
+        $startClient();
+        $this->removePidFile();
     }
 
     /**

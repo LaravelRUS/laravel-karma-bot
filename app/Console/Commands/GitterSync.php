@@ -85,7 +85,7 @@ class GitterSync extends Command
         $request = $this->cursor($client, $room);
         $count = 1;   // Start number
         $page = 0;   // Current page
-        $chunk = 1000; // Per page
+        $chunk = 100; // Per page
 
 
         while (true) {
