@@ -31,8 +31,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        file_put_contents(base_path('.touch'), Carbon::now()->toDateTimeString());
-        
         $schedule
             ->command('gitter:pool', ['restart'])
             ->everyFiveMinutes();
