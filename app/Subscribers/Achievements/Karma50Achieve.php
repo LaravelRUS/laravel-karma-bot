@@ -32,7 +32,7 @@ class Karma50Achieve extends AbstractAchieve
     /**
      * @var string
      */
-    public $image = 'http://karma.laravel.su/img/achievements/karma-50.gif';
+    public $image = '//karma.laravel.su/img/achievements/karma-50.gif';
 
     /**
      * @throws \LogicException
