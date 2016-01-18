@@ -27,6 +27,9 @@ return [
         // Google поисковик
         App\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
 
+        // Советник по оформлению сообщений
+        App\Middlewares\MarkdownAdviserMiddleware::class => Storage::PRIORITY_DEFAULT,
+
         // Подсчёт "спасибок"
         App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
 
