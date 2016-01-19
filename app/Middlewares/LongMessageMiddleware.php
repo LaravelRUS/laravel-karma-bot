@@ -20,7 +20,7 @@ class LongMessageMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $text = $message->escaped_text;
+        $text = $message->text;
         $lines = count(explode("\n", $text));
         $chars = mb_strlen($text);
 
