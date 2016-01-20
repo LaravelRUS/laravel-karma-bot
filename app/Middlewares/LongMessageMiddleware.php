@@ -10,8 +10,8 @@ use App\Gitter\Middleware\MiddlewareInterface;
  */
 class LongMessageMiddleware implements MiddlewareInterface
 {
-    const MAX_CHARS = 500;
-    const MAX_LINES = 15;
+    const MAX_CHARS = 1000;
+    const MAX_LINES = 20;
     const MAX_CODE_LINES = 20;
 
     /**
