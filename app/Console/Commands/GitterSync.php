@@ -74,6 +74,7 @@ class GitterSync extends Command
     {
         $this->syncUsers($config, $container);
 
+        return; // Temporary fix
         $config->set('gitter.output', false);
 
         $client = Client::make($config->get('gitter.token'), $this->argument('room'));
