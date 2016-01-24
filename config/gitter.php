@@ -46,7 +46,7 @@ return [
         App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
 
         // Анализ ссылок на изображения и видео
-        App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
+        // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
 
         // Ответы на персональные вопросы для бота
         App\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
