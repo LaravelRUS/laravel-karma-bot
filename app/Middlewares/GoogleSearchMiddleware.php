@@ -18,7 +18,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
     {
         $text = $message->escaped_text;
 
-        if (preg_match('/^(@.*?\s)?(?:погугли|гугли)\s(.*?)$/isu', $text, $matches)) {
+        if (preg_match('/^(@.*?\s)?(?:погугли|загугли|гугли)\s(.*?)$/isu', $text, $matches)) {
             if (!trim($matches[2])) {
                 return $message;
             }
