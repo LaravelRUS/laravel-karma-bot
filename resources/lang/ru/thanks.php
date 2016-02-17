@@ -34,6 +34,9 @@ return [
         // Грузинский
         'მადლობა',
 
+        // Баскский
+        'eskerrik asko',
+        
         // Испанский
         'gracias',
         'gràcies',
