@@ -20,6 +20,7 @@ return [
         'yii.chat'      => '555086c915522ed4b3e03631', // https://gitter.im/yiisoft/yii2/rus
 
         'phpua.symfony' => '5497ef29db8155e6700e1e81', // https://gitter.im/php-ua/symfony
+        'phpua.php'     => '549565c0db8155e6700e16c1', // https://gitter.im/php-ua/php
 
 
     ],
