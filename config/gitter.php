@@ -22,7 +22,7 @@ return [
         'phpua.symfony' => '5497ef29db8155e6700e1e81', // https://gitter.im/php-ua/symfony
         'phpua.php'     => '549565c0db8155e6700e16c1', // https://gitter.im/php-ua/php
 
-
+        'vuejs.chat'    => '55d5eaab0fc9f982beae0db8', // https://gitter.im/vuejs-ru/Discussion
     ],
 
 
