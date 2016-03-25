@@ -23,6 +23,8 @@ return [
         'phpua.php'     => '549565c0db8155e6700e16c1', // https://gitter.im/php-ua/php
 
         'vuejs.chat'    => '55d5eaab0fc9f982beae0db8', // https://gitter.im/vuejs-ru/Discussion
+        
+        'synrc.n2o'     => '54a2823adb8155e6700e3f37', // https://gitter.im/synrc/n2o
     ],
 
 
