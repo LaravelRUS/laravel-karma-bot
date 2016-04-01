@@ -5,7 +5,7 @@ return [
     'self'          => 'Так не честно, @:user. Нельзя добавлять карму самому себе.',
     'bot'           => '@:user, *не за что, я всегда к твоим услугам* =)',
     'nouser'        => '@:user, в этом чате принято добавлять имя пользователя, чтобы его поблагодарить.',
-    'achievements'  => '- Достижения: :achievements',
+    'achievements'  => '- Достижения вроде тоже есть',
     'account'       => '- [Профиль :user на laravel.su](http://karma.laravel.su/user/:user)',
 
     'count'     => [
