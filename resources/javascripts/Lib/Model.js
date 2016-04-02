@@ -18,7 +18,7 @@ export default class Model {
     }
 
     /**
-     * @type {array}
+     * @type {Array}
      */
     static modelsLoaded = [];
 
@@ -33,7 +33,7 @@ export default class Model {
     }
 
     /**
-     * @type {array}
+     * @type {Array}
      */
     static modelsBooted = [];
 

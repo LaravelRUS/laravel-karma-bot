@@ -13,7 +13,7 @@
         "barryvdh/laravel-ide-helper": "2.1.*",
         "guzzlehttp/guzzle": "^6.1",
         "predis/predis": "~1.0",
-
+        "serafim/gitter-api": "2.0.*",
         "big-shark/sql-to-builder": "dev-master@dev"
     },
     "require-dev": {

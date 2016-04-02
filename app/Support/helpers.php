@@ -3,7 +3,7 @@
 if (!function_exists('asset_ts')) {
     function asset_ts($path, $secure = false)
     {
-        $url = asset($path, $secure);
+        $url = '/' . $path;
 
         if (is_file(public_path($path))) {
             $time = filemtime(public_path($path));

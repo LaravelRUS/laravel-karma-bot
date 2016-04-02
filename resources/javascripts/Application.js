@@ -74,6 +74,7 @@ export default class Application {
     run() {
         this.controllers.forEach(data => {
             var controller = require(data.controller.replace(/\\\/\./g, '/'));
+            controller = controller.default || controller;
             ko.applyBindings(new controller(data.node), data.node);
         });
 
