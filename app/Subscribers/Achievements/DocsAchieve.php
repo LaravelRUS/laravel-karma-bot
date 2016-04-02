@@ -22,7 +22,7 @@ class DocsAchieve extends AbstractAchieve
     /**
      * @var string
      */
-    public $title = 'Красава';
+    public $title = 'Красавчик';
 
     /**
      * @var string
