@@ -73,18 +73,27 @@ export default class Model {
      * Boot model
      */
     static boot() {
+        var register = (key) => {
+            if (this.collection[key] instanceof Function) {
+                (method => {
+                    Object.defineProperty(this, method, {
+                        enumerable: false,
+                        configurable: false,
+                        get: () => this.collection[method]
+                    });
+                })(key);
+            }
+        };
+
         if (!this.booted()) {
             // Переносим методы коллекции в модель
+            let context = Object.getOwnPropertyDescriptors(Reflect.getPrototypeOf(this.collection));
+            for (var key in context) {
+                register(key);
+            }
+
             for (var key in this.collection) {
-                if (this.collection[key] instanceof Function) {
-                    (method => {
-                        Object.defineProperty(this, method, {
-                            enumerable: false,
-                            configurable: false,
-                            get: () => this.collection[method]
-                        });
-                    })(key);
-                }
+                register(key);
             }
 
             this.booted(true);
