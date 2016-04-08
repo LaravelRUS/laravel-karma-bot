@@ -59,6 +59,6 @@ return [
     // Subscribers
     'subscribers' => [
         // Подписывается на создание ачивки и отправляет сообщеньку в чат
-        App\Subscribers\AchieveSubscriber::class,
+        Core\Subscribers\AchieveSubscriber::class,
     ],
 ];

@@ -2,7 +2,7 @@
 namespace App;
 
 use Carbon\Carbon;
-use App\Mappers\UserMapperTrait;
+use Core\Mappers\UserMapperTrait;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;

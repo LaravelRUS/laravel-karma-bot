@@ -13,7 +13,7 @@ namespace App;
 use Carbon\Carbon;
 use LogicException;
 use App\Gitter\Client;
-use App\Mappers\MessageMapperTrait;
+use Core\Mappers\MessageMapperTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
