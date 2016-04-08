@@ -12,13 +12,12 @@ namespace Domains;
 
 use Carbon\Carbon;
 use LogicException;
-use App\Gitter\Client;
+use Interfaces\Gitter\Client;
 use Core\Mappers\MessageMapperTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Message
- * @package App
  *
  * @property string $gitter_id
  * @property string $text

@@ -11,12 +11,11 @@
 namespace Domains;
 
 use Carbon\Carbon;
-use App\Gitter\Achieve\AbstractAchieve;
+use Interfaces\Gitter\Achieve\AbstractAchieve;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Achieve
- * @package App
  *
  * @property-read int $id
  * @property string $name

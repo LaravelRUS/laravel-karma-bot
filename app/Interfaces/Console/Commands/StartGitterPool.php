@@ -19,7 +19,6 @@ use Illuminate\Contracts\Container\Container;
 
 /**
  * Class StartGitterPool
- * @package App\Console\Commands
  */
 class StartGitterPool extends Command
 {

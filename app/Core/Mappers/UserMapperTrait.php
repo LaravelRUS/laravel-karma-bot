@@ -13,11 +13,10 @@ namespace Core\Mappers;
 
 use Domains\User;
 use InvalidArgumentException;
-use App\Gitter\Support\AttributeMapper;
+use Interfaces\Gitter\Support\AttributeMapper;
 
 /**
  * Class UserMapperTrait
- * @package App\Mappers
  */
 trait UserMapperTrait
 {

@@ -11,11 +11,10 @@
 namespace Core\Subscribers\Achievements;
 
 use Domains\Karma;
-use App\Gitter\Achieve\AbstractAchieve;
+use Interfaces\Gitter\Achieve\AbstractAchieve;
 
 /**
  * Class Karma50Achieve
- * @package App\Achieve
  */
 class Karma50Achieve extends AbstractAchieve
 {

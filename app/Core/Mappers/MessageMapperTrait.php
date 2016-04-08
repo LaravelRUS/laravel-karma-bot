@@ -14,12 +14,11 @@ use Domains\Room;
 use Domains\User;
 use Domains\Message;
 use Carbon\Carbon;
-use App\Gitter\Support\AttributeMapper;
+use Interfaces\Gitter\Support\AttributeMapper;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class MessageMapperTrait
- * @package App\Mappers
  */
 trait MessageMapperTrait
 {

@@ -14,7 +14,7 @@ namespace Interfaces\Console\Commands;
 
 
 use Domains\Room;
-use App\Gitter\Client;
+use Interfaces\Gitter\Client;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Class StartGitterBot
- * @package App\Console\Commands
  */
 class StartGitterBot extends Command
 {

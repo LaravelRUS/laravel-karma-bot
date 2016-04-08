@@ -12,14 +12,14 @@
 
 namespace Interfaces\Console\Commands;
 
-use App\Gitter\Console\CircleProgress;
+use Interfaces\Gitter\Console\CircleProgress;
 use Domains\Karma;
 use Domains\User;
 use Domains\Room;
 use Domains\Message;
-use App\Gitter\Client;
+use Interfaces\Gitter\Client;
 use InvalidArgumentException;
-use App\Gitter\Karma\Validator;
+use Interfaces\Gitter\Karma\Validator;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
@@ -27,7 +27,6 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * Class GitterSync
- * @package App\Console\Commands
  */
 class GitterSync extends Command
 {

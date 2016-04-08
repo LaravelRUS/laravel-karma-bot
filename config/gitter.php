@@ -1,5 +1,5 @@
 <?php
-use App\Gitter\Middleware\Storage;
+use Interfaces\Gitter\Middleware\Storage;
 
 return [
     'token'       => env('GITTER_TOKEN', null),
@@ -31,28 +31,28 @@ return [
     // Middlewares
     'middlewares' => [
         // Вывод кармы по запросу
-        App\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
+        Domains\Bot\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
 
         // SQL билдер
-        App\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
+        Domains\Bot\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
 
         // Google поисковик
-        App\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
+        Domains\Bot\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
 
         // Советник по оформлению сообщений
-        App\Middlewares\MarkdownAdviserMiddleware::class => Storage::PRIORITY_DEFAULT,
+        Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class => Storage::PRIORITY_DEFAULT,
 
         // Слишком длинные сообщения
-        App\Middlewares\LongMessageMiddleware::class => Storage::PRIORITY_DEFAULT,
+        Domains\Bot\Middlewares\LongMessageMiddleware::class => Storage::PRIORITY_DEFAULT,
 
         // Подсчёт "спасибок"
-        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
+        Domains\Bot\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
 
         // Анализ ссылок на изображения и видео
         // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
 
         // Ответы на персональные вопросы для бота
-        App\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
+        Domains\Bot\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
     ],
 
 

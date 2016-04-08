@@ -10,15 +10,14 @@
  */
 namespace Domains;
 
-use App\Gitter\Client;
-use App\Gitter\Http\Stream;
+use Interfaces\Gitter\Client;
+use Interfaces\Gitter\Http\Stream;
 use InvalidArgumentException;
-use App\Gitter\Middleware\Storage as Middlewares;
-use App\Gitter\Subscriber\Storage as Subscribers;
+use Interfaces\Gitter\Middleware\Storage as Middlewares;
+use Interfaces\Gitter\Subscriber\Storage as Subscribers;
 
 /**
  * Class Room
- * @package App
  *
  * @property int $id
  */

@@ -14,7 +14,6 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * Class User
- * @package App
  *
  * @property int $id
  * @property string $gitter_id

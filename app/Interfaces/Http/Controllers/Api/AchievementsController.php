@@ -14,11 +14,10 @@ use Domains\Achieve;
 use Illuminate\Support\Collection;
 use Interfaces\Http\Controllers\Controller;
 use Core\Subscribers\AchieveSubscriber;
-use App\Gitter\Achieve\AbstractAchieve;
+use Interfaces\Gitter\Achieve\AbstractAchieve;
 
 /**
  * Class AchievementsController
- * @package App\Http\Controllers
  */
 class AchievementsController extends Controller
 {

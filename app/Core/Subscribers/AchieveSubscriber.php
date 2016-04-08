@@ -15,7 +15,7 @@ use Domains\Achieve;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
-use App\Gitter\Subscriber\SubscriberInterface;
+use Interfaces\Gitter\Subscriber\SubscriberInterface;
 use Core\Subscribers\Achievements\Karma10Achieve;
 use Core\Subscribers\Achievements\Karma50Achieve;
 use Core\Subscribers\Achievements\Karma100Achieve;
@@ -28,7 +28,6 @@ use Core\Subscribers\Achievements\DocsAchieve;
 
 /**
  * Class AchieveSubscriber
- * @package App\Subscribers
  */
 class AchieveSubscriber implements
     SubscriberInterface,

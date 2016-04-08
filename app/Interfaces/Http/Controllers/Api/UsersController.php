@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class UsersController
- * @package App\Http\Controllers
  */
 class UsersController extends Controller
 {
