@@ -40,10 +40,10 @@ class Thanks10Karma0Achieve extends AbstractAchieve
     public function handle()
     {
         Karma::created(function (Karma $karma) {
-            $thanks = $karma->user->thanks->count();
-            $karma = $karma->target->karma->count();
+            $userThanks = $karma->user->thanks->count();
+            $userKarma = $karma->user->karma->count();
 
-            if ($thanks === 10 && $karma === 0) {
+            if ($userThanks === 10 && $userKarma === 0) {
                 $this->create($karma->user, $karma->created_at);
             }
         });
