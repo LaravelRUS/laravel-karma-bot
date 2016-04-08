@@ -7,7 +7,7 @@ return [
     'output'      => true,
 
     'rooms'       => [
-        //'debug' => env('GITTER_DEBUG_ROOM', '5617cdcad33f749381a8d5e5'), // Debug
+        'debug'         => env('GITTER_DEBUG_ROOM', null), // Debug
 
         'laravel.chat'  => '52f9b90e5e986b0712ef6b9d',  // https://gitter.im/LaravelRUS/chat
         'laravel.site'  => '54053e51163965c9bc201c26',  // https://gitter.im/LaravelRUS/laravel.ru
