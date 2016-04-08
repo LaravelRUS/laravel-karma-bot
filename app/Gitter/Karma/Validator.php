@@ -10,8 +10,8 @@
  */
 namespace App\Gitter\Karma;
 
-use App\User;
-use App\Message;
+use Domains\User;
+use Domains\Message;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 

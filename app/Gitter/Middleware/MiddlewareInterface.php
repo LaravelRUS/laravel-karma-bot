@@ -11,7 +11,7 @@
 
 namespace App\Gitter\Middleware;
 
-use App\Message;
+use Domains\Message;
 
 /**
  * Interface MiddlewareInterface

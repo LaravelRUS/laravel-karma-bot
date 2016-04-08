@@ -13,10 +13,10 @@
 namespace Interfaces\Console\Commands;
 
 use App\Gitter\Console\CircleProgress;
-use App\Karma;
-use App\User;
-use App\Room;
-use App\Message;
+use Domains\Karma;
+use Domains\User;
+use Domains\Room;
+use Domains\Message;
 use App\Gitter\Client;
 use InvalidArgumentException;
 use App\Gitter\Karma\Validator;

@@ -2,10 +2,10 @@
 namespace App\Middlewares;
 
 use App\Gitter\Ai;
-use App\Message;
+use Domains\Message;
 use App\Gitter\Karma\Validator;
 use App\Gitter\Middleware\MiddlewareInterface;
-use App\User;
+use Domains\User;
 use Illuminate\Support\Str;
 
 /**

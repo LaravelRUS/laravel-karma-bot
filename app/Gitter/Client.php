@@ -13,8 +13,8 @@
 namespace App\Gitter;
 
 use App;
-use App\Room;
-use App\User;
+use Domains\Room;
+use Domains\User;
 use App\Gitter\Http\Stream;
 use App\Gitter\Http\Request;
 use InvalidArgumentException;

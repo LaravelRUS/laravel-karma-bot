@@ -11,7 +11,7 @@
 
 namespace Core\Mappers;
 
-use App\User;
+use Domains\User;
 use InvalidArgumentException;
 use App\Gitter\Support\AttributeMapper;
 

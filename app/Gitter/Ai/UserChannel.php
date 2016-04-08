@@ -1,8 +1,8 @@
 <?php
 namespace App\Gitter\Ai;
 
-use App\Message;
-use App\User;
+use Domains\Message;
+use Domains\User;
 use Illuminate\Support\Str;
 
 /**

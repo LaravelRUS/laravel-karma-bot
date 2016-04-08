@@ -1,7 +1,7 @@
 <?php
 namespace App\Middlewares;
 
-use App\Message;
+use Domains\Message;
 use App\Gitter\Middleware\MiddlewareInterface;
 
 /**

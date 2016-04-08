@@ -10,8 +10,8 @@
  */
 namespace Core\Subscribers;
 
-use App\Room;
-use App\Achieve;
+use Domains\Room;
+use Domains\Achieve;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;

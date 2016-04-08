@@ -10,8 +10,8 @@
  */
 namespace Interfaces\Http\Controllers\Api;
 
-use App\User;
-use App\Karma;
+use Domains\User;
+use Domains\Karma;
 use Interfaces\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

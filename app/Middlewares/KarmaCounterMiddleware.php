@@ -2,7 +2,7 @@
 namespace App\Middlewares;
 
 use App\Gitter\Middleware\Storage;
-use App\Message;
+use Domains\Message;
 use App\Gitter\Karma\Validator;
 use App\Gitter\Middleware\MiddlewareInterface;
 

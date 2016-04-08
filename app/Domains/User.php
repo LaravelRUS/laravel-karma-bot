@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace Domains;
 
 use Carbon\Carbon;
 use Core\Mappers\UserMapperTrait;

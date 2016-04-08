@@ -33,6 +33,7 @@
             "App\\": "app/",
             "Core\\": "app/Core/",
             "Interfaces\\": "app/Interfaces/",
+            "Domains\\": "app/Domains/",
             "Tests\\": "tests/"
         }
     },

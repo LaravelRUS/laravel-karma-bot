@@ -10,7 +10,7 @@
  */
 namespace App\Gitter\Karma;
 
-use App\User;
+use Domains\User;
 use Lang;
 
 class Status

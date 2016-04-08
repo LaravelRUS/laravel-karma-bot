@@ -10,9 +10,9 @@
  */
 namespace Core\Mappers;
 
-use App\Room;
-use App\User;
-use App\Message;
+use Domains\Room;
+use Domains\User;
+use Domains\Message;
 use Carbon\Carbon;
 use App\Gitter\Support\AttributeMapper;
 use Illuminate\Database\Eloquent\Model;

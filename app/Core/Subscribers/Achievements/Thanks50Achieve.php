@@ -10,7 +10,7 @@
  */
 namespace Core\Subscribers\Achievements;
 
-use App\Karma;
+use Domains\Karma;
 use App\Gitter\Achieve\AbstractAchieve;
 
 /**

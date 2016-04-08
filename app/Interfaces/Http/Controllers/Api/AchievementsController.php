@@ -10,7 +10,7 @@
  */
 namespace Interfaces\Http\Controllers\Api;
 
-use App\Achieve;
+use Domains\Achieve;
 use Illuminate\Support\Collection;
 use Interfaces\Http\Controllers\Controller;
 use Core\Subscribers\AchieveSubscriber;

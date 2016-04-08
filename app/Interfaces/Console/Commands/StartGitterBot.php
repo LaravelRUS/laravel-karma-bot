@@ -13,7 +13,7 @@
 namespace Interfaces\Console\Commands;
 
 
-use App\Room;
+use Domains\Room;
 use App\Gitter\Client;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

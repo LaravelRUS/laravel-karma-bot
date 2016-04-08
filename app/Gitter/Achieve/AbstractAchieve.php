@@ -10,8 +10,8 @@
  */
 namespace App\Gitter\Achieve;
 
-use App\User;
-use App\Achieve;
+use Domains\User;
+use Domains\Achieve;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;

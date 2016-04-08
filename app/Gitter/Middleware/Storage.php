@@ -11,7 +11,6 @@
 
 namespace App\Gitter\Middleware;
 
-use App\Gitter\Models\Model;
 use App\Gitter\Support\PriorityList;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Container\Container;

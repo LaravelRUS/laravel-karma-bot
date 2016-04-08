@@ -1,8 +1,8 @@
 <?php
 namespace App\Gitter;
 
-use App\User;
-use App\Message;
+use Domains\User;
+use Domains\Message;
 use App\Gitter\Ai\UserChannel;
 
 /**
