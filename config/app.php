@@ -138,17 +138,19 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
-         * Application Service Providers...
-         */
-        Core\Providers\AppServiceProvider::class,
-        Core\Providers\AuthServiceProvider::class,
-        Core\Providers\EventServiceProvider::class,
-        Core\Providers\RouteServiceProvider::class,
-
-        /*
          * Vendor Service Providers
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
+        /*
+         * Application Service Providers...
+         */
+        Core\Providers\AppServiceProvider::class,
+        Core\Providers\OrmServiceProvider::class,
+        Core\Providers\AuthServiceProvider::class,
+        Core\Providers\EventServiceProvider::class,
+        Core\Providers\RouteServiceProvider::class,
+        Core\Providers\GitterClientServiceProvider::class,
     ],
 
     /*

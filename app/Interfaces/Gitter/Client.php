@@ -13,6 +13,7 @@
 namespace Interfaces\Gitter;
 
 use App;
+use Core\Mappers\UserMapper;
 use Domains\Room;
 use Domains\User;
 use Interfaces\Gitter\Http\Stream;
@@ -116,7 +117,7 @@ class Client
     public function authAs($gitterUserId = null)
     {
         $auth = $this->request('user', ['userId' => $gitterUserId])[0];
-        $this->user = User::fromGitterObject($auth);
+        $this->user = UserMapper::fromGitterObject($auth);
 
         \Auth::loginUsingId($this->user->id);
 

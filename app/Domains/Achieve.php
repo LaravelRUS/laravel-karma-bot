@@ -16,6 +16,7 @@ use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Achieve
+ * @deprecated
  *
  * @property-read int $id
  * @property string $name

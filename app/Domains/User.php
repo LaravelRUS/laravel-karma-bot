@@ -2,18 +2,16 @@
 namespace Domains;
 
 use Carbon\Carbon;
-use Core\Mappers\UserMapperTrait;
-
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
  * Class User
+ * @deprecated
  *
  * @property int $id
  * @property string $gitter_id
@@ -46,10 +44,7 @@ class User extends \Eloquent implements
 {
     use Authenticatable,
         Authorizable,
-        CanResetPassword,
-
-        // Gitter converter
-        UserMapperTrait;
+        CanResetPassword;
 
     /**
      * @var string

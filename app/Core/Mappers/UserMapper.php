@@ -16,20 +16,18 @@ use InvalidArgumentException;
 use Interfaces\Gitter\Support\AttributeMapper;
 
 /**
- * Class UserMapperTrait
+ * Class UserMapper
  */
-trait UserMapperTrait
+class UserMapper
 {
     /**
-     * @TODO Add User::class memory pool (with GC probably)
-     *
-     * @param array $attributes
+     * @param array|\StdClass $attributes
      * @return User
      * @throws InvalidArgumentException
      */
-    public static function fromGitterObject(array $attributes)
+    public static function fromGitterObject($attributes)
     {
-        $values = (new AttributeMapper($attributes))
+        $values = (new AttributeMapper((array)$attributes))
             ->rename('id', 'gitter_id')
             ->rename('username', 'login')
             ->rename('displayName', 'name')
@@ -37,10 +35,10 @@ trait UserMapperTrait
             ->only(['gitter_id', 'login', 'name', 'avatar', 'url'])
             ->toArray();
 
-        $user = static::where('gitter_id', $values['gitter_id'])->first();
+        $user = User::where('gitter_id', $values['gitter_id'])->first();
         if (!$user) {
-            $user = static::unguarded(function () use ($values) {
-                return static::create($values);
+            $user = User::unguarded(function () use ($values) {
+                return User::create($values);
             });
         }
 

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Message
+ * @deprecated 
  *
  * @property string $gitter_id
  * @property string $text

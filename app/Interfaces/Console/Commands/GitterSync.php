@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of GitterBot package.
  *
@@ -9,30 +8,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Interfaces\Console\Commands;
 
-use Interfaces\Gitter\Console\CircleProgress;
-use Domains\Karma;
-use Domains\User;
-use Domains\Room;
+use Carbon\Carbon;
+use Core\Mappers\UserMapper;
 use Domains\Message;
-use Interfaces\Gitter\Client;
-use InvalidArgumentException;
-use Interfaces\Gitter\Karma\Validator;
+use Domains\User;
+use Gitter\Client;
+use Gitter\Support\ApiIterator;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Symfony\Component\Finder\Finder;
+use Illuminate\Database\Connection;
+use InvalidArgumentException;
+use Ramsey\Uuid\Uuid;
+use Serafim\Evacuator\Evacuator;
 
 /**
  * Class GitterSync
+ * @package Interfaces\Console\Commands
  */
 class GitterSync extends Command
 {
     /**
      * The name and signature of the console command.
-     *
      * @var string
      */
     protected $signature = 'gitter:sync {room}';
@@ -40,129 +39,190 @@ class GitterSync extends Command
 
     /**
      * The console command description.
-     *
      * @var string
      */
     protected $description = 'Fill users karma from all messages of target room.';
-
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @var Validator
-     */
-    protected $karma;
-
 
     /**
      * Execute the console command.
      *
      * @param Repository $config
      * @param Container $container
+     * @param Connection $db
      *
      * @return mixed
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public function handle(Repository $config, Container $container)
+    public function handle(Repository $config, Container $container, Connection $db)
     {
-        $this->syncUsers($config, $container);
-
-        return; // Temporary fix
         $config->set('gitter.output', false);
 
-        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
-        $room = $container->make(Room::class);
 
-        $this->karma = new Validator();
-
-
-        $request = $this->cursor($client, $room);
-        $count = 1;   // Start number
-        $page = 0;   // Current page
-        $chunk = 100; // Per page
+        // Sync users
+        $db->transaction(function () use ($container) {
+            $this->comment('Start users synchronize at ' . ($start = Carbon::now()));
+            $container->call([$this, 'importUsers']);
+            $this->comment('Ends ' . Carbon::now()->diffForHumans($start));
+        });
 
 
-        while (true) {
-            $messageChunk = $request($chunk, $chunk * $page++);
-
-            if (!count($messageChunk)) {
-                $this->output->write(sprintf("\r Well done. <comment>%s</comment> Messages was be loaded.", $count));
-                break;
-            }
+        $this->output->newLine();
 
 
-            foreach ($messageChunk as $m) {
-                echo "\rLoad message: $count ";
-                $count++;
-            }
-
-            $name = 'sync/' . $page . '.json';
-            echo '...dump to ' . $name;
-            file_put_contents(
-                storage_path($name),
-                json_encode($messageChunk)
-            );
-        }
+        // Sync messages
+        $db->transaction(function () use ($container) {
+            $this->comment('Start messages synchronize at ' . ($start = Carbon::now()));
+            $container->call([$this, 'importMessages']);
+            $this->comment('Ends ' . Carbon::now()->diffForHumans($start));
+        });
 
 
-        echo "\n";
-
-        $this->output->write('Flush database karma increments');
-        Karma::query()
-            ->where('room_id', $room->id)
-            ->delete();
-
-
-        $this->output->write('Start message parsing.');
-        $finder = (new Finder())
-            ->files()
-            ->in(storage_path('sync'))
-            ->name('*.json')
-            ->sort(function($a, $b) {
-                $parse = function(\SplFileInfo $file) {
-                    return str_replace('.json', '', $file->getFilename());
-                };
-
-                return $parse($b) <=> $parse($a);
-            });
-
-
-        $count = 1;
-        foreach ($finder as $file) {
-            $messages = json_decode($file->getContents(), true);
-            foreach ($messages as $message) {
-                $message = Message::fromGitterObject($message);
-
-                echo "\r" . $count++ . ' messages parsing: ' . $message->created_at;
-                usleep(100);
-                $this->onMessage($message);
-            }
-
-            unlink($file->getRealPath());
-        }
+        $this->output->newLine();
     }
 
     /**
      * @param Client $client
-     * @param Room $room
-     * @return \Closure
-     * @throws \InvalidArgumentException
+     * @param Connection $db
+     * @throws \Throwable
      */
-    public function cursor(Client $client, Room $room)
+    public function importMessages(Client $client, Connection $db)
     {
-        return function ($limit = 100, $skip = 0) use ($client, $room) {
-            return $client->request('message.list', [
-                'roomId' => $room->id,
-                'limit'  => $limit,
-                'skip'   => $skip,
-            ]);
-        };
+        $limit          = 100;
+        $lastMessageId  = null;
+        $room           = $this->getRoom($client);
+        $rootTimeZone   = new \DateTimeZone('UTC');
+
+
+        $messages = new ApiIterator(function ($page) use ($client, $room, $limit, &$lastMessageId) {
+            $query = ['limit' => $limit];
+
+            if ($lastMessageId !== null) {
+                $query['beforeId'] = $lastMessageId;
+            }
+
+            $result = $this->rescue(function () use ($room, $query, $client) {
+                return $client->http->getMessages($room->id, $query)->wait();
+            });
+
+            if (count($result) > 0) {
+                $lastMessageId = $result[0]->id;
+            }
+
+            return $result;
+        });
+
+
+        foreach ($messages as $i => $message) {
+            $data = [
+                'id'            => Uuid::uuid4()->toString(),
+                'gitter_id'     => $message->id,
+                'room_id'       => $room->id,
+                'text'          => $message->text,
+                'text_rendered' => $message->html,
+                'user_id'       => $message->fromUser->id,
+                'created_at'    => new Carbon($message->sent, $rootTimeZone),
+                'updated_at'    => new Carbon($message->sent, $rootTimeZone),
+            ];
+
+            if (property_exists($message, 'editedAt') && $message->editedAt) {
+                $data['updated_at'] = new Carbon($message->editedAt, $rootTimeZone);
+            }
+
+            /*
+             ! Bug: Only 1 item inserting by 1 sql query
+             ! @see: https://github.com/gitterHQ/gitter/issues/1184
+             !
+             ! TODO This operations (delete + insert) will be very slow. Optimize later %)
+             */
+            try {
+
+                $db->transaction(function () use ($message, $data, $db) {
+                    $db->table('messages')->where('gitter_id', $data['gitter_id'])->delete();
+                    $db->table('messages')->insert($data);
+
+                    $db->table('urls')->where('message_id', $data['id'])->delete();
+                    $db->table('urls')->insert(
+                        $this->getUrlsFromMessage($data, (array)$message->urls)
+                    );
+
+                    $db->table('mentions')->where('message_id', $data['id'])->delete();
+                    $db->table('mentions')->insert(
+                        $this->getMentionsFromMessage($data, (array)$message->mentions)
+                    );
+
+                });
+
+                $this->info(
+                    '#' . $i . ' ' .
+                    $data['created_at'] . ' ' .
+                    mb_substr(str_replace("\n", '', $data['text']), 0, 32) . '... '
+
+                );
+
+            } catch (\Throwable $e) {
+
+                $this->error($e->getMessage() . "\n" . $e->getTraceAsString());
+
+            }
+        }
+    }
+
+    /**
+     * This command will returns an object of the room
+     *
+     * @param Client $client
+     * @return mixed
+     * @throws \Throwable
+     */
+    private function getRoom(Client $client)
+    {
+        return $this->rescue(function () use ($client) {
+            return $client->http->getRoomById($this->argument('room'))->wait();
+        });
+    }
+
+    /**
+     * This method must be wrap ALL request actions
+     *
+     * @param \Closure $request
+     * @return mixed
+     * @throws \Throwable
+     */
+    private function rescue(\Closure $request)
+    {
+        return (new Evacuator($request))
+            ->retry(Evacuator::INFINITY_RETRIES)
+            ->catch(function (\Throwable $e) {
+                $this->error($e->getMessage() . "\n" . '// retry again');
+                sleep(1);
+            })
+            ->invoke();
+    }
+
+    /**
+     * This method run an users export
+     *
+     * @param Client $client
+     * @throws \Throwable
+     */
+    public function importUsers(Client $client)
+    {
+        $room = $this->getRoom($client);
+
+
+        $users = new ApiIterator(function ($page) use ($client, $room) {
+            return $this->rescue(function () use ($room, $page, $client) {
+
+                return $client->http->getRoomUsers($room->id, ['limit' => 30, 'skip' => 30 * $page])->wait();
+
+            });
+        });
+
+
+        foreach ($users as $i => $user) {
+            $user = UserMapper::fromGitterObject($user);
+            $this->comment('#' . $i . ' @' . $user->login);
+        }
     }
 
     /**
@@ -188,29 +248,44 @@ class GitterSync extends Command
     }
 
     /**
-     * @param Repository $config
-     * @param Container $container
+     * @param array $message
+     * @param array $mentions
+     * @return array
      */
-    public function syncUsers(Repository $config, Container $container)
+    private function getMentionsFromMessage(array $message, array $mentions)
     {
-        $this->output->write('Start user sync...');
-        $config->set('gitter.output', false);
+        $result = [];
 
-        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
-        $room = $container->make(Room::class);
-
-
-        $users = $client->request('room.users', ['roomId' => $room->id]);
-        $message = "\r<comment>[%s/%s]</comment> %s%80s";
-
-        $count = count($users);
-        $current = 1;
-        foreach ($users as $user) {
-            $user = User::fromGitterObject($user);
-            $this->output->write(sprintf($message, $current, $count, $user->login, ''));
-            $current++;
+        foreach ($mentions as $mention) {
+            if (property_exists($mention, 'userId') && $mention->userId) {
+                $result[] = [
+                    'id'         => Uuid::uuid4()->toString(),
+                    'message_id' => $message['id'],
+                    'user_id'    => $message['user_id'],
+                ];
+            }
         }
 
-        $this->output->write(sprintf($message, $count, $count, 'OK', ''));
+        return $result;
+    }
+
+    /**
+     * @param array $message
+     * @param array $urls
+     * @return array
+     */
+    private function getUrlsFromMessage(array $message, array $urls)
+    {
+        $result = [];
+
+        foreach ($urls as $url) {
+            $result[] = [
+                'id'         => Uuid::uuid4()->toString(),
+                'message_id' => $message['id'],
+                'url'        => $url->url,
+            ];
+        }
+
+        return $result;
     }
 }

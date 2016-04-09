@@ -15,6 +15,7 @@ use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Karma
+ * @deprecated
  *
  * @property-read int $id
  * @property string $room_id

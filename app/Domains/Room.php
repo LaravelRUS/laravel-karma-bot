@@ -18,6 +18,7 @@ use Interfaces\Gitter\Subscriber\Storage as Subscribers;
 
 /**
  * Class Room
+ * @deprecated
  *
  * @property int $id
  */

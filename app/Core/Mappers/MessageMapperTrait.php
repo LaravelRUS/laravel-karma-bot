@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class MessageMapperTrait
+ * @deprecated
  */
 trait MessageMapperTrait
 {
@@ -39,7 +40,7 @@ trait MessageMapperTrait
                 return !!$val;
             }, 'edited')
             ->value('fromUser', function ($user) {
-                return User::fromGitterObject($user);
+                return UserMapper::fromGitterObject($user);
             }, 'user')
             ->value('sent', function ($date) {
                 return (new Carbon($date))->setTimezone('Europe/Moscow');
