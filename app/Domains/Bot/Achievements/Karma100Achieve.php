@@ -8,30 +8,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Core\Subscribers\Achievements;
+namespace Domains\Bot\Achievements;
 
 use Domains\Karma;
 use Interfaces\Gitter\Achieve\AbstractAchieve;
 
 /**
- * Class Karma10Achieve
+ * Class Karma100Achieve
  */
-class Karma10Achieve extends AbstractAchieve
+class Karma100Achieve extends AbstractAchieve
 {
     /**
      * @var string
      */
-    public $title = 'Находчивый';
+    public $title = 'Благодетель';
 
     /**
      * @var string
      */
-    public $description = 'Набрать 10 кармы.';
+    public $description = 'Набрать 100 кармы.';
 
     /**
      * @var string
      */
-    public $image = '//karma.laravel.su/img/achievements/karma-10.gif';
+    public $image = '//karma.laravel.su/img/achievements/karma-100.gif';
 
     /**
      * @throws \LogicException
@@ -39,10 +39,9 @@ class Karma10Achieve extends AbstractAchieve
     public function handle()
     {
         Karma::created(function (Karma $karma) {
-
             $count = $karma->target->karma->count();
 
-            if ($count === 10) {
+            if ($count === 100) {
                 $this->create($karma->target, $karma->created_at);
             }
         });

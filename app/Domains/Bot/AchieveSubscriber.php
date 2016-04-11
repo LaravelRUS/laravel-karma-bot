@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Core\Subscribers;
+namespace Domains\Bot;
 
-use Domains\Room;
 use Domains\Achieve;
-use Illuminate\Support\Collection;
-use Illuminate\Contracts\Support\Jsonable;
+use Domains\Bot\Achievements\DocsAchieve;
+use Domains\Bot\Achievements\Karma100Achieve;
+use Domains\Bot\Achievements\Karma10Achieve;
+use Domains\Bot\Achievements\Karma500Achieve;
+use Domains\Bot\Achievements\Karma50Achieve;
+use Domains\Bot\Achievements\Thanks100Achieve;
+use Domains\Bot\Achievements\Thanks10Karma0Achieve;
+use Domains\Bot\Achievements\Thanks20Achieve;
+use Domains\Bot\Achievements\Thanks50Achieve;
+use Domains\Room;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Collection;
 use Interfaces\Gitter\Subscriber\SubscriberInterface;
-use Core\Subscribers\Achievements\Karma10Achieve;
-use Core\Subscribers\Achievements\Karma50Achieve;
-use Core\Subscribers\Achievements\Karma100Achieve;
-use Core\Subscribers\Achievements\Karma500Achieve;
-use Core\Subscribers\Achievements\Thanks20Achieve;
-use Core\Subscribers\Achievements\Thanks50Achieve;
-use Core\Subscribers\Achievements\Thanks100Achieve;
-use Core\Subscribers\Achievements\Thanks10Karma0Achieve;
-use Core\Subscribers\Achievements\DocsAchieve;
 
 /**
  * Class AchieveSubscriber
@@ -46,7 +46,7 @@ class AchieveSubscriber implements
         Thanks50Achieve::class,
         Thanks100Achieve::class,
         Thanks10Karma0Achieve::class,
-        DocsAchieve::class
+        DocsAchieve::class,
     ];
 
     /**
@@ -63,14 +63,6 @@ class AchieveSubscriber implements
             $this->instances[] = ($instance = new $achieve);
             $instance->handle();
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function getAchievementInstances(): array
-    {
-        return $this->instances;
     }
 
     /**
@@ -93,11 +85,12 @@ class AchieveSubscriber implements
     }
 
     /**
-     * @return Collection
+     * @param int $options
+     * @return string
      */
-    public function toCollection(): Collection
+    public function toJson($options = 0): string
     {
-        return new Collection($this->getAchievementInstances());
+        return json_encode($this->toArray(), $options);
     }
 
     /**
@@ -111,11 +104,18 @@ class AchieveSubscriber implements
     }
 
     /**
-     * @param int $options
-     * @return string
+     * @return Collection
      */
-    public function toJson($options = 0): string
+    public function toCollection(): Collection
     {
-        return json_encode($this->toArray(), $options);
+        return new Collection($this->getAchievementInstances());
+    }
+
+    /**
+     * @return array
+     */
+    public function getAchievementInstances(): array
+    {
+        return $this->instances;
     }
 }

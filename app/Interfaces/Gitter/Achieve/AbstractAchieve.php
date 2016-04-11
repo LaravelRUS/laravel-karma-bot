@@ -59,7 +59,7 @@ abstract class AbstractAchieve implements
      */
     public function __construct()
     {
-        $this->name = static::class;
+        $this->name = basename(static::class);
     }
 
     /**
