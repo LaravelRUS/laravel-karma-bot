@@ -1,13 +1,12 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Message\Message;
 
 /**
  * Class GoogleSearchMiddleware
  */
-class GoogleSearchMiddleware implements MiddlewareInterface
+class GoogleSearchMiddleware implements Middleware
 {
     /**
      * @param Message $message
@@ -15,7 +14,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $text = $message->escaped_text;
+        $text = $message->text->escaped;
 
         if (preg_match('/^(@.*?\s)?(?:погугли|загугли|гугли)\s(.*?)$/isu', $text, $matches)) {
             if (!trim($matches[2])) {

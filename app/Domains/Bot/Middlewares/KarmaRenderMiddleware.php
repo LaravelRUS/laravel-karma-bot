@@ -1,15 +1,15 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Message\Message;
+
 
 /**
  * Проверяет слово "карма" и выводит статус
  *
  * Class KarmaRenderMiddleware
  */
-class KarmaRenderMiddleware implements MiddlewareInterface
+class KarmaRenderMiddleware implements Middleware
 {
     /**
      * @param Message $message

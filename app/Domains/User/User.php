@@ -12,49 +12,99 @@ declare(strict_types = 1);
 namespace Domains\User;
 
 use Carbon\Carbon;
-use Domains\Message\Message;
-use Illuminate\Support\Collection;
+use Core\Entity\Getters;
+use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
- * Class User
- * TODO This class doesnot implemented Yet
- *
- * @package Domains\User
- * @property string $login
- * @property string $name
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property-read Mention[]|Collection $mentions
- * @property-read Message[]|Collection $messages
+ * @ORM\Entity
+ * @ORM\Table(name="users")
  */
-class User extends \Eloquent
+class User
 {
+    use Getters;
+
     /**
      * @var string
+     * @ORM\Column(name="gitter_id", type="string")
      */
-    protected $table = 'users';
+    public $gitterId;
 
     /**
-     * @return string
+     * @var string
+     * @ORM\Column(type="string")
      */
-    public function getId()
+    protected $name;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    protected $avatar;
+
+    /**
+     * @var Credinals
+     * @ORM\Embedded(class=Credinals::class)
+     */
+    protected $credinals;
+
+    /**
+     * @var string
+     * @ORM\Column(name="id", type="string")
+     */
+    protected $password;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="created")
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updated;
+
+    /**
+     * @var string
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="id", type="string")
+     */
+    private $id;
+
+    /**
+     * User constructor.
+     * @param Credinals $credinals
+     * @param string|null $name
+     * @param string|null $avatar
+     */
+    public function __construct(Credinals $credinals, string $name = null, string $avatar = null)
     {
-        return $this->id;
+        $this->id           = Uuid::uuid4()->toString();
+        $this->created      = Carbon::now();
+        $this->updated      = Carbon::now();
+
+        $this->credinals    = $credinals;
+        $this->name         = $name ?: $credinals->login;
+        $this->avatar       = $avatar ?: sprintf('https://github.com/identicons/%s.png', $credinals->login);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \DateTime
      */
-    public function mentions()
+    protected function getCreated()
     {
-        return $this->hasMany(Mention::class, 'user_id', 'id');
+        return $this->created;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \DateTime
      */
-    public function messages()
+    protected function getUpdated()
     {
-        return $this->hasMany(Message::class, 'user_id', 'id');
+        return $this->created;
     }
 }

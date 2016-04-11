@@ -1,17 +1,15 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Interfaces\Gitter\Middleware\Storage;
-use Domains\Message;
-use Interfaces\Gitter\Karma\Validator;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Message\Message;
+use Domains\Bot\Middlewares\Karma\Validator;
 
 /**
  * Проверяет "спасибо" и выводит инкремент.
  *
  * Class KarmaCounterMiddleware
  */
-class KarmaCounterMiddleware implements MiddlewareInterface
+class KarmaCounterMiddleware implements Middleware
 {
     /**
      * @var Validator
@@ -57,7 +55,5 @@ class KarmaCounterMiddleware implements MiddlewareInterface
         if (!$hasAnswers) {
             return $message;
         }
-
-        return Storage::SIGNAL_STOP;
     }
 }

@@ -13,7 +13,7 @@ class CreateAchievementsTable extends Migration
     public function up()
     {
         Schema::create('achievements', function(Blueprint $t){
-            $t->increments('id');
+            $t->uuid('id')->unique()->primary();
             $t->string('name')->index();
             $t->integer('user_id')->index();
             $t->string('title');

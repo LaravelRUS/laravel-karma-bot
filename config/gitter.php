@@ -31,28 +31,28 @@ return [
     // Middlewares
     'middlewares' => [
         // Вывод кармы по запросу
-        Domains\Bot\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
+        //Domains\Bot\Middlewares\KarmaRenderMiddleware::class,
 
         // SQL билдер
-        Domains\Bot\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
+        //Domains\Bot\Middlewares\SqlBuilderMiddleware::class,
 
         // Google поисковик
-        Domains\Bot\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
+        Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
 
         // Советник по оформлению сообщений
-        Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class => Storage::PRIORITY_DEFAULT,
+        //Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class,
 
         // Слишком длинные сообщения
-        Domains\Bot\Middlewares\LongMessageMiddleware::class => Storage::PRIORITY_DEFAULT,
+        //Domains\Bot\Middlewares\LongMessageMiddleware::class,
 
         // Подсчёт "спасибок"
-        Domains\Bot\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
+        //Domains\Bot\Middlewares\KarmaCounterMiddleware::class,
 
         // Анализ ссылок на изображения и видео
         // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
 
         // Ответы на персональные вопросы для бота
-        Domains\Bot\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
+        //Domains\Bot\Middlewares\PersonalAnswersMiddleware::class,
     ],
 
 

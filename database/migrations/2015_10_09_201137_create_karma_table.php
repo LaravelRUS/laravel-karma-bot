@@ -14,17 +14,12 @@ class CreateKarmaTable extends Migration
     public function up()
     {
         Schema::create('karma', function(Blueprint $t){
-            $stats = [
-                'inc',
-                'dec'
-            ];
-
-            $t->increments('id');
-            $t->string('room_id');
-            $t->string('message_id');
-            $t->integer('user_id')->index();
-            $t->integer('user_target_id')->index();
-            $t->enum('status', $stats)->default('inc');
+            $t->uuid('id')->unique()->primary();
+            $t->uuid('room_id')->index();
+            $t->uuid('message_id')->index();
+            $t->uuid('user_id')->index();
+            $t->uuid('user_target_id')->index();
+            $t->smallInteger('value')->default(1);
             $t->timestamp('created_at');
         });
     }

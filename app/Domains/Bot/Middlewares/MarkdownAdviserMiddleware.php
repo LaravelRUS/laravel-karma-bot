@@ -1,13 +1,13 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Message\Message;
+
 
 /**
  * Class MarkdownAdviserMiddleware
  */
-class MarkdownAdviserMiddleware implements MiddlewareInterface
+class MarkdownAdviserMiddleware implements Middleware
 {
     /**
      * @param Message $message

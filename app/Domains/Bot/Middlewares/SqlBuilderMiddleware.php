@@ -1,14 +1,14 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Domains\Message;
+use Domains\Message\Message;
 use BigShark\SQLToBuilder\BuilderClass;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+
 
 /**
  * Class SqlBuilderMiddleware
  */
-class SqlBuilderMiddleware implements MiddlewareInterface
+class SqlBuilderMiddleware implements Middleware
 {
     /**
      * @param Message $message

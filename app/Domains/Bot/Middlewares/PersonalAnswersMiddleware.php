@@ -1,31 +1,15 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Interfaces\Gitter\Ai;
-use Domains\Message;
-use Interfaces\Gitter\Karma\Validator;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
-use Domains\User;
+use Domains\Message\Message;
+use Domains\User\User;
 use Illuminate\Support\Str;
 
 /**
  * Class PersonalAnswersMiddleware
  */
-class PersonalAnswersMiddleware implements MiddlewareInterface
+class PersonalAnswersMiddleware implements Middleware
 {
-    /**
-     * @var Ai
-     */
-    protected $ai;
-
-    /**
-     * PersonalAnswersMiddleware constructor.
-     */
-    public function __construct()
-    {
-        $this->ai = new Ai();
-    }
-
     /**
      * @param Message $message
      * @return mixed

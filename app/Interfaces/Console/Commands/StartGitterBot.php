@@ -13,13 +13,15 @@
 namespace Interfaces\Console\Commands;
 
 
-use Domains\Room;
-use Interfaces\Gitter\Client;
 use Carbon\Carbon;
+use Domains\Room\Room;
+use Gitter\Client;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Facades\Log;
+use Domains\Bot\Middlewares\Repository as Middlewares;
+use Interfaces\Gitter\Factories\Room as RoomFactory;
+use Interfaces\Gitter\Factories\Message as MessageFactory;
 
 
 /**
@@ -42,12 +44,6 @@ class StartGitterBot extends Command
      */
     protected $description = 'Start gitter bot thread for target room.';
 
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
     /**
      * @var string
      */
@@ -59,24 +55,51 @@ class StartGitterBot extends Command
      *
      * @param Repository $config
      * @param Container $container
-     *
+     * @param Client $client
      * @return mixed
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \LogicException
      * @throws \Exception
      */
-    public function handle(Repository $config, Container $container)
+    public function handle(Repository $config, Container $container, Client $client)
     {
-        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
-        $stream = $container->make(Room::class)->listen();
-
-        $this->info(sprintf('KarmaBot %s started at %s', Client::VERSION, Carbon::now()));
-
-
         $this->makePidFile();
-        $client->run();
+
+        $room = $this->getRoom($config, $client);
+
+
+        $middlewares = new Middlewares($container, $room);
+        foreach ($config->get('gitter.middlewares') as $middleware) {
+            $middlewares->register($middleware);
+        }
+
+        $client->stream->onMessage($room->gitterId, function ($data) use ($middlewares, $room) {
+            $message = MessageFactory::create($data, $room);
+
+            $middlewares->handle($message);
+        });
+
+
+        $this->info(sprintf('KarmaBot %s started at %s', '0.2b', Carbon::now()));
+        $client->stream->listen();
         $this->removePidFile();
+    }
+
+    /**
+     * @param Repository $config
+     * @param Client $client
+     * @return Room
+     * @throws \Exception
+     */
+    private function getRoom(Repository $config, Client $client) : Room
+    {
+        $rooms = $config->get('gitter.rooms');
+        if (!array_key_exists($this->argument('room'), $rooms)) {
+            throw new \InvalidArgumentException('Can not resolve room ' . $this->argument('room'));
+        }
+
+        return RoomFactory::createFromId($client, $rooms[$this->argument('room')]);
     }
 
     /**

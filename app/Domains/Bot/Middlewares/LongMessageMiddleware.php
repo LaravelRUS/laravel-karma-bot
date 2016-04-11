@@ -1,13 +1,13 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Message\Message;
+
 
 /**
  * Class LongMessageMiddleware
  */
-class LongMessageMiddleware implements MiddlewareInterface
+class LongMessageMiddleware implements Middleware
 {
     const MAX_CHARS = 1000;
     const MAX_LINES = 20;
