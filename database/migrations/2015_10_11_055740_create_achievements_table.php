@@ -16,9 +16,6 @@ class CreateAchievementsTable extends Migration
             $t->uuid('id')->unique()->primary();
             $t->string('name')->index();
             $t->integer('user_id')->index();
-            $t->string('title');
-            $t->string('description');
-            $t->string('image');
             $t->timestamp('created_at');
         });
     }

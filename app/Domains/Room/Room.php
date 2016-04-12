@@ -11,22 +11,20 @@
 namespace Domains\Room;
 
 use Core\Entity\Getters;
-use Ramsey\Uuid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use EndyJasmi\Cuid;
 
 /**
  * Class Room
  * @package Domains\Room
+ * @ORM\Entity
+ * @property-read string $id
  * @property-read string $url
  * @property-read string $title
  */
 class Room
 {
     use Getters;
-
-    /**
-     * @var string|null
-     */
-    public $gitterId = null;
 
     /**
      * @var string
@@ -40,8 +38,11 @@ class Room
 
     /**
      * @var string
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(type="string")
      */
-    private $id;
+    protected $id;
 
     /**
      * Room constructor.
@@ -50,7 +51,7 @@ class Room
      */
     public function __construct(string $url, string $title = null)
     {
-        $this->id  = Uuid::uuid4()->toString();
+        $this->id = Cuid::cuid();
         $this->url = $url;
         if ($title === null) {
             $this->title = $this->url;

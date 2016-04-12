@@ -10,6 +10,7 @@
  */
 namespace Interfaces\Gitter\Factories;
 
+use Core\Entity\Builder;
 use Domains\User\User as Entity;
 use Domains\User\Credinals;
 
@@ -21,15 +22,43 @@ class User
 {
     /**
      * @param \StdClass $data
+     * @param string $entityClass
      * @return Entity
      */
-    public static function create($data) : Entity
+    public static function create($data, string $entityClass = null) : Entity
     {
         $credinals = new Credinals($data->username, '');
 
-        $user = new Entity($credinals, $data->displayName, $data->avatarUrlMedium);
-        $user->gitterId = $data->id;
+        $entity = $entityClass ?: Entity::class;
+
+        $user = new $entity($credinals, $data->displayName, $data->avatarUrlMedium);
+
+        Builder::fill($user, 'id', $data->id);
 
         return $user;
+    }
+
+    /**
+     * @param $data
+     * @return Entity
+     */
+    public static function createFromMention($data) : Entity
+    {
+        $credinals = new Credinals($data->screenName, '');
+
+        $user = new Entity($credinals, $data->screenName);
+        Builder::fill($user, 'id', $data->userId);
+
+
+        return $user;
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    public static function isValidMention($data) : bool
+    {
+        return property_exists($data, 'userId');
     }
 }

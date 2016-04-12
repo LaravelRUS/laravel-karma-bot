@@ -11,24 +11,25 @@ declare(strict_types = 1);
  */
 namespace Domains\User;
 
-use Carbon\Carbon;
 use Core\Entity\Getters;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use EndyJasmi\Cuid;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
+ * @property-read string $id
+ * @property-read string $name
+ * @property-read string $avatar
+ * @property-read Credinals $credinals
+ * @property-read string $password
+ * @property-read \DateTime $created
+ * @property-read \DateTime $updated
  */
 class User
 {
     use Getters;
-
-    /**
-     * @var string
-     * @ORM\Column(name="gitter_id", type="string")
-     */
-    public $gitterId;
 
     /**
      * @var string
@@ -50,13 +51,13 @@ class User
 
     /**
      * @var string
-     * @ORM\Column(name="id", type="string")
+     * @ORM\Column(type="string")
      */
     protected $password;
 
     /**
      * @var \DateTime
-     * @Gedmo\Timestampable(on="created")
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $created;
@@ -70,10 +71,11 @@ class User
 
     /**
      * @var string
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="id", type="string")
+     * @ORM\Column(type="string")
      */
-    private $id;
+    protected $id;
 
     /**
      * User constructor.
@@ -83,28 +85,20 @@ class User
      */
     public function __construct(Credinals $credinals, string $name = null, string $avatar = null)
     {
-        $this->id           = Uuid::uuid4()->toString();
-        $this->created      = Carbon::now();
-        $this->updated      = Carbon::now();
+        $this->id = Cuid::cuid();
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
 
-        $this->credinals    = $credinals;
-        $this->name         = $name ?: $credinals->login;
-        $this->avatar       = $avatar ?: sprintf('https://github.com/identicons/%s.png', $credinals->login);
+        $this->credinals = $credinals;
+        $this->name = $name ?: $credinals->login;
+        $this->avatar = $avatar ?: sprintf('https://github.com/identicons/%s.png', $credinals->login);
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    protected function getCreated()
+    public function getIdentity()
     {
-        return $this->created;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    protected function getUpdated()
-    {
-        return $this->created;
+        return $this->id;
     }
 }
