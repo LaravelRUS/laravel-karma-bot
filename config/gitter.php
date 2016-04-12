@@ -1,6 +1,4 @@
 <?php
-use Interfaces\Gitter\Middleware\Storage;
-
 return [
     'token'       => env('GITTER_TOKEN', null),
 
@@ -37,10 +35,13 @@ return [
         //Domains\Bot\Middlewares\SqlBuilderMiddleware::class,
 
         // Google поисковик
-        Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
+        Domains\Bot\Middlewares\Common\GoogleSearchMiddleware::class,
 
         // Советник по оформлению сообщений
-        //Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class,
+        Domains\Bot\Middlewares\Common\MarkdownAdviserMiddleware::class,
+
+        // Ответы на персональные вопросы для бота
+        Domains\Bot\Middlewares\Common\PersonalAnswersMiddleware::class,
 
         // Слишком длинные сообщения
         //Domains\Bot\Middlewares\LongMessageMiddleware::class,
@@ -51,8 +52,6 @@ return [
         // Анализ ссылок на изображения и видео
         // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
 
-        // Ответы на персональные вопросы для бота
-        //Domains\Bot\Middlewares\PersonalAnswersMiddleware::class,
     ],
 
 

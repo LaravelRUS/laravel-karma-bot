@@ -15,12 +15,16 @@ namespace Interfaces\Console\Commands;
 
 use Carbon\Carbon;
 use Domains\Room\Room;
+use Domains\User\Bot;
+use Domains\User\User;
 use Gitter\Client;
+use Interfaces\Gitter\Io;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Domains\Bot\Middlewares\Repository as Middlewares;
+use Interfaces\Gitter\Factories\User as UserFactory;
 use Interfaces\Gitter\Factories\Room as RoomFactory;
+use Domains\Bot\Middlewares\Repository as Middlewares;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
 
 
@@ -49,7 +53,6 @@ class StartGitterBot extends Command
      */
     protected $pid;
 
-
     /**
      * Execute the console command.
      *
@@ -66,19 +69,24 @@ class StartGitterBot extends Command
     {
         $this->makePidFile();
 
-        $room = $this->getRoom($config, $client);
 
+        $room        = $this->getRoom($config, $client);
+        $io          = new Io($client, $room);
+        $middlewares = new Middlewares($container, $room, $io);
 
-        $middlewares = new Middlewares($container, $room);
+        // Export middlewares from config
         foreach ($config->get('gitter.middlewares') as $middleware) {
             $middlewares->register($middleware);
         }
 
-        $client->stream->onMessage($room->gitterId, function ($data) use ($middlewares, $room) {
+        $middlewares->ignore($this->auth($client, $container));
+
+        $client->stream->onMessage($room->id, function ($data) use ($middlewares, $room, $io) {
             $message = MessageFactory::create($data, $room);
 
-            $middlewares->handle($message);
+            $io->send($middlewares->handle($message));
         });
+
 
 
         $this->info(sprintf('KarmaBot %s started at %s', '0.2b', Carbon::now()));
@@ -87,10 +95,32 @@ class StartGitterBot extends Command
     }
 
     /**
+     * @param Client $client
+     * @param Container|null $container
+     * @throws \Exception
+     * @return User
+     */
+    private function auth(Client $client, Container $container = null) : User
+    {
+        $response = $client->http->getCurrentUser()->wait();
+
+        $user = UserFactory::create($response[0], Bot::class);
+
+        if ($container !== null) {
+            $container->singleton(Bot::class, function() use ($user) {
+                return $user;
+            });
+        }
+
+        return $user;
+    }
+
+    /**
      * @param Repository $config
      * @param Client $client
      * @return Room
      * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     private function getRoom(Repository $config, Client $client) : Room
     {

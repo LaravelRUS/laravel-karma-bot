@@ -11,69 +11,73 @@ declare(strict_types = 1);
  */
 namespace Domains\Message;
 
-use Carbon\Carbon;
 use Core\Entity\Getters;
-use Core\Entity\Setters;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Room\Room;
 use Domains\User\User;
+use EndyJasmi\Cuid;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Collection;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="messages")
  *
+ * @property-read string $id
+ * @property-read Room $room
+ * @property-read User $user
  * @property-read Text $text
  * @property-read \DateTime $created
  * @property-read \DateTime $updated
+ * @property-read ArrayCollection|User[] $mentions
  */
 class Message
 {
-    use Getters, Setters;
-
-    /**
-     * @var string
-     * @ORM\Column(name="gitter_id", type="string")
-     */
-    public $gitterId;
+    use Getters;
 
     /**
      * @var Text
      * @ORM\Embedded(class=Text::class)
      */
-    public $text;
+    protected $text;
 
     /**
      * @var \DateTime
-     * @Gedmo\Timestampable(on="created")
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
-    public $created;
+    protected $created;
 
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    public $updated;
+    protected $updated;
 
     /**
      * @var Room
      */
-    public $room;
+    protected $room;
 
     /**
      * @var User
      */
-    public $user;
+    protected $user;
 
     /**
      * @var string
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="string")
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @var array|ArrayCollection|User[]
+     */
+    protected $mentions = [];
 
     /**
      * Message constructor.
@@ -83,31 +87,41 @@ class Message
      */
     public function __construct(string $text, Room $room, User $user)
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = Cuid::cuid();
         $this->text = new Text($text);
-        $this->created = Carbon::now();
-        $this->updated = Carbon::now();
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
         $this->room = $room;
         $this->user = $user;
+
+        $this->mentions = new ArrayCollection();
     }
 
     /**
-     * @param string|\DateTime $created
-     * @param string|\DateTime|null $updated
+     * @param User $user
+     * @return mixed
      */
-    public function overwriteTimestamps($created, $updated = null)
+    public function isAppealTo(User $user)
     {
-        $this->created = is_string($created)
-            ? new Carbon($created)
-            : $created;
+        $mentions =
+            (new Collection($this->mentions->toArray()))
+                ->map(function (User $user) {
+                    return $user->getIdentity();
+                })
+                ->toArray();
 
-        if ($updated === null) {
-            $updated = $this->created;
-        }
+        return in_array($user->getIdentity(), $mentions, true);
+    }
 
-        $this->updated = is_string($updated)
-            ? new Carbon($updated)
-            : $updated;
+    /**
+     * @param User $user
+     * @return $this|Message
+     */
+    public function addMention(User $user) : Message
+    {
+        $this->mentions->add($user);
+
+        return $this;
     }
 
     /**
@@ -127,7 +141,7 @@ class Message
      */
     public function touch()
     {
-        $this->updated = Carbon::now();
+        $this->updated = new \DateTime();
 
         return $this;
     }

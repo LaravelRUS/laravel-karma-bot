@@ -17,7 +17,6 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function(Blueprint $t) {
             $t->uuid('id')->unique()->primary();
-            $t->string('gitter_id')->index();
             $t->uuid('room_id')->index();
             $t->uuid('user_id')->index();
             $t->longText('text');

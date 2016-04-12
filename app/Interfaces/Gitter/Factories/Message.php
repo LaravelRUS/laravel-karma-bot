@@ -10,6 +10,7 @@
  */
 namespace Interfaces\Gitter\Factories;
 
+use Core\Entity\Builder as Entity;
 use Domains\Room\Room as RoomEntity;
 use Domains\Message\Message as MessageEntity;
 use Interfaces\Gitter\Factories\User as UserFactory;
@@ -20,7 +21,7 @@ use Interfaces\Gitter\Factories\User as UserFactory;
  */
 class Message
 {
-    /**
+     /**
      * @param \StdClass $data
      * @param RoomEntity $room
      * @return MessageEntity
@@ -30,9 +31,23 @@ class Message
         $user = UserFactory::create($data->fromUser);
 
         $message = new MessageEntity($data->text, $room, $user);
-        $message->gitterId = $data->id;
-        $message->overwriteTimestamps($data->sent, $data->lastAccessTime ?? null);
+
+        Entity::fill($message, 'id', $data->id);
+        Entity::fill($message, 'created', new \DateTime($data->sent));
+        Entity::fill($message, 'updated', new \DateTime($data->lastAccessTime ?? $data->sent));
+
+
+        if ($data->mentions ?? false) {
+            foreach ($data->mentions as $mention) {
+                if (!UserFactory::isValidMention($mention)) {
+                    continue;
+                }
+
+                $message->addMention(UserFactory::createFromMention($mention));
+            }
+        }
 
         return $message;
     }
+
 }

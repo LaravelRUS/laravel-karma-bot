@@ -1,9 +1,9 @@
 <?php
 /**
- * This file is part of Api package.
+ * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
- * @date 24.03.2016 15:12
+ * @date 12.04.2016 18:28
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,29 +19,75 @@ use Illuminate\Support\Str;
 trait Getters
 {
     /**
-     * @param string $key
-     * @return mixed
-     * @throws \LogicException
+     * @var array|string[]
      */
-    public function __get($key)
+    private $readOnlyDeclarations = [];
+
+    /**
+     * @param string $property
+     * @return bool
+     */
+    private function hasReadableDeclaration(string $property) : bool
     {
-        if (!method_exists($this, $this->getGetterMethod($key))) {
-            throw new \LogicException(sprintf('Property %s::%s not accessible', static::class, $key));
+        if ($this->readOnlyDeclarations === []) {
+            $reflection = new \ReflectionObject($this);
+            $doc = $reflection->getDocComment();
+
+            $pattern = '/@property\-read\s(?:.*?)\$([a-z_]+[0-9a-z_\x7f-\xff]*)/isu';
+
+            preg_match_all($pattern, $doc, $matches);
+
+            $this->readOnlyDeclarations = $matches[1];
         }
 
-        if (!property_exists($this, $key)) {
-            return $this->{$this->getGetterMethod($key)}();
-        }
-
-        return $this->{$this->getGetterMethod($key)}($this->$key);
+        return in_array($property, $this->readOnlyDeclarations, true);
     }
 
     /**
-     * @param string $key
+     * @param string $property
      * @return string
      */
-    private function getGetterMethod($key)
+    private function getGetter(string $property) : string
     {
-        return 'get' . Str::studly($key);
+        return 'get' . Str::camel($property);
+    }
+
+    /**
+     * @param string $property
+     * @return bool
+     */
+    private function hasGetter(string $property) : bool
+    {
+        $getter = $this->getGetter($property);
+        return method_exists($this, $getter);
+    }
+
+    /**
+     * @param string $name
+     * @return mixed|void
+     */
+    public function __get($name)
+    {
+        if ($this->hasGetter($name)) {
+            $getter = $this->getGetter($name);
+            return $this->$getter();
+        }
+
+        if ($this->hasReadableDeclaration($name)) {
+            return $this->getPropertyValue($name);
+        }
+    }
+
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    private function getPropertyValue(string $name)
+    {
+        $reflection = new \ReflectionProperty($this, $name);
+        $reflection->setAccessible(true);
+
+        return $reflection->getValue($this);
     }
 }

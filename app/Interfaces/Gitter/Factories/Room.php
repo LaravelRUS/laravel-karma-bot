@@ -10,6 +10,8 @@
  */
 namespace Interfaces\Gitter\Factories;
 
+use Core\Entity\Builder;
+use Doctrine\ORM\Mapping as ORM;
 use Domains\Room\Room as Entity;
 use Gitter\Client;
 
@@ -26,7 +28,7 @@ class Room
     public static function create($data) : Entity
     {
         $room = new Entity($data->url, $data->topic ?: $data->name);
-        $room->gitterId = $data->id;
+        Builder::fill($room, 'id', $data->id);
 
         return $room;
     }

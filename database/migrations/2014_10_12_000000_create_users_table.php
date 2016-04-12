@@ -14,7 +14,6 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $t) {
             $t->uuid('id')->unique()->primary();
-            $t->string('gitter_id')->index();
             $t->string('name');
             $t->string('login');
             $t->string('avatar');
