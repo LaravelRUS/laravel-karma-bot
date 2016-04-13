@@ -12,7 +12,9 @@ declare(strict_types = 1);
 namespace Domains\User;
 
 use Core\Entity\Getters;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Domains\Message\Message;
 use EndyJasmi\Cuid;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -23,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @property-read string $name
  * @property-read string $avatar
  * @property-read Credinals $credinals
- * @property-read string $password
  * @property-read \DateTime $created
  * @property-read \DateTime $updated
  */
@@ -45,15 +46,9 @@ class User
 
     /**
      * @var Credinals
-     * @ORM\Embedded(class=Credinals::class)
+     * @ORM\Embedded(class=Credinals::class, columnPrefix=false)
      */
     protected $credinals;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    protected $password;
 
     /**
      * @var \DateTime
@@ -78,6 +73,12 @@ class User
     protected $id;
 
     /**
+     * @var Message[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="id")
+     */
+    protected $messages;
+
+    /**
      * User constructor.
      * @param Credinals $credinals
      * @param string|null $name
@@ -88,7 +89,7 @@ class User
         $this->id = Cuid::cuid();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
-
+        $this->messages = new ArrayCollection();
         $this->credinals = $credinals;
         $this->name = $name ?: $credinals->login;
         $this->avatar = $avatar ?: sprintf('https://github.com/identicons/%s.png', $credinals->login);

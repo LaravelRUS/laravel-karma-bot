@@ -11,16 +11,20 @@
 namespace Domains\Room;
 
 use Core\Entity\Getters;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Domains\Message\Message;
 use EndyJasmi\Cuid;
 
 /**
  * Class Room
  * @package Domains\Room
  * @ORM\Entity
+ * @ORM\Table(name="rooms")
  * @property-read string $id
  * @property-read string $url
  * @property-read string $title
+ * @property-read Message[]|ArrayCollection $messages
  */
 class Room
 {
@@ -28,11 +32,13 @@ class Room
 
     /**
      * @var string
+     * @ORM\Column(type="string")
      */
     protected $url;
 
     /**
      * @var string
+     * @ORM\Column(type="string")
      */
     protected $title;
 
@@ -45,6 +51,12 @@ class Room
     protected $id;
 
     /**
+     * @var ArrayCollection|Message[]
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="id")
+     */
+    protected $messages;
+
+    /**
      * Room constructor.
      * @param string $url
      * @param string|null $title
@@ -53,9 +65,18 @@ class Room
     {
         $this->id = Cuid::cuid();
         $this->url = $url;
-        if ($title === null) {
-            $this->title = $this->url;
-        }
+        $this->title = $title ?: $this->url;
+        $this->messages = new ArrayCollection();
+    }
+
+    /**
+     * @param Message $message
+     * @return Room
+     */
+    public function addMessage(Message $message) : Room
+    {
+        $this->messages->add($message);
+        return $this;
     }
 
     /**

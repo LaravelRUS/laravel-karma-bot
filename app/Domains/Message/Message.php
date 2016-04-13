@@ -38,7 +38,7 @@ class Message
 
     /**
      * @var Text
-     * @ORM\Embedded(class=Text::class)
+     * @ORM\Embedded(class=Text::class, columnPrefix=false)
      */
     protected $text;
 
@@ -58,11 +58,13 @@ class Message
 
     /**
      * @var Room
+     * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="room_id", cascade={"persist"})
      */
     protected $room;
 
     /**
      * @var User
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="user_id", cascade={"persist"})
      */
     protected $user;
 

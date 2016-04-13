@@ -14,6 +14,8 @@ namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Domains\Bot\Middlewares;
 use Domains\Bot\Pid;
 use Domains\Bot\ProcessId;
@@ -60,10 +62,11 @@ class StartGitterBot extends Command
      *
      * @param Container $container
      * @param Client $client
+     * @param EntityManagerInterface $manager
      * @return mixed
      * @throws \Throwable
      */
-    public function handle(Container $container, Client $client)
+    public function handle(Container $container, Client $client, EntityManagerInterface $manager)
     {
         // Create an a pid file
         $this->pid   = new ProcessId();
@@ -94,8 +97,14 @@ class StartGitterBot extends Command
                 return $user;
             });
 
-            $io->onMessage(function (Message $message) use ($middlewares, $io) {
+            $io->onMessage(function (Message $message) use ($middlewares, $io, $manager) {
+                $manager->persist($message);
+
+                $manager->flush();
+
                 $io->send($middlewares->handle($message));
+
+                $manager->clear();
             });
 
 
