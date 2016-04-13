@@ -60,14 +60,14 @@ class Message
 
     /**
      * @var Room
-     * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="messages", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="messages", cascade={"persist", "merge"})
      * @ORM\JoinColumn(name="room_id")
      */
     protected $room;
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist", "merge"})
      * @ORM\JoinColumn(name="user_id")
      */
     protected $user;

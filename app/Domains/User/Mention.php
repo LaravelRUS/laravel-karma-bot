@@ -39,21 +39,21 @@ class Mention
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentions", cascade={"merge"})
      * @ORM\JoinColumn(name="user_id")
      */
     protected $user;
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentioned", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentioned", cascade={"merge"})
      * @ORM\JoinColumn(name="user_target_id")
      */
     protected $target;
 
     /**
      * @var Message
-     * @ORM\ManyToOne(targetEntity=Message::class, inversedBy="mentions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Message::class, inversedBy="mentions", cascade={"merge"})
      * @ORM\JoinColumn(name="message_id")
      */
     protected $message;
