@@ -16,7 +16,7 @@ use Interfaces\Gitter\Achieve\AbstractAchieve;
 /**
  * Class Karma10Achieve
  */
-class Karma10Achieve extends AbstractAchieve
+class Karma10Achieve 
 {
     /**
      * @var string

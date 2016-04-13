@@ -16,7 +16,7 @@ use Interfaces\Gitter\Achieve\AbstractAchieve;
 /**
  * Class Thanks50Achieve
  */
-class Thanks50Achieve extends AbstractAchieve
+class Thanks50Achieve 
 {
     /**
      * @var string
