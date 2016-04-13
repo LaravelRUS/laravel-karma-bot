@@ -28,9 +28,10 @@ class Room
     public static function create($data) : Entity
     {
         $room = new Entity($data->url, $data->topic ?: $data->name);
+
         Builder::fill($room, 'id', $data->id);
 
-        return $room;
+        return Builder::synchronized($room);
     }
 
     /**

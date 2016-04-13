@@ -28,7 +28,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @property-read \DateTime $created
  * @property-read \DateTime $updated
  */
-class User
+class User implements Bot
 {
     use Getters;
 

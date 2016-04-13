@@ -14,6 +14,7 @@ namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Domains\Bot\Middlewares;

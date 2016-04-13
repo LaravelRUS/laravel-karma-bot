@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 namespace Core\Entity;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\ORMInvalidArgumentException;
 
 /**
  * Class Builder
@@ -23,7 +26,31 @@ class Builder
      */
     public static function fill($instance, string $field, $value)
     {
-        \EntityManager::getClassMetadata(get_class($instance))
+        static::getEntityManager()
+            ->getClassMetadata(get_class($instance))
             ->setFieldValue($instance, $field, $value);
+    }
+
+    /**
+     * @param $entity
+     * @param string $identity
+     * @return mixed
+     */
+    public static function synchronized($entity, $identity = 'id')
+    {
+        $em = static::getEntityManager();
+
+        $repository = $em->getRepository(get_class($entity));
+        $exists     = $repository->findOneBy(['id' => $entity->$identity]);
+
+        return $exists ?: $entity;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private static function getEntityManager()
+    {
+        return app(EntityManager::class);
     }
 }

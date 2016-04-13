@@ -22,20 +22,17 @@ class User
 {
     /**
      * @param \StdClass $data
-     * @param string $entityClass
      * @return Entity
      */
-    public static function create($data, string $entityClass = null) : Entity
+    public static function create($data) : Entity
     {
         $credinals = new Credinals($data->username, '');
 
-        $entity = $entityClass ?: Entity::class;
-
-        $user = new $entity($credinals, $data->displayName, $data->avatarUrlMedium);
+        $user = new Entity($credinals, $data->displayName, $data->avatarUrlMedium);
 
         Builder::fill($user, 'id', $data->id);
 
-        return $user;
+        return Builder::synchronized($user);
     }
 
     /**
@@ -47,10 +44,10 @@ class User
         $credinals = new Credinals($data->screenName, '');
 
         $user = new Entity($credinals, $data->screenName);
+
         Builder::fill($user, 'id', $data->userId);
 
-
-        return $user;
+        return Builder::synchronized($user);
     }
 
     /**

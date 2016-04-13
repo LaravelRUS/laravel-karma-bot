@@ -11,6 +11,7 @@
 namespace Interfaces\Gitter;
 
 use Core\Io\Bus;
+use Doctrine\ORM\EntityManager;
 use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\Bot;
@@ -67,6 +68,15 @@ class Io extends Bus
         // TODO Implement new user event
         // TODO Implement new room event
 
+        // TODO This clearing identity list to avoid memory overflow and must be moved to ...
+        $this->client->stream
+            ->getEventLoop()
+            ->addPeriodicTimer(120, function() {
+                /** @var EntityManager $em */
+                $em = app(EntityManager::class);
+                $em->clear();
+            });
+
         $this->client->stream->listen();
     }
 
@@ -78,7 +88,7 @@ class Io extends Bus
     {
         if ($this->authAs === null) {
             $response = $this->client->http->getCurrentUser()->wait();
-            $this->authAs = UserFactory::create($response[0], Bot::class);
+            $this->authAs = UserFactory::create($response[0]);
         }
 
         return $this->authAs;

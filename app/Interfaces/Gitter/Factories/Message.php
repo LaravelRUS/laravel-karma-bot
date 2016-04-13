@@ -47,7 +47,7 @@ class Message
             }
         }
 
-        return $message;
+        return Entity::synchronized($message);
     }
 
 }

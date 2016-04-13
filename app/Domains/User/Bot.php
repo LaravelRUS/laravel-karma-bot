@@ -10,14 +10,11 @@
  */
 namespace Domains\User;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * Class Bot
+ * Interface Bot
  * @package Domains\User
- * @ORM\Entity
  */
-class Bot extends User
+interface Bot
 {
 
 }
