@@ -58,55 +58,60 @@ class StartGitterBot extends Command
     /**
      * Execute the console command.
      *
-     * @param Repository $config
      * @param Container $container
      * @param Client $client
      * @return mixed
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public function handle(Repository $config, Container $container, Client $client)
+    public function handle(Container $container, Client $client)
     {
         // Create an a pid file
         $this->pid   = new ProcessId();
         $this->pid->create();
 
-        // Current room
-        $room        = $this->getRoom($client);
-        $this->comment('Join to room [' . $room->url . ']');
+        try {
+            // Current room
+            $room = $this->getRoom($client);
+            $this->comment('Join to room [' . $room->url . ']');
 
-        // Gitter Io
-        $io          = new Io($client, $room);
+            // Gitter Io
+            $io = new Io($client, $room);
 
-        // Current authenticated user
-        $user        = $io->auth();
+            // Current authenticated user
+            $user = $io->auth();
 
-        $this->comment('Login as [' . $user->credinals->login . ']');
+            $this->comment('Login as [' . $user->credinals->login . ']');
 
-        // Middlewares
-        $middlewares = Middlewares::new($container, $room, $io)->ignore($user);
+            // Middlewares
+            $middlewares = Middlewares::new($container, $room, $io)->ignore($user);
 
-        $this->info('Loading middlewares:');
-        foreach ($middlewares->getRegisteredMiddlewares() as $middleware) {
-            $this->comment(' > ' . get_class($middleware));
+            $this->info('Loading middlewares:');
+            foreach ($middlewares->getRegisteredMiddlewares() as $middleware) {
+                $this->comment(' > ' . get_class($middleware));
+            }
+
+            $container->singleton(Bot::class, function () use ($user) {
+                return $user;
+            });
+
+            $io->onMessage(function (Message $message) use ($middlewares, $io) {
+                $io->send($middlewares->handle($message));
+            });
+
+
+            $this->output->newLine();
+            $this->info(sprintf('KarmaBot %s started at %s', '0.2b', Carbon::now()));
+
+
+            $io->listen();
+
+        } catch (\Throwable $e) {
+            throw $e;
+
+        } finally {
+
+            $this->pid->delete();
         }
-
-        $container->singleton(Bot::class, function() use ($user) { return $user; });
-
-        $io->onMessage(function(Message $message) use ($middlewares, $io) {
-            $io->send($middlewares->handle($message));
-        });
-
-
-        $this->output->newLine();
-        $this->info(sprintf('KarmaBot %s started at %s', '0.2b', Carbon::now()));
-
-
-        $io->listen();
-        
-        $this->pid->delete();
     }
 
     /**
@@ -117,6 +122,6 @@ class StartGitterBot extends Command
      */
     private function getRoom(Client $client) : Room
     {
-          return RoomFactory::createFromUri($client, $this->argument('room'));
+        return RoomFactory::createFromUri($client, $this->argument('room'));
     }
 }

@@ -58,6 +58,9 @@ return [
 
             // Подсчёт "спасибок"
             //Domains\Bot\Middlewares\KarmaCounterMiddleware::class,
+
+            // Подписывается на создание ачивки и отправляет сообщеньку в чат
+            //Domains\Bot\AchieveSubscriber::class,
         ],
 
         'laravel' => [
@@ -72,12 +75,5 @@ return [
             // Анализ ссылок на изображения и видео
             // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
         ]
-    ],
-
-
-    // Subscribers
-    'subscribers' => [
-        // Подписывается на создание ачивки и отправляет сообщеньку в чат
-        //Domains\Bot\AchieveSubscriber::class,
     ],
 ];
