@@ -98,7 +98,8 @@ class Io extends Bus
 
         if (trim($text)) {
             try {
-                $this->client->http->sendMessage($this->room->id, $text)->wait();
+                $decorated = '_' . $text . '_';
+                $this->client->http->sendMessage($this->room->id, $decorated)->wait();
             } catch (\Throwable $e) {
                 return false;
             }

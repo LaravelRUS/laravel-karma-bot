@@ -16,6 +16,10 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
 
+/**
+ * Class ResponseContentParser
+ * @package Core\Io
+ */
 trait ResponseContentParser
 {
     /**

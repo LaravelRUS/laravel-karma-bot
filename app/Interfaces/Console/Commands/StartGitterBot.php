@@ -74,7 +74,8 @@ class StartGitterBot extends Command
         $this->pid->create();
 
         // Current room
-        $room        = $this->getRoom($config, $client);
+        $room        = $this->getRoom($client);
+        $this->comment('Join to room [' . $room->url . ']');
 
         // Gitter Io
         $io          = new Io($client, $room);
@@ -82,9 +83,15 @@ class StartGitterBot extends Command
         // Current authenticated user
         $user        = $io->auth();
 
+        $this->comment('Login as [' . $user->credinals->login . ']');
+
         // Middlewares
         $middlewares = Middlewares::new($container, $room, $io)->ignore($user);
 
+        $this->info('Loading middlewares:');
+        foreach ($middlewares->getRegisteredMiddlewares() as $middleware) {
+            $this->comment(' > ' . get_class($middleware));
+        }
 
         $container->singleton(Bot::class, function() use ($user) { return $user; });
 
@@ -92,7 +99,10 @@ class StartGitterBot extends Command
             $io->send($middlewares->handle($message));
         });
 
+
+        $this->output->newLine();
         $this->info(sprintf('KarmaBot %s started at %s', '0.2b', Carbon::now()));
+
 
         $io->listen();
         
@@ -100,19 +110,13 @@ class StartGitterBot extends Command
     }
 
     /**
-     * @param Repository $config
      * @param Client $client
      * @return Room
      * @throws \Exception
      * @throws \InvalidArgumentException
      */
-    private function getRoom(Repository $config, Client $client) : Room
+    private function getRoom(Client $client) : Room
     {
-        $rooms = $config->get('gitter.rooms');
-        if (!array_key_exists($this->argument('room'), $rooms)) {
-            throw new \InvalidArgumentException('Can not resolve room ' . $this->argument('room'));
-        }
-
-        return RoomFactory::createFromId($client, $rooms[$this->argument('room')]);
+          return RoomFactory::createFromUri($client, $this->argument('room'));
     }
 }

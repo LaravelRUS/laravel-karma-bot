@@ -22,6 +22,8 @@ use Illuminate\Contracts\Container\Container;
  */
 class Middlewares
 {
+    const DEFAULT_MIDDLEWARES_GROUP = 'common';
+
     /**
      * @param Container $container
      * @param Room $room
@@ -31,14 +33,53 @@ class Middlewares
     public static function new(Container $container, Room $room, Response $response) : Repository
     {
         /** @var Config $config */
-        $config = $container->make(Config::class);
-        $middlewares = new Repository($container, $room, $response);
+        $config      = $container->make(Config::class);
 
-        // Export middlewares from config
-        foreach ($config->get('gitter.middlewares') as $middleware) {
-            $middlewares->register($middleware);
+        $repository  = new Repository($container, $room, $response);
+
+        $middlewares = static::getMiddlewares(
+            $config,
+            static::getMiddlewareGroups($config, $room)
+        );
+
+        foreach ($middlewares as $middleware) {
+            $repository->register($middleware);
         }
 
-        return $middlewares;
+        return $repository;
+    }
+
+    /**
+     * @param Config $config
+     * @param array $groups
+     * @return array
+     */
+    private static function getMiddlewares(Config $config, array $groups) : array
+    {
+        $result = [];
+
+        foreach ($groups as $group) {
+            $result = array_merge($result, (array)$config->get('gitter.middlewares.' . $group));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Config $config
+     * @param Room $room
+     * @return array
+     */
+    private static function getMiddlewareGroups(Config $config, Room $room) : array
+    {
+        $roomName = trim($room->url, '/');
+
+        $groups = (array)$config->get('gitter.rooms.' . $roomName);
+
+        if ($groups === []) {
+            $groups = [static::DEFAULT_MIDDLEWARES_GROUP];
+        }
+
+        return $groups;
     }
 }

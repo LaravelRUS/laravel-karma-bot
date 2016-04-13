@@ -30,17 +30,35 @@ trait Getters
     private function hasReadableDeclaration(string $property) : bool
     {
         if ($this->readOnlyDeclarations === []) {
-            $reflection = new \ReflectionObject($this);
-            $doc = $reflection->getDocComment();
+            $context = new \ReflectionClass($this);
 
-            $pattern = '/@property\-read\s(?:.*?)\$([a-z_]+[0-9a-z_\x7f-\xff]*)/isu';
+            while ($context) {
+                $this->readOnlyDeclarations = array_merge(
+                    $this->readOnlyDeclarations,
+                    $this->getDeclarations($context)
+                );
 
-            preg_match_all($pattern, $doc, $matches);
-
-            $this->readOnlyDeclarations = $matches[1];
+                $context = $context->getParentClass();
+            }
         }
 
+
         return in_array($property, $this->readOnlyDeclarations, true);
+    }
+
+    /**
+     * @param $class
+     * @return array
+     */
+    private function getDeclarations(\ReflectionClass $class) : array
+    {
+        $doc = $class->getDocComment();
+
+        $pattern = '/@property\-read\s(?:.*?)\$([a-z_]+[0-9a-z_\x7f-\xff]*)/isu';
+
+        preg_match_all($pattern, $doc, $matches);
+
+        return $matches[1];
     }
 
     /**

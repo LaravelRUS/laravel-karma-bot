@@ -88,6 +88,14 @@ class Repository
     }
 
     /**
+     * @return array|Middleware[]
+     */
+    public function getRegisteredMiddlewares()
+    {
+        return $this->middlewares;
+    }
+
+    /**
      * @param Message $message
      * @return mixed
      */
