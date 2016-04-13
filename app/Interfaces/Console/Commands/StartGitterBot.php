@@ -14,6 +14,10 @@ namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
+use Domains\Bot\Middlewares;
+use Domains\Bot\Pid;
+use Domains\Bot\ProcessId;
+use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\Bot;
 use Domains\User\User;
@@ -24,7 +28,6 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Interfaces\Gitter\Factories\User as UserFactory;
 use Interfaces\Gitter\Factories\Room as RoomFactory;
-use Domains\Bot\Middlewares\Repository as Middlewares;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
 
 
@@ -39,7 +42,6 @@ class StartGitterBot extends Command
      * @var string
      */
     protected $signature = 'gitter:listen {room}';
-
 
     /**
      * The console command description.
@@ -67,52 +69,34 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container, Client $client)
     {
-        $this->makePidFile();
+        // Create an a pid file
+        $this->pid   = new ProcessId();
+        $this->pid->create();
 
-
+        // Current room
         $room        = $this->getRoom($config, $client);
+
+        // Gitter Io
         $io          = new Io($client, $room);
-        $middlewares = new Middlewares($container, $room, $io);
 
-        // Export middlewares from config
-        foreach ($config->get('gitter.middlewares') as $middleware) {
-            $middlewares->register($middleware);
-        }
+        // Current authenticated user
+        $user        = $io->auth();
 
-        $middlewares->ignore($this->auth($client, $container));
+        // Middlewares
+        $middlewares = Middlewares::new($container, $room, $io)->ignore($user);
 
-        $client->stream->onMessage($room->id, function ($data) use ($middlewares, $room, $io) {
-            $message = MessageFactory::create($data, $room);
 
+        $container->singleton(Bot::class, function() use ($user) { return $user; });
+
+        $io->onMessage(function(Message $message) use ($middlewares, $io) {
             $io->send($middlewares->handle($message));
         });
 
-
-
         $this->info(sprintf('KarmaBot %s started at %s', '0.2b', Carbon::now()));
-        $client->stream->listen();
-        $this->removePidFile();
-    }
 
-    /**
-     * @param Client $client
-     * @param Container|null $container
-     * @throws \Exception
-     * @return User
-     */
-    private function auth(Client $client, Container $container = null) : User
-    {
-        $response = $client->http->getCurrentUser()->wait();
-
-        $user = UserFactory::create($response[0], Bot::class);
-
-        if ($container !== null) {
-            $container->singleton(Bot::class, function() use ($user) {
-                return $user;
-            });
-        }
-
-        return $user;
+        $io->listen();
+        
+        $this->pid->delete();
     }
 
     /**
@@ -130,24 +114,5 @@ class StartGitterBot extends Command
         }
 
         return RoomFactory::createFromId($client, $rooms[$this->argument('room')]);
-    }
-
-    /**
-     * Create pid file
-     */
-    protected function makePidFile()
-    {
-        $this->pid = storage_path('pids/' . date('Y_m_d_tis_') . microtime(1) . '.pid');
-        file_put_contents($this->pid, getmypid());
-    }
-
-    /**
-     * Delete pid file
-     */
-    protected function removePidFile()
-    {
-        if (is_file($this->pid)) {
-            unlink($this->pid);
-        }
     }
 }

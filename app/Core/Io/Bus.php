@@ -9,56 +9,76 @@
  * file that was distributed with this source code.
  */
 namespace Core\Io;
+
 use Domains\Message\Message;
-use Domains\Message\Text;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Renderable;
+use Domains\User\User;
+use Illuminate\Events\Dispatcher;
 
 /**
  * Class Bus
  * @package Core\IoBus
  */
-abstract class Bus implements Response
+abstract class Bus implements Response, Request, Inclusion, Authentication
 {
-    /**
-     * @var bool
-     */
-    private $enabled = true;
+    const EVENT_NEW_MESSAGE = 'on:message';
+    const EVENT_NEW_USER = 'on:message';
+    const EVENT_NEW_ROOM = 'on:message';
+
+        // Bus enable\disable options
+    use InclusionTrigger,
+        // Parse output data
+        ResponseContentParser;
 
     /**
-     * @return bool
+     * @var Dispatcher
      */
-    public function isDisabled() : bool
+    private $events;
+
+    /**
+     * Bus constructor.
+     */
+    public function __construct()
     {
-        return !$this->isEnabled();
+        $this->events = new Dispatcher();
     }
 
     /**
-     * @return bool
+     * @param \Closure $closure
+     * @return Request
      */
-    public function isEnabled() : bool
+    final public function onMessage(\Closure $closure) : Request
     {
-        return $this->enabled;
-    }
+        $this->events->listen(static::EVENT_NEW_MESSAGE, $closure);
 
-    /**
-     * @return $this|Response
-     */
-    public function disable() : Response
-    {
-        $this->enabled = false;
         return $this;
     }
 
     /**
-     * @return $this|Response
+     * @param \Closure $closure
+     * @return Request
      */
-    public function enable() : Response
+    final public function onRoom(\Closure $closure) : Request
     {
-        $this->enabled = true;
+        $this->events->listen(static::EVENT_NEW_ROOM, $closure);
+
         return $this;
     }
+
+    /**
+     * @param \Closure $closure
+     * @return Request
+     */
+    final public function onUser(\Closure $closure) : Request
+    {
+        $this->events->listen(static::EVENT_NEW_USER, $closure);
+
+        return $this;
+    }
+
+    /**
+     * @return void
+     */
+    abstract public function listen();
 
     /**
      * @param mixed $data
@@ -67,37 +87,24 @@ abstract class Bus implements Response
     abstract public function send($data) : bool;
 
     /**
-     * @param $data
-     * @return string
+     * @return User
      */
-    protected function parseAnswer($data) : string
+    abstract public function auth() : User;
+
+    /**
+     * @param Message $message
+     * @param mixed $data
+     * @return bool
+     */
+    abstract public function update(Message $message, $data) : bool;
+
+    /**
+     * @param string $event "on:message" or "on:user" or "on:room" string
+     * @param array ...$args
+     * @return array|null
+     */
+    protected function fire(string $event, ...$args)
     {
-        switch (true) {
-            case $data instanceof Text:
-                return (string)$data->text;
-
-            case $data instanceof Message:
-                return (string)$data->text->text;
-
-            case $data instanceof Renderable:
-                return (string)$data->render();
-
-            case $data instanceof Jsonable:
-                return (string)$data->toJson();
-
-            case $data instanceof Arrayable:
-                return json_encode($data->toArray());
-
-            case $data instanceof \Throwable:
-                return (string)null;
-
-            case is_object($data) && method_exists($data, '__toString'):
-                return (string)$data;
-
-            case is_array($data):
-                return (string)json_encode($data);
-        }
-
-        return (string)$data;
+        return $this->events->fire($event, $args);
     }
 }
