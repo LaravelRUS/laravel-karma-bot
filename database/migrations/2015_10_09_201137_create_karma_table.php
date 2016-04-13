@@ -19,7 +19,6 @@ class CreateKarmaTable extends Migration
             $t->uuid('message_id')->index();
             $t->uuid('user_id')->index();
             $t->uuid('user_target_id')->index();
-            $t->smallInteger('value')->default(1);
             $t->timestamp('created_at');
         });
     }

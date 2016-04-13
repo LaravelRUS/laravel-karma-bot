@@ -14,6 +14,7 @@ namespace Domains\User;
 use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Domains\Karma\Karma;
 use Domains\Message\Message;
 use EndyJasmi\Cuid;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -27,6 +28,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @property-read Credinals $credinals
  * @property-read \DateTime $created
  * @property-read \DateTime $updated
+ * @property-read Karma[] $karma
+ * @property-read Karma[] $thanks
  */
 class User implements Bot
 {
@@ -74,9 +77,21 @@ class User implements Bot
 
     /**
      * @var Message[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="id")
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="user")
      */
     protected $messages;
+
+    /**
+     * @var Karma[]
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="target")
+     */
+    protected $karma;
+
+    /**
+     * @var Karma[]
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="user")
+     */
+    protected $thanks;
 
     /**
      * User constructor.
@@ -86,13 +101,16 @@ class User implements Bot
      */
     public function __construct(Credinals $credinals, string $name = null, string $avatar = null)
     {
+        $this->credinals = $credinals;
+        $this->name = $name ?: $credinals->login;
+        $this->avatar = $avatar ?: sprintf('https://github.com/identicons/%s.png', $credinals->login);
+
         $this->id = Cuid::cuid();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
         $this->messages = new ArrayCollection();
-        $this->credinals = $credinals;
-        $this->name = $name ?: $credinals->login;
-        $this->avatar = $avatar ?: sprintf('https://github.com/identicons/%s.png', $credinals->login);
+        $this->karma = new ArrayCollection();
+        $this->thanks = new ArrayCollection();
     }
 
     /**

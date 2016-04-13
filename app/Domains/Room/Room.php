@@ -13,6 +13,7 @@ namespace Domains\Room;
 use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Domains\Karma\Karma;
 use Domains\Message\Message;
 use EndyJasmi\Cuid;
 
@@ -52,9 +53,15 @@ class Room
 
     /**
      * @var ArrayCollection|Message[]
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="id")
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="room")
      */
     protected $messages;
+
+    /**
+     * @var ArrayCollection|Karma[]
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="room")
+     */
+    protected $karma;
 
     /**
      * Room constructor.
@@ -67,6 +74,7 @@ class Room
         $this->url = $url;
         $this->title = $title ?: $this->url;
         $this->messages = new ArrayCollection();
+        $this->karma = new ArrayCollection();
     }
 
     /**

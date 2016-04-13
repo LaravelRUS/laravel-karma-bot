@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Domains\Bot\Middlewares;
 use Domains\Bot\Pid;
 use Domains\Bot\ProcessId;
+use Domains\Karma\Karma;
 use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\Bot;
@@ -69,6 +70,8 @@ class StartGitterBot extends Command
      */
     public function handle(Container $container, Client $client, EntityManagerInterface $manager)
     {
+        $this->call('doctrine:generate:proxies');
+
         // Create an a pid file
         $this->pid   = new ProcessId();
         $this->pid->create();
@@ -98,8 +101,10 @@ class StartGitterBot extends Command
                 return $user;
             });
 
-            $io->onMessage(function (Message $message) use ($middlewares, $io, $manager) {
+            $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
                 $manager->persist($message);
+
+                $manager->persist(new Karma($message->user, $user, $message));
 
                 $manager->flush();
 

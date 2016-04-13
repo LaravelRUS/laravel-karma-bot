@@ -14,6 +14,7 @@ namespace Domains\Message;
 use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Domains\Karma\Karma;
 use Domains\Room\Room;
 use Domains\User\User;
 use EndyJasmi\Cuid;
@@ -58,13 +59,15 @@ class Message
 
     /**
      * @var Room
-     * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="room_id", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Room::class, inversedBy="messages", cascade={"persist"})
+     * @ORM\JoinColumn(name="room_id")
      */
     protected $room;
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="user_id", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id")
      */
     protected $user;
 
@@ -82,6 +85,12 @@ class Message
     protected $mentions = [];
 
     /**
+     * @var ArrayCollection|Karma[]
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message")
+     */
+    protected $karma;
+
+    /**
      * Message constructor.
      * @param string $text
      * @param Room $room
@@ -97,6 +106,7 @@ class Message
         $this->user = $user;
 
         $this->mentions = new ArrayCollection();
+        $this->karma = new ArrayCollection();
     }
 
     /**
