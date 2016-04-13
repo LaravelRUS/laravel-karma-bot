@@ -28,8 +28,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @property-read Credinals $credinals
  * @property-read \DateTime $created
  * @property-read \DateTime $updated
- * @property-read Karma[] $karma
- * @property-read Karma[] $thanks
+ * @property-read ArrayCollection|Message[] $messages
+ * @property-read ArrayCollection|Karma[] $karma
+ * @property-read ArrayCollection|Karma[] $thanks
  */
 class User implements Bot
 {
@@ -82,13 +83,13 @@ class User implements Bot
     protected $messages;
 
     /**
-     * @var Karma[]
+     * @var ArrayCollection|Karma[]
      * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="target")
      */
     protected $karma;
 
     /**
-     * @var Karma[]
+     * @var ArrayCollection|Karma[]
      * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="user")
      */
     protected $thanks;
@@ -114,10 +115,26 @@ class User implements Bot
     }
 
     /**
-     * @return string
+     * @param User $target
+     * @param Message $forMessage
+     * @return Karma
      */
-    public function getIdentity()
+    public function thank(User $target, Message $forMessage) : Karma
     {
-        return $this->id;
+        $karma = new Karma($this, $target, $forMessage);
+        $this->karma->add($karma);
+
+        return $karma;
+    }
+
+    /**
+     * @param Message $message
+     * @return $this
+     */
+    public function write(Message $message)
+    {
+        $this->messages->add($message);
+
+        return $this;
     }
 }
