@@ -65,7 +65,7 @@ return [
 
         'laravel' => [
             // SQL билдер
-            //Domains\Bot\Middlewares\SqlBuilderMiddleware::class,
+            Domains\Bot\Middlewares\Laravel\SqlBuilderMiddleware::class,
         ],
 
         'improvements' => [

@@ -108,6 +108,14 @@ class Text
      */
     public function __toString()
     {
+        return $this->toString();
+    }
+
+    /**
+     * @return string
+     */
+    public function toString() : string
+    {
         return $this->text;
     }
 }
