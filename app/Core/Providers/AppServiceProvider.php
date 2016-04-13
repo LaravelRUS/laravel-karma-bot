@@ -2,28 +2,23 @@
 
 namespace Core\Providers;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Carbon\Carbon;
+use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        AnnotationReader::addGlobalIgnoredName('readonly');
-    }
-
-    /**
-     * Register any application services.
-     *
      * @return void
      */
     public function register()
     {
-        //
+        $this->app->singleton(\DateTimeZone::class, function() {
+            return Carbon::now()->getTimezone();
+        });
+
+        $this->app->bind(\DateTime::class, function(Container $app) {
+            return new \DateTime('now', $app->make(\DateTimeZone::class));
+        });
     }
 }
