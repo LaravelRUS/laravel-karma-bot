@@ -31,7 +31,7 @@ class User
         $user = new Entity($credinals, $data->displayName, $data->avatarUrlMedium);
 
         Builder::fill($user, 'id', $data->id);
-
+        
         return Builder::synchronized($user);
     }
 
@@ -46,6 +46,7 @@ class User
         $user = new Entity($credinals, $data->screenName);
 
         Builder::fill($user, 'id', $data->userId);
+
 
         return Builder::synchronized($user);
     }

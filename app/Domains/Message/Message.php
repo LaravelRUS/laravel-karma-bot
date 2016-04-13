@@ -13,6 +13,7 @@ namespace Domains\Message;
 
 use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
+use Domains\User\Mention;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Karma\Karma;
 use Domains\Room\Room;
@@ -80,13 +81,14 @@ class Message
     protected $id;
 
     /**
-     * @var array|ArrayCollection|User[]
+     * @var ArrayCollection|Mention[]
+     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="message", cascade={"persist"})
      */
-    protected $mentions = [];
+    protected $mentions;
 
     /**
      * @var ArrayCollection|Karma[]
-     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message")
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message", cascade={"persist"})
      */
     protected $karma;
 
@@ -117,23 +119,24 @@ class Message
     {
         $mentions =
             (new Collection($this->mentions->toArray()))
-                ->map(function (User $user) {
-                    return $user->getIdentity();
+                ->map(function (Mention $mention) {
+                    return $mention->user->id;
                 })
                 ->toArray();
 
-        return in_array($user->getIdentity(), $mentions, true);
+        return in_array($user->id, $mentions, true);
     }
 
     /**
-     * @param User $user
-     * @return $this|Message
+     * @param User $to
+     * @return $this|Mention
      */
-    public function addMention(User $user) : Message
+    public function addMention(User $to) : Mention
     {
-        $this->mentions->add($user);
+        $mention = new Mention($to, $this);
+        $this->mentions->add($mention);
 
-        return $this;
+        return $mention;
     }
 
     /**

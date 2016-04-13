@@ -41,7 +41,7 @@ class Builder
         $em = static::getEntityManager();
 
         $repository = $em->getRepository(get_class($entity));
-        $exists     = $repository->findOneBy(['id' => $entity->$identity]);
+        $exists     = $repository->find($entity->$identity);
 
         return $exists ?: $entity;
     }

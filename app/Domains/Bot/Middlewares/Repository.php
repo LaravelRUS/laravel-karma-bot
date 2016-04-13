@@ -67,7 +67,7 @@ class Repository
      */
     public function ignore(User $user) : Repository
     {
-        $this->ignoreUsers[] = $user->getIdentity();
+        $this->ignoreUsers[] = $user->id;
 
         return $this;
     }
@@ -102,7 +102,7 @@ class Repository
     public function handle(Message $message)
     {
         // User are ignored?
-        if (in_array($message->user->getIdentity(), $this->ignoreUsers, true)) {
+        if (in_array($message->user->id, $this->ignoreUsers, true)) {
             return null;
         }
 

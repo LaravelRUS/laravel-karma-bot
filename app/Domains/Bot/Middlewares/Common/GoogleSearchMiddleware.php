@@ -36,7 +36,7 @@ class GoogleSearchMiddleware implements Middleware
                 /** @var User $mentionTo */
                 $mentionTo = $message->mentions->first();
 
-                $answerTo = $mentionTo->getIdentity() === $bot->getIdentity()
+                $answerTo = $mentionTo->id === $bot->id
                     ? $message->user
                     : $mentionTo;
 

@@ -53,13 +53,13 @@ class Room
 
     /**
      * @var ArrayCollection|Message[]
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="room")
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="room", cascade={"persist"})
      */
     protected $messages;
 
     /**
      * @var ArrayCollection|Karma[]
-     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="room")
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="room", cascade={"persist"})
      */
     protected $karma;
 

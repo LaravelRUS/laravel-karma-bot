@@ -78,21 +78,33 @@ class User implements Bot
 
     /**
      * @var Message[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="user", cascade={"persist"})
      */
     protected $messages;
 
     /**
      * @var ArrayCollection|Karma[]
-     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="target")
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="target", cascade={"persist"})
      */
     protected $karma;
 
     /**
      * @var ArrayCollection|Karma[]
-     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="user", cascade={"persist"})
      */
     protected $thanks;
+
+    /**
+     * @var ArrayCollection|Mention[]
+     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="user", cascade={"persist"})
+     */
+    protected $mentions;
+
+    /**
+     * @var ArrayCollection|Mention[]
+     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="target", cascade={"persist"})
+     */
+    protected $mentioned;
 
     /**
      * User constructor.
@@ -112,6 +124,8 @@ class User implements Bot
         $this->messages = new ArrayCollection();
         $this->karma = new ArrayCollection();
         $this->thanks = new ArrayCollection();
+        $this->mentions = new ArrayCollection();
+        $this->mentioned = new ArrayCollection();
     }
 
     /**
