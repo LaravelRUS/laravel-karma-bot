@@ -25,7 +25,7 @@ return [
     |
     */
     'rooms'       => [
-        env('GITTER_DEBUG_ROOM', null) => ['common', 'karma', 'laravel', 'improvements'],
+        env('GITTER_DEBUG_ROOM', null) => ['*'],
         'LaravelRUS/chat'              => ['common', 'karma', 'laravel', 'improvements'],
         'LaravelRUS/laravel.ru'        => ['common', 'karma', 'laravel', 'improvements'],
         'LaravelRUS/GitterBot'         => ['common', 'karma', 'laravel', 'improvements'],
@@ -78,6 +78,6 @@ return [
     // Subscribers
     'subscribers' => [
         // Подписывается на создание ачивки и отправляет сообщеньку в чат
-        Domains\Bot\AchieveSubscriber::class,
+        //Domains\Bot\AchieveSubscriber::class,
     ],
 ];

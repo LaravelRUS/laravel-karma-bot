@@ -76,10 +76,15 @@ class Middlewares
 
         $groups = (array)$config->get('gitter.rooms.' . $roomName);
 
-        if ($groups === []) {
-            $groups = [static::DEFAULT_MIDDLEWARES_GROUP];
-        }
+        switch ($groups) {
+            case ['*']:
+                return array_keys($config->get('gitter.middlewares'));
 
-        return $groups;
+            case []:
+                return [static::DEFAULT_MIDDLEWARES_GROUP];
+
+            default:
+                return $groups;
+        }
     }
 }
