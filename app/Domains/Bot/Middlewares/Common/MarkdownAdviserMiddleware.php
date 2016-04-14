@@ -58,6 +58,6 @@ class MarkdownAdviserMiddleware implements Middleware
         $words   = (new Collection(trans('markdown.queries')))->map('preg_quote')->implode('|');
         $pattern = sprintf('/^(?:@.*?\s)?(?:%s).*?$/isu', $words);
 
-        return preg_match($pattern, $message->text->escaped, $matches);
+        return preg_match($pattern, $message->text->inline, $matches);
     }
 }

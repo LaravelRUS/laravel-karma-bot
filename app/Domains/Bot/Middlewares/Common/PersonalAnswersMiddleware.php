@@ -51,9 +51,8 @@ class PersonalAnswersMiddleware implements Middleware
             ->implode('|');
 
         $pattern = $message->isAppealTo($bot)
-            ? sprintf('/^\W*(?:@.*?)\s+(?:%s)\W*$/isu', $words)
+            ? sprintf('/^.*?(?:@.*?)\s+(?:%s)\W*$/isu', $words)
             : sprintf('/^\W*(?:%s)\W*$/isu', $words);
-
 
         return preg_match($pattern, trim($message->text->escaped));
     }

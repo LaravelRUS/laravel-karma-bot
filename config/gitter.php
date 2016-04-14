@@ -25,17 +25,17 @@ return [
     |
     */
     'rooms'       => [
-        env('GITTER_DEBUG_ROOM', null) => ['*'],
-        'LaravelRUS/chat'              => ['common', 'karma', 'laravel', 'improvements'],
-        'LaravelRUS/laravel.ru'        => ['common', 'karma', 'laravel', 'improvements'],
-        'LaravelRUS/GitterBot'         => ['common', 'karma', 'laravel', 'improvements'],
-        'DrupalRu/drupal.ru'           => ['common', 'karma'],
-        'dru-io/Drupal'                => ['common', 'karma'],
-        'yii2/offtopic-rus'            => ['common', 'karma'],
-        'yiisoft/yii2/rus'             => ['common', 'karma'],
-        'php-ua/symfony'               => ['common', 'karma'],
-        'php-ua/php'                   => ['common', 'karma'],
-        'vuejs-ru/Discussion'          => ['common', 'karma'],
+        env('GITTER_DEBUG_ROOM', 'KarmaBot/KarmaTest') => ['*'],
+        'LaravelRUS/chat'              => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/laravel.ru'        => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/GitterBot'         => ['common', 'karma', 'improvements', 'laravel'],
+        'DrupalRu/drupal.ru'           => ['common', 'karma', 'improvements'],
+        'dru-io/Drupal'                => ['common', 'karma', 'improvements'],
+        'yiisoft/yii2/offtopic-rus'    => ['common', 'karma', 'improvements'],
+        'yiisoft/yii2/rus'             => ['common', 'karma', 'improvements'],
+        'php-ua/symfony'               => ['common', 'karma', 'improvements'],
+        'php-ua/php'                   => ['common', 'karma', 'improvements'],
+        'vuejs-ru/Discussion'          => ['common', 'karma', 'improvements'],
     ],
 
 
@@ -70,7 +70,7 @@ return [
 
         'improvements' => [
             // Слишком длинные сообщения
-            //Domains\Bot\Middlewares\LongMessageMiddleware::class,
+            Domains\Bot\Middlewares\Improvements\LongCodeMiddleware::class,
 
             // Анализ ссылок на изображения и видео
             // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,

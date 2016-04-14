@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Embeddable
  *
- * @property-read string $escaped
+ * @property-read string $inline
  * @property-read string $words
  * @property-read string $withoutSpecialChars
  */
@@ -50,21 +50,54 @@ class Text
     }
 
     /**
-     * @return Text
+     * @return string
      */
-    public function getEscaped() : Text
+    public function getInline() : string
     {
-        $text = mb_strtolower($this->text);
-        $text = str_replace(["\n", "\r"], ' ', $text);
-        return new Text(trim($text));
+        $text = str_replace(["\n", "\r"], ' ', $this->text);
+        $text = preg_replace('/\s+/iu', ' ', $text);
+
+        return trim($text);
     }
 
     /**
-     * @return Text
+     * @return array|string[]
      */
-    public function getWithoutSpecialChars() : Text
+    public function lines() : array
     {
-        $text = (string)$this->getEscaped();
+        return explode("\n", $this->text);
+    }
+
+    /**
+     * @return int
+     */
+    public function bytesCount() : int
+    {
+        return strlen($this->text);
+    }
+
+    /**
+     * @return int
+     */
+    public function charsCount() : int
+    {
+        return mb_strlen($this->text);
+    }
+
+    /**
+     * @return int
+     */
+    public function linesCount() : int
+    {
+        return count($this->lines());
+    }
+
+    /**
+     * @return string
+     */
+    public function getWithoutSpecialChars() : string
+    {
+        $text = (string)$this->getInline();
 
         $removes = [
             '/\@[a-z0-9\-_]+/iu',
@@ -75,7 +108,7 @@ class Text
             $text = preg_replace($pattern, '', $text);
         }
 
-        return new Text(trim($text));
+        return trim($text);
     }
 
     /**

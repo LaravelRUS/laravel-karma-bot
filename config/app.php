@@ -142,6 +142,7 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        GrahamCampbell\GitHub\GitHubServiceProvider::class,
         LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
 
         /*
@@ -203,6 +204,7 @@ return [
         'EntityManager' => LaravelDoctrine\ORM\Facades\EntityManager::class,
         'Registry'      => LaravelDoctrine\ORM\Facades\Registry::class,
         'Doctrine'      => LaravelDoctrine\ORM\Facades\Doctrine::class,
+        'GitHub'        => GrahamCampbell\GitHub\Facades\GitHub::class,
     ],
 
 ];

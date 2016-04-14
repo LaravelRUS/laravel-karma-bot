@@ -19,6 +19,7 @@
         "doctrine/annotations": "1.2.*",
         "doctrine/dbal": "^2.5.0",
         "laravel-doctrine/orm": "1.0.*",
+        "graham-campbell/github": "4.2.*",
         "gedmo/doctrine-extensions": "2.4.*",
         "laravel-doctrine/extensions": "1.0.*",
         "filp/whoops": "2.0.*",
