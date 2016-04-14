@@ -68,15 +68,6 @@ class Io extends Bus
         // TODO Implement new user event
         // TODO Implement new room event
 
-        // TODO This clearing identity list to avoid memory overflow and must be moved to ...
-        $this->client->stream
-            ->getEventLoop()
-            ->addPeriodicTimer(120, function() {
-                /** @var EntityManager $em */
-                $em = app(EntityManager::class);
-                $em->clear();
-            });
-
         $this->client->stream->listen();
     }
 
