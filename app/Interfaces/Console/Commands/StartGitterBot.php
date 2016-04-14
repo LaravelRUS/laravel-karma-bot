@@ -14,25 +14,17 @@ namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Domains\Bot\Middlewares;
-use Domains\Bot\Pid;
 use Domains\Bot\ProcessId;
-use Domains\Karma\Karma;
 use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\Bot;
-use Domains\User\User;
 use Gitter\Client;
-use Interfaces\Gitter\Io;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Interfaces\Gitter\Factories\User as UserFactory;
 use Interfaces\Gitter\Factories\Room as RoomFactory;
-use Interfaces\Gitter\Factories\Message as MessageFactory;
+use Interfaces\Gitter\Io;
 
 
 /**
@@ -73,7 +65,7 @@ class StartGitterBot extends Command
         $this->call('doctrine:generate:proxies');
 
         // Create an a pid file
-        $this->pid   = new ProcessId();
+        $this->pid = new ProcessId();
         $this->pid->create();
 
         try {
@@ -104,13 +96,11 @@ class StartGitterBot extends Command
             $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
                 $manager->persist($message);
 
-                $manager->persist(new Karma($message->user, $user, $message));
-
                 $manager->flush();
 
-                $io->send($middlewares->handle($message));
+                $result = $middlewares->handle($message);
 
-                $manager->clear();
+                $io->send($result);
             });
 
 
