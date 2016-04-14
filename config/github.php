@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Laravel GitHub.
  *
@@ -10,7 +9,6 @@
  */
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Connection Name
@@ -21,7 +19,6 @@ return [
     | connections at once using the manager class.
     |
     */
-
     'default' => 'main',
 
     /*
@@ -35,32 +32,12 @@ return [
     | "application", "password", and "token".
     |
     */
-
     'connections' => [
-
         'main' => [
+            // @see https://github.com/settings/tokens
             'token'  => env('GITHUB_TOKEN'),
             'method' => 'token',
-            // 'baseUrl' => 'https://api.github.com/',
-            // 'version' => 'v3',
         ],
-
-        'alternative' => [
-            'clientId'     => 'your-client-id',
-            'clientSecret' => 'your-client-secret',
-            'method'       => 'application',
-            // 'baseUrl'      => 'https://api.github.com/',
-            // 'version'      => 'v3',
-        ],
-
-        'other' => [
-            'username' => 'your-username',
-            'password' => 'your-password',
-            'method'   => 'password',
-            // 'baseUrl'  => 'https://api.github.com/',
-            // 'version'  => 'v3',
-        ],
-
     ],
 
 ];
