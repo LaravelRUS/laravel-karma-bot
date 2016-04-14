@@ -11,16 +11,16 @@ declare(strict_types = 1);
  */
 namespace Domains\Message;
 
-use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
-use Domains\User\Mention;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Karma\Karma;
 use Domains\Room\Room;
+use Domains\User\Mention;
 use Domains\User\User;
 use EndyJasmi\Cuid;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Illuminate\Support\Collection;
+use Serafim\Properties\Getters;
 
 /**
  * @ORM\Entity
@@ -67,7 +67,7 @@ class Message
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist", "merge"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist", "merge"}, fetch="EAGER")
      * @ORM\JoinColumn(name="user_id")
      */
     protected $user;
@@ -82,13 +82,13 @@ class Message
 
     /**
      * @var ArrayCollection|Mention[]
-     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="message", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="message", cascade={"persist"}, fetch="EAGER")
      */
     protected $mentions;
 
     /**
      * @var ArrayCollection|Karma[]
-     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message", cascade={"persist"}, fetch="EAGER")
      */
     protected $karma;
 
@@ -113,18 +113,15 @@ class Message
 
     /**
      * @param User $user
-     * @return mixed
+     * @return bool
      */
-    public function isAppealTo(User $user)
+    public function isAppealTo(User $user) : bool
     {
-        $mentions =
-            (new Collection($this->mentions->toArray()))
-                ->map(function (Mention $mention) {
-                    return $mention->user->id;
-                })
-                ->toArray();
-
-        return in_array($user->id, $mentions, true);
+        return null !== (new Collection($this->mentions->toArray()))
+            ->filter(function (Mention $mention) use ($user) {
+                return $mention->isMentionOf($user);
+            })
+            ->first();
     }
 
     /**

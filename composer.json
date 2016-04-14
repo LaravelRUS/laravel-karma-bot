@@ -14,6 +14,7 @@
         "predis/predis": "~1.0",
         "serafim/evacuator": "1.0.*",
         "serafim/gitter-api": "2.1.*",
+        "serafim/properties": "1.0.*",
         "endyjasmi/cuid": "2.0.*",
         "doctrine/annotations": "1.2.*",
         "doctrine/dbal": "^2.5.0",

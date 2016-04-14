@@ -10,7 +10,7 @@
  */
 namespace Domains\Message;
 
-use Core\Entity\Getters;
+use Serafim\Properties\Getters;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

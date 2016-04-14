@@ -10,13 +10,13 @@
  */
 namespace Domains\Karma;
 
-use Core\Entity\Getters;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\User;
 use EndyJasmi\Cuid;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Serafim\Properties\Getters;
 
 /**
  * Class Karma

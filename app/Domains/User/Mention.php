@@ -10,10 +10,10 @@
  */
 namespace Domains\User;
 
-use Core\Entity\Getters;
 use Doctrine\ORM\Mapping as ORM;
-use EndyJasmi\Cuid;
 use Domains\Message\Message;
+use EndyJasmi\Cuid;
+use Serafim\Properties\Getters;
 
 /**
  * Class Mention
@@ -39,21 +39,21 @@ class Mention
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentions", cascade={"merge"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentions", cascade={"persist", "merge"})
      * @ORM\JoinColumn(name="user_id")
      */
     protected $user;
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentioned", cascade={"merge"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentioned", cascade={"persist", "merge"}, fetch="EAGER")
      * @ORM\JoinColumn(name="user_target_id")
      */
     protected $target;
 
     /**
      * @var Message
-     * @ORM\ManyToOne(targetEntity=Message::class, inversedBy="mentions", cascade={"merge"})
+     * @ORM\ManyToOne(targetEntity=Message::class, inversedBy="mentions", cascade={"persist", "merge"})
      * @ORM\JoinColumn(name="message_id")
      */
     protected $message;
@@ -69,5 +69,14 @@ class Mention
         $this->user = $inMessage->user;
         $this->target = $mentions;
         $this->message = $inMessage;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isMentionOf(User $user) : bool
+    {
+        return $this->target->id === $user->id;
     }
 }

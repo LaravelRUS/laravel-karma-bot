@@ -10,12 +10,12 @@
  */
 namespace Domains\Room;
 
-use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Karma\Karma;
 use Domains\Message\Message;
 use EndyJasmi\Cuid;
+use Serafim\Properties\Getters;
 
 /**
  * Class Room
@@ -84,6 +84,7 @@ class Room
     public function addMessage(Message $message) : Room
     {
         $this->messages->add($message);
+
         return $this;
     }
 

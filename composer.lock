@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6cfb68f35fe4c9ef94e9ccb8adfd7629",
-    "content-hash": "67e0abcb680da948a206b69b08838809",
+    "hash": "508935300dca2cf8a86dba3f24d7bf0f",
+    "content-hash": "112f023bb0b923c2f87ae119e0ab222c",
     "packages": [
         {
             "name": "amphp/amp",
@@ -3282,6 +3282,50 @@
                 "react"
             ],
             "time": "2016-04-11 12:38:53"
+        },
+        {
+            "name": "serafim/properties",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SerafimArts/Properties.git",
+                "reference": "89669ec10f04368091474e571afd93e56c8012f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SerafimArts/Properties/zipball/89669ec10f04368091474e571afd93e56c8012f4",
+                "reference": "89669ec10f04368091474e571afd93e56c8012f4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Serafim\\Properties\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nesmeyanov Kirill",
+                    "email": "nesk@xakep.ru"
+                }
+            ],
+            "description": "PHP properties implementation",
+            "homepage": "http://github.io/SerafimArts/Properties",
+            "keywords": [
+                "fields",
+                "properties"
+            ],
+            "time": "2016-04-14 15:12:45"
         },
         {
             "name": "swiftmailer/swiftmailer",

@@ -10,12 +10,12 @@
  */
 namespace Domains\User;
 
-use Core\Entity\Getters;
 use Doctrine\ORM\Mapping as ORM;
+use Serafim\Properties\Getters;
 
 /**
  * @ORM\Embeddable
- * 
+ *
  * @property-read string $login
  * @property-read string $password
  * @property-read string|null $email
@@ -56,16 +56,6 @@ class Credinals
     }
 
     /**
-     * @param string $email
-     * @return Credinals
-     */
-    public function changeEmail(string $email) : Credinals
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
      * @param string $password
      * @return $this|Credinals
      * @throws \RuntimeException
@@ -73,6 +63,18 @@ class Credinals
     public function updatePassword(string $password) : Credinals
     {
         $this->password = \Hash::make($password);
+
+        return $this;
+    }
+
+    /**
+     * @param string $email
+     * @return Credinals
+     */
+    public function changeEmail(string $email) : Credinals
+    {
+        $this->email = $email;
+
         return $this;
     }
 
@@ -83,6 +85,7 @@ class Credinals
     public function changeLogin(string $login) : Credinals
     {
         $this->login = $login;
+
         return $this;
     }
 

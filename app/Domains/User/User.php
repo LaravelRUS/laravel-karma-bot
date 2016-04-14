@@ -11,13 +11,13 @@ declare(strict_types = 1);
  */
 namespace Domains\User;
 
-use Core\Entity\Getters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Karma\Karma;
 use Domains\Message\Message;
 use EndyJasmi\Cuid;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Serafim\Properties\Getters;
 
 /**
  * @ORM\Entity
