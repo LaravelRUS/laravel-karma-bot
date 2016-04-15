@@ -33,8 +33,8 @@ return [
         // Вывод кармы по запросу
         Domains\Bot\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
 
-        // SQL билдер
-        Domains\Bot\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
+        // SQL билдер (Temporary remove)
+        // Domains\Bot\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
 
         // Google поисковик
         Domains\Bot\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
