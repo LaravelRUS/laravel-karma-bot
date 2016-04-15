@@ -20,7 +20,7 @@ use GrahamCampbell\GitHub\GitHubManager;
  */
 class LongCodeMiddleware implements Middleware
 {
-    const MAX_CODE_LINES = 2;
+    const MAX_CODE_LINES = 40;
 
     /**
      * @param Message $message
