@@ -145,10 +145,18 @@ class User implements Bot
      * @param Message $message
      * @return $this
      */
-    public function write(Message $message)
+    public function write(Message $message) : Message
     {
         $this->messages->add($message);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)sprintf('@%s', $this->credinals->login);
     }
 }

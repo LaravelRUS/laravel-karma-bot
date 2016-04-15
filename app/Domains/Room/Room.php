@@ -87,20 +87,4 @@ class Room
 
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    protected function getTitle()
-    {
-        return (string)$this->title;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getUrl()
-    {
-        return (string)$this->url;
-    }
 }

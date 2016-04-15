@@ -44,6 +44,7 @@ class Credinals
 
     /**
      * Credinals constructor.
+     * @throws \RuntimeException
      * @param string $login
      * @param string $password
      * @param string $email
@@ -87,29 +88,5 @@ class Credinals
         $this->login = $login;
 
         return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    protected function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getLogin() : string
-    {
-        return $this->login;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPassword() : string
-    {
-        return $this->password;
     }
 }

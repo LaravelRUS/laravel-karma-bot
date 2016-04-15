@@ -46,15 +46,27 @@ class LongCodeMiddleware implements Middleware
 
                     return trans('long.gist', [
                         'user'     => $message->user->credinals->login,
-                        'gist_url' => $response['html_url']
+                        'gist_url' => $response['html_url'],
                     ]);
                 } catch (\Throwable $e) {
                     trans('long.code', [
-                        'user'     => $message->user->credinals->login
+                        'user' => $message->user->credinals->login,
                     ]);
                 }
             }
         }
+    }
+
+    /**
+     * @param Message $message
+     * @return array
+     */
+    protected function getCodeDeclaration(Message $message)
+    {
+        $pattern = '/(?:`{3})([a-z]*)\n(.*?)\n(?:`{3})/ismu';
+        preg_match_all($pattern, $message->text->toString(), $matches, PREG_SET_ORDER);
+
+        return $matches;
     }
 
     /**
@@ -67,10 +79,12 @@ class LongCodeMiddleware implements Middleware
     private function exportToGist(GitHubManager $manager, Message $message, array $codeInserts)
     {
         $data = [
-            'files' => [],
-            'public' => false,
-            'description' => 'This gist was be generated special for @' . $message->user->credinals->login .
-                '. Enjoy ;)'
+            'files'       => [],
+            'public'      => false,
+            'description' => sprintf(
+                'This gist was be generated special for @%s. Enjoy ;)',
+                $message->user->credinals->login
+            ),
         ];
 
         foreach ($codeInserts as $i => $match) {
@@ -79,22 +93,10 @@ class LongCodeMiddleware implements Middleware
             $name = 'file-' . ($i + 1) . '.' . ($lang ? mb_strtolower($lang) : 'txt');
 
             $data['files'][$name] = [
-                'content' => $code
+                'content' => $code,
             ];
         }
 
         return $manager->gist()->create($data);
-    }
-
-    /**
-     * @param Message $message
-     * @return array
-     */
-    protected function getCodeDeclaration(Message $message)
-    {
-        $pattern = '/(?:`{3})([a-z]*)\n(.*?)\n(?:`{3})/ismu';
-        preg_match_all($pattern, $message->text->toString(), $matches, PREG_SET_ORDER);
-        
-        return $matches;
     }
 }

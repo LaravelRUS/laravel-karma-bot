@@ -137,9 +137,23 @@ class Text
     }
 
     /**
+     * @param string $search
+     * @param string $replace
+     * @param bool $caseSensitive
      * @return string
      */
-    public function __toString()
+    public function replace(string $search, string $replace, bool $caseSensitive = false) : string
+    {
+        if ($caseSensitive) {
+            return str_replace($search, $replace, $this->text);
+        }
+        return str_ireplace($search, $replace, $this->text);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString() : string
     {
         return $this->toString();
     }
