@@ -1,36 +1,44 @@
 <?php
+/**
+ * This file is part of GitterBot package.
+ *
+ * @author Serafim <nesk@xakep.ru>
+ * @date 15.04.2016 15:35
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Domains\Bot\Middlewares;
 
 use Domains\Message\Message;
-
+use Interfaces\Gitter\Io;
 
 /**
- * Проверяет слово "карма" и выводит статус
- *
  * Class KarmaRenderMiddleware
+ * @package Domains\Bot\Middlewares
  */
 class KarmaRenderMiddleware implements Middleware
 {
     /**
+     * @param Io $io
      * @param Message $message
      * @return mixed
      */
-    public function handle(Message $message)
+    public function handle(Io $io, Message $message)
     {
-        if (trim(mb_strtolower($message->text)) === 'карма') {
+        if ($message->text->like('карма')) {
             $args = [
-                'user'   => $message->user->login,
-                'karma'  => $message->user->karma_text,
-                'thanks' => $message->user->thanks_text,
+                'user'   => $message->user->credinals->login,
+                'karma'  => $message->user->karma->count(),
+                'thanks' => $message->user->thanks->count(),
             ];
-
-
+            
             $karmaMessage = [];
 
             // Karma info
             $karmaMessage[] = $args['karma']
-                ? \Lang::get('karma.count.message', $args)
-                : \Lang::get('karma.count.empty', $args);
+                ? trans('karma.count.message', $args)
+                : trans('karma.count.empty', $args);
 
             // If has achievements
             $achievements = $this->getAchievements($message);
@@ -39,7 +47,7 @@ class KarmaRenderMiddleware implements Middleware
             }
 
             // Profile link
-            $karmaMessage[] = \Lang::get('karma.account', $args);
+            $karmaMessage[] = trans('karma.account', $args);
 
             $message->italic(implode("\n", $karmaMessage));
 

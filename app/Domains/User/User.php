@@ -143,7 +143,7 @@ class User implements Bot
 
     /**
      * @param Message $message
-     * @return $this
+     * @return $this|Message
      */
     public function write(Message $message) : Message
     {
@@ -155,8 +155,8 @@ class User implements Bot
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
-        return (string)sprintf('@%s', $this->credinals->login);
+        return (string)$this->credinals;
     }
 }

@@ -67,7 +67,7 @@ class Message
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist", "merge"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages", cascade={"persist", "merge"})
      * @ORM\JoinColumn(name="user_id")
      */
     protected $user;
@@ -82,13 +82,13 @@ class Message
 
     /**
      * @var ArrayCollection|Mention[]
-     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="message", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="message", cascade={"persist"})
      */
     protected $mentions;
 
     /**
      * @var ArrayCollection|Karma[]
-     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=Karma::class, mappedBy="message", cascade={"persist"})
      */
     protected $karma;
 

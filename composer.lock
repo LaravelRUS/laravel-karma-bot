@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d5b40f2dfddd59f09228bf328f763d54",
-    "content-hash": "1d2badb677e0dfc0c40d6013322e4b8b",
+    "hash": "e148d67e662e6e6bbf66894ae8df72b4",
+    "content-hash": "64e048f9c36dea7aa03b9f29a8ce2e89",
     "packages": [
         {
             "name": "amphp/amp",
@@ -2658,6 +2658,45 @@
                 "php"
             ],
             "time": "2016-02-28 19:48:28"
+        },
+        {
+            "name": "ninsuo/php-shared-memory",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ninsuo/php-shared-memory.git",
+                "reference": "01826f5a785decd95cc1e3b5083847fc0861df9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ninsuo/php-shared-memory/zipball/01826f5a785decd95cc1e3b5083847fc0861df9a",
+                "reference": "01826f5a785decd95cc1e3b5083847fc0861df9a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fuz\\Component\\SharedMemory\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "The BSD 2-Clause License"
+            ],
+            "authors": [
+                {
+                    "name": "Alain Tiemblo",
+                    "email": "alain@fuz.org"
+                }
+            ],
+            "description": "Share variables across multiple PHP apps",
+            "homepage": "https://github.com/ninsuo/php-shared-memory",
+            "time": "2014-10-18 10:10:36"
         },
         {
             "name": "paragonie/random_compat",

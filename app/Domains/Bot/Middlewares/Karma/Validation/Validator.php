@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Domains\Bot\Middlewares\Karma;
+namespace Domains\Bot\Middlewares\Karma\Validation;
 
 use Domains\User\User;
 use Domains\Message\Message;

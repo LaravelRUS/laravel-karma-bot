@@ -14,6 +14,9 @@ namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
+use Core\Doctrine\SqlMemoryLogger;
+use Core\Repositories\MessageRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Domains\Bot\Middlewares;
 use Domains\Bot\ProcessId;
@@ -23,6 +26,7 @@ use Domains\User\Bot;
 use Gitter\Client;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Foundation\Application;
 use Interfaces\Gitter\Factories\Room as RoomFactory;
 use Interfaces\Gitter\Io;
 
@@ -54,7 +58,7 @@ class StartGitterBot extends Command
     /**
      * Execute the console command.
      *
-     * @param Container $container
+     * @param Container|Application $container
      * @param Client $client
      * @param EntityManagerInterface $manager
      * @return mixed
@@ -62,6 +66,11 @@ class StartGitterBot extends Command
      */
     public function handle(Container $container, Client $client, EntityManagerInterface $manager)
     {
+        \Registry::getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(new SqlMemoryLogger());
+
+
         $this->call('doctrine:generate:proxies');
 
         // Create an a pid file
@@ -92,6 +101,8 @@ class StartGitterBot extends Command
             $container->singleton(Bot::class, function () use ($user) {
                 return $user;
             });
+
+            $this->info(str_repeat('=', 80));
 
             $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
                 $manager->persist($message);

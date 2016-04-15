@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        \Interfaces\Console\Commands\SqlLogger::class,
         \Interfaces\Console\Commands\StartGitterPool::class,
         \Interfaces\Console\Commands\StartGitterBot::class
     ];

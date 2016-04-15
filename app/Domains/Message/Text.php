@@ -69,6 +69,15 @@ class Text
     }
 
     /**
+     * @param string $pattern
+     * @return bool
+     */
+    public function like(string $pattern) : bool
+    {
+        return (bool)preg_match('/^' . $pattern . '$/isu', $this->text);
+    }
+
+    /**
      * @return int
      */
     public function bytesCount() : int

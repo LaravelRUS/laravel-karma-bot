@@ -89,4 +89,12 @@ class Credinals
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)sprintf('@%s', $this->login);
+    }
 }
