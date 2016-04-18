@@ -32,7 +32,8 @@ class SqlBuilderMiddleware implements Middleware
         if ($isSql) {
             try {
                 $builder = new BuilderClass($message->text->toString());
-                return $builder->convert();
+                return $this->formatBuilderResult($builder->convert());
+
 
             } catch (\Exception $e) {
                 return 'Я не понимать ваш SQL =(';
@@ -41,12 +42,24 @@ class SqlBuilderMiddleware implements Middleware
     }
 
     /**
+     * @param string $code
+     * @return mixed
+     */
+    private function formatBuilderResult(string $code)
+    {
+        return
+            '[Документация по SQL Builder](https://laravel.com/docs/5.2/queries) ' . "\n\n" .
+            '```php' . "\n" .
+            str_replace(')->', ")\n    ->", $code) . "\n" .
+            '```';
+    }
+
+    /**
      * @param Message $message
      * @return boolean
      */
     private function isSqlQuery(Message $message) : bool
     {
-        $text = $message->text->escaped;
-        return (bool)preg_match('/^(select)/iu', $text);
+        return stripos($message->text, 'select') === 0;
     }
 }
