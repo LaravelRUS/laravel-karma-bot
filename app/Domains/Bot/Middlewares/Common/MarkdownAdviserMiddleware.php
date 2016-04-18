@@ -42,7 +42,7 @@ class MarkdownAdviserMiddleware implements Middleware
 
                 $answerTo = $mentionTo->id === $bot->id
                     ? $message->user
-                    : $mentionTo->user;
+                    : $mentionTo->target;
 
                 return trans('markdown.personal', [
                     'user'  => $answerTo->credinals->login

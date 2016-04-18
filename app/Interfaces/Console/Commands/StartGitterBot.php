@@ -112,12 +112,14 @@ class StartGitterBot extends Command
 
             $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
                 $manager->persist($message);
-
                 $manager->flush();
 
                 $result = $middlewares->handle($message);
 
                 $io->send($result);
+
+                $manager->merge($message);
+                $manager->flush();
             });
 
 

@@ -61,7 +61,7 @@ class GoogleSearchMiddleware implements Middleware
 
                 $answerTo = $mentionTo->isMentionOf($bot)
                     ? $message->user
-                    : $mentionTo->user;
+                    : $mentionTo->target;
 
                 return [
                     trans('google.personal', [

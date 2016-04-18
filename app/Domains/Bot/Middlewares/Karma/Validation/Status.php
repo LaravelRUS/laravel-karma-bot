@@ -10,15 +10,21 @@
  */
 namespace Domains\Bot\Middlewares\Karma\Validation;
 
-use Domains\User\User;
 use Lang;
+use Domains\User\User;
+use Serafim\Properties\Getters;
 
 /**
  * Class Status
  * @package Domains\Bot\Middlewares\Karma
+ *
+ * @property-read User $user
+ * @property-read int $status
  */
 class Status
 {
+    use Getters;
+
     const STATUS_NOTHING    = 2;
     const STATUS_INCREMENT  = 4;
     const STATUS_TIMEOUT    = 8;
@@ -86,30 +92,13 @@ class Status
         return $this->status === static::STATUS_NO_USER;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
     /**
      * @param $karma
      * @return string|null
      */
     public function getTranslation($karma)
     {
-        $args = ['user' => $this->user->login, 'karma' => $karma];
+        $args = ['user' => $this->user->credinals->login, 'karma' => $karma];
 
         switch ($this->status) {
             case static::STATUS_INCREMENT:

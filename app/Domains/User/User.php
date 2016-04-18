@@ -96,7 +96,7 @@ class User implements Bot
 
     /**
      * @var ArrayCollection|Mention[]
-     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Mention::class, mappedBy="creator", cascade={"persist"})
      */
     protected $mentions;
 
@@ -150,6 +150,28 @@ class User implements Bot
         $this->messages->add($message);
 
         return $this;
+    }
+
+    /**
+     * @param User $to
+     * @param Message $fromMessage
+     * @return Karma
+     */
+    public function addKarma(User $to, Message $fromMessage) : Karma
+    {
+        $karma = new Karma($this, $to, $fromMessage);
+        $to->karma->add($karma);
+
+        return $karma;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function is(User $user) : bool
+    {
+        return $this->id === $user->id;
     }
 
     /**

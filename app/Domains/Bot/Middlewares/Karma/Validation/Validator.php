@@ -10,8 +10,14 @@
  */
 namespace Domains\Bot\Middlewares\Karma\Validation;
 
-use Domains\User\User;
+use Core\Repositories\KarmaRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Domains\Karma\Karma;
 use Domains\Message\Message;
+use Domains\Message\Text;
+use Domains\User\Mention;
+use Domains\User\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -27,11 +33,18 @@ class Validator
     protected $likes = [];
 
     /**
-     * Validator constructor.
+     * @var KarmaRepository
      */
-    public function __construct()
+    private $karma;
+
+    /**
+     * Validator constructor.
+     * @param KarmaRepository $repository
+     */
+    public function __construct(KarmaRepository $repository)
     {
-        $this->likes = \Lang::get('thanks.likes');
+        $this->likes = trans('thanks.likes');
+        $this->karma = $repository;
     }
 
     /**
@@ -43,7 +56,7 @@ class Validator
         $response = new Collection([]);
 
         // If has no mentions
-        if (!count($message->mentions)) {
+        if (!$message->hasMentions()) {
             if ($this->validateText($message)) {
                 $response->push(new Status($message->user, Status::STATUS_NO_USER));
             }
@@ -51,16 +64,24 @@ class Validator
             return $response;
         }
 
+        /** @var Mention $mention */
         foreach ($message->mentions as $mention) {
-            // Ignore bot queries
-            if (\Auth::user()->login === $message->user->login) {
-                continue;
-            }
-
-            $response->push($this->validateMessage($message, $mention));
+            $response->push($this->validateMessage($message, $mention->target));
         }
 
         return $response;
+    }
+
+    /**
+     * @param Message $message
+     * @return bool
+     */
+    protected function validateText(Message $message)
+    {
+        $text = $message->text->withoutSpecialChars;
+        $text = (new Text($text))->toLower();
+
+        return Str::endsWith($text, $this->likes) || Str::startsWith($text, $this->likes);
     }
 
     /**
@@ -92,7 +113,7 @@ class Validator
      */
     protected function validateUser(Message $message, User $mention)
     {
-        return $mention->login !== $message->user->login;
+        return $mention->id !== $message->user->id;
     }
 
     /**
@@ -102,19 +123,19 @@ class Validator
      */
     protected function validateTimeout(Message $message, User $mention)
     {
-        return $mention->getLastKarmaTimeForRoom($message->room_id)->timestamp + 60
-            < $message->created_at->timestamp;
-    }
+        try {
+            /** @var Karma $karma */
+            $karma = $this->karma
+                ->getLatestKarmaForUser($mention)
+                ->setMaxResults(1)
+                ->getSingleResult();
 
+        } catch (NoResultException $e) {
+            return true;
+        } catch (NonUniqueResultException $e) {
+            return true;
+        }
 
-    /**
-     * @param Message $message
-     * @return bool
-     */
-    protected function validateText(Message $message)
-    {
-        $escapedText = $message->text_without_special_chars;
-
-        return Str::endsWith($escapedText, $this->likes) || Str::startsWith($escapedText, $this->likes);
+        return $karma->created->getTimestamp() + 60 < $message->created->getTimestamp();
     }
 }

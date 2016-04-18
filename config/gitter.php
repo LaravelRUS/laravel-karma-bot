@@ -57,7 +57,7 @@ return [
             Domains\Bot\Middlewares\Karma\KarmaRenderMiddleware::class,
 
             // Подсчёт "спасибок"
-            //Domains\Bot\Middlewares\KarmaCounterMiddleware::class,
+            Domains\Bot\Middlewares\Karma\KarmaCounterMiddleware::class,
 
             // Подписывается на создание ачивки и отправляет сообщеньку в чат
             //Domains\Bot\AchieveSubscriber::class,

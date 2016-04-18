@@ -21,7 +21,7 @@ use Serafim\Properties\Getters;
  * @ORM\Entity
  * @ORM\Table(name="mentions")
  * @property-read string $id
- * @property-read User $user
+ * @property-read User $creator
  * @property-read User $target
  * @property-read Message $message
  */
@@ -42,7 +42,7 @@ class Mention
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mentions", cascade={"persist", "merge"})
      * @ORM\JoinColumn(name="user_id")
      */
-    protected $user;
+    protected $creator;
 
     /**
      * @var User
@@ -66,7 +66,7 @@ class Mention
     public function __construct(User $mentions, Message $inMessage)
     {
         $this->id = Cuid::cuid();
-        $this->user = $inMessage->user;
+        $this->creator = $inMessage->user;
         $this->target = $mentions;
         $this->message = $inMessage;
     }

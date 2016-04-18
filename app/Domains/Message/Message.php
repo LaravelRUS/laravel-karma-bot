@@ -140,12 +140,20 @@ class Message
      * @param string $text
      * @return $this
      */
-    protected function updateMessageText(string $text)
+    public function updateMessageText(string $text)
     {
         $this->text->update($text);
         $this->touch();
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMentions() : bool
+    {
+        return $this->mentions->count() > 0;
     }
 
     /**
