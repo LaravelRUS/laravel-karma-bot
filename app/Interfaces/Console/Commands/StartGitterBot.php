@@ -103,6 +103,7 @@ class StartGitterBot extends Command
             });
 
             $this->info(str_repeat('=', 80));
+            
 
             $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
                 $manager->persist($message);

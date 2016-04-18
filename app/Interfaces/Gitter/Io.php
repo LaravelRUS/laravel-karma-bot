@@ -11,14 +11,13 @@
 namespace Interfaces\Gitter;
 
 use Core\Io\Bus;
-use Doctrine\ORM\EntityManager;
+use Core\Presenters\MarkdownPresenter;
 use Domains\Message\Message;
 use Domains\Room\Room;
-use Domains\User\Bot;
 use Domains\User\User;
 use Gitter\Client;
-use Interfaces\Gitter\Factories\User as UserFactory;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
+use Interfaces\Gitter\Factories\User as UserFactory;
 
 /**
  * Class Io
@@ -50,7 +49,7 @@ class Io extends Bus
     {
         parent::__construct();
 
-        $this->room   = $room;
+        $this->room = $room;
         $this->client = $client;
     }
 
@@ -60,7 +59,7 @@ class Io extends Bus
      */
     public function listen()
     {
-        $this->client->stream->onMessage($this->room->id, function($data) {
+        $this->client->stream->onMessage($this->room->id, function ($data) {
             $message = MessageFactory::create($data, $this->room);
             $this->fire(static::EVENT_NEW_MESSAGE, $message);
         });
@@ -99,7 +98,8 @@ class Io extends Bus
 
         if (trim($text)) {
             try {
-                $decorated = '_' . $text . '_';
+                $decorated = MarkdownPresenter::encode('<bot>' . $text . '</bot>');
+
                 $this->client->http->sendMessage($this->room->id, $decorated)->wait();
             } catch (\Throwable $e) {
                 return false;
