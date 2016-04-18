@@ -11,6 +11,7 @@
 namespace Core\Repositories;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\QueryBuilder;
@@ -25,9 +26,9 @@ class KarmaRepository extends Repository
 {
     /**
      * MessageRepository constructor.
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         parent::__construct($em, $em->getClassMetadata(Karma::class));
     }

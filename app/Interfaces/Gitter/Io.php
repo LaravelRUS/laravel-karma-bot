@@ -11,13 +11,13 @@
 namespace Interfaces\Gitter;
 
 use Core\Io\Bus;
-use Core\Presenters\MarkdownPresenter;
 use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\User;
 use Gitter\Client;
 use Illuminate\Support\Str;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
+use Interfaces\Gitter\Factories\Room as RoomFactory;
 use Interfaces\Gitter\Factories\User as UserFactory;
 
 /**
@@ -40,7 +40,7 @@ class Io extends Bus
      * @var null|User
      */
     private $authAs = null;
-
+    
     /**
      * Response constructor.
      * @param Client $client

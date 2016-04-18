@@ -16,8 +16,6 @@ namespace Interfaces\Console\Commands;
 use Carbon\Carbon;
 use Core\Doctrine\SqlMemoryLogger;
 use Core\Io\Bus;
-use Core\Repositories\MessageRepository;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Domains\Bot\Middlewares;
 use Domains\Bot\ProcessId;
@@ -33,9 +31,9 @@ use Interfaces\Gitter\Io;
 
 
 /**
- * Class StartGitterBot
+ * Class GitterBot
  */
-class StartGitterBot extends Command
+class GitterBot extends Command
 {
     /**
      * The name and signature of the console command.
@@ -84,7 +82,7 @@ class StartGitterBot extends Command
             $this->comment('Join to room [' . $room->url . ']');
 
 
-            $container->singleton(Bus::class, function(Container $app) use ($room) {
+            $container->singleton(Bus::class, function (Container $app) use ($room) {
                 return $app->make(Io::class, ['room' => $room]);
             });
 
@@ -92,7 +90,6 @@ class StartGitterBot extends Command
 
             // Current authenticated user
             $user = $io->auth();
-
             $this->comment('Login as [' . $user->credinals->login . ']');
 
             // Middlewares
@@ -108,7 +105,7 @@ class StartGitterBot extends Command
             });
 
             $this->info(str_repeat('=', 80));
-            
+
 
             $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
                 $manager->persist($message);
