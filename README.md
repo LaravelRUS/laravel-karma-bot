@@ -5,3 +5,7 @@
 [![Code Quality](https://scrutinizer-ci.com/g/LaravelRUS/GitterBot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/LaravelRUS/GitterBot/)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LaravelRUS/GitterBot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+### Empowerment
+
+#### Search:
+ - [List of sites](https://github.com/LaravelRUS/GitterBot/issues/56)
