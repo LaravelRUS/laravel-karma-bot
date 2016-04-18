@@ -123,13 +123,15 @@ class Io extends Bus
         $codeOpen = false;
 
         foreach ($lines as $line) {
-            if (Str::startsWith($line, '```')) {
-                $codeOpen = !$codeOpen;
+            $isCodeLine = Str::startsWith($line, '```');
+
+            if ($isCodeLine && !$codeOpen) {
+                $codeOpen = true;
             }
 
-            if (!$codeOpen) {
-                $result[] = '_' . $line . '_';
-            }
+            $result[] = !$codeOpen && trim($line) && !$isCodeLine
+                ? '_' . $line . '_'
+                : $line;
         }
 
         return implode("\n", $result);
