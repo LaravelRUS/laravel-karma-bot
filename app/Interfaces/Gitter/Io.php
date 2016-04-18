@@ -60,7 +60,10 @@ class Io extends Bus
     public function listen()
     {
         $this->client->stream->onMessage($this->room->id, function ($data) {
+            $data->text = MarkdownPresenter::decode($data->text);
+
             $message = MessageFactory::create($data, $this->room);
+            
             $this->fire(static::EVENT_NEW_MESSAGE, $message);
         });
 
@@ -99,7 +102,6 @@ class Io extends Bus
         if (trim($text)) {
             try {
                 $decorated = MarkdownPresenter::encode('<bot>' . $text . '</bot>');
-
                 $this->client->http->sendMessage($this->room->id, $decorated)->wait();
             } catch (\Throwable $e) {
                 return false;
