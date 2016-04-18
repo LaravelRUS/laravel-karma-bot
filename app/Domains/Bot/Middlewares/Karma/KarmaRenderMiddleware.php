@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Domains\Bot\Middlewares;
+namespace Domains\Bot\Middlewares\Karma;
 
+use Domains\Bot\Middlewares\Middleware;
 use Domains\Message\Message;
-use Interfaces\Gitter\Io;
 
 /**
  * Class KarmaRenderMiddleware
@@ -20,11 +20,10 @@ use Interfaces\Gitter\Io;
 class KarmaRenderMiddleware implements Middleware
 {
     /**
-     * @param Io $io
      * @param Message $message
      * @return mixed
      */
-    public function handle(Io $io, Message $message)
+    public function handle(Message $message)
     {
         if ($message->text->like('карма')) {
             $args = [
@@ -32,7 +31,7 @@ class KarmaRenderMiddleware implements Middleware
                 'karma'  => $message->user->karma->count(),
                 'thanks' => $message->user->thanks->count(),
             ];
-            
+
             $karmaMessage = [];
 
             // Karma info
@@ -41,20 +40,16 @@ class KarmaRenderMiddleware implements Middleware
                 : trans('karma.count.empty', $args);
 
             // If has achievements
-            $achievements = $this->getAchievements($message);
-            if ($achievements) {
-                $karmaMessage[] = $achievements;
-            }
+            //$achievements = $this->getAchievements($message);
+            //if ($achievements) {
+            //    $karmaMessage[] = $achievements;
+            //}
 
             // Profile link
             $karmaMessage[] = trans('karma.account', $args);
 
-            $message->italic(implode("\n", $karmaMessage));
-
-            return null;
+            return implode("\n", $karmaMessage);
         }
-
-        return $message;
     }
 
     /**

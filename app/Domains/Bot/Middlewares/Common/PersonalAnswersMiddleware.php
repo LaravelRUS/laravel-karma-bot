@@ -54,6 +54,6 @@ class PersonalAnswersMiddleware implements Middleware
             ? sprintf('/^.*?(?:@.*?)\s+(?:%s)\W*$/isu', $words)
             : sprintf('/^\W*(?:%s)\W*$/isu', $words);
 
-        return preg_match($pattern, trim($message->text->escaped));
+        return preg_match($pattern, trim($message->text->toString()));
     }
 }

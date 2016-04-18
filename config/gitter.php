@@ -54,7 +54,7 @@ return [
 
         'karma' => [
             // Вывод кармы по запросу
-            //Domains\Bot\Middlewares\KarmaRenderMiddleware::class,
+            Domains\Bot\Middlewares\Karma\KarmaRenderMiddleware::class,
 
             // Подсчёт "спасибок"
             //Domains\Bot\Middlewares\KarmaCounterMiddleware::class,

@@ -12,9 +12,12 @@ namespace Domains\Bot\Middlewares\Common;
 
 use Domains\Message\Message;
 use Domains\Bot\Middlewares\Middleware;
+use Domains\Message\Text;
 use Domains\User\Bot;
+use Domains\User\Mention;
 use Domains\User\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class MarkdownAdviserMiddleware
@@ -31,14 +34,15 @@ class MarkdownAdviserMiddleware implements Middleware
     {
         $isMarkdownQuery = $this->hasMarkdownQuery($message);
 
+
         if ($isMarkdownQuery) {
             if (count($message->mentions)) {
-                /** @var User $mentionTo */
+                /** @var Mention $mentionTo */
                 $mentionTo = $message->mentions->first();
 
                 $answerTo = $mentionTo->id === $bot->id
                     ? $message->user
-                    : $mentionTo;
+                    : $mentionTo->user;
 
                 return trans('markdown.personal', [
                     'user'  => $answerTo->credinals->login
@@ -51,13 +55,30 @@ class MarkdownAdviserMiddleware implements Middleware
 
     /**
      * @param Message $message
-     * @return string
+     * @return bool
      */
-    private function hasMarkdownQuery(Message $message) : string
+    private function hasMarkdownQuery(Message $message) : bool
     {
-        $words   = (new Collection(trans('markdown.queries')))->map('preg_quote')->implode('|');
-        $pattern = sprintf('/^(?:@.*?\s)?(?:%s).*?$/isu', $words);
+        $keywords = trans('markdown.queries');
 
-        return preg_match($pattern, $message->text->inline, $matches);
+        $text      = new Text($message->text);
+        $text      = (new Text($text))->toLower();
+        $text      = (new Text($text))->withoutSpecialChars;
+        $sentences = (new Text($text))->sentences;
+
+        foreach ($sentences as $sentence) {
+            $count = 0;
+            foreach ($keywords as $keyword) {
+                if (Str::contains($sentence, $keyword)) {
+                    $count++;
+                }
+            }
+
+            if ($count >= 2) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

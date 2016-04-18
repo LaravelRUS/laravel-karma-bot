@@ -10,10 +10,14 @@
  */
 namespace Domains\Bot\Middlewares\Common;
 
+
+use Core\Io\Bus;
+use Domains\Bot\Middlewares\Common\GoogleSearch\GoogleSearch;
 use Domains\Bot\Middlewares\Middleware;
 use Domains\Message\Message;
 use Domains\User\Bot;
-use Domains\User\User;
+use Domains\User\Mention;
+use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 
 /**
@@ -22,6 +26,19 @@ use Illuminate\Support\Collection;
  */
 class GoogleSearchMiddleware implements Middleware
 {
+    /**
+     * @var GoogleSearch
+     */
+    private $search;
+
+    /**
+     * GoogleSearchMiddleware constructor.
+     */
+    public function __construct(Repository $config)
+    {
+        $this->search = new GoogleSearch($config);
+    }
+
     /**
      * @param Bot $bot
      * @param Message $message
@@ -32,21 +49,33 @@ class GoogleSearchMiddleware implements Middleware
         $query = $this->getGoogleQuery($message);
 
         if ($query) {
+            $search = '';
+            try {
+                $search = $this->search->searchGetMessage($query);
+            } catch (\Throwable $e) {}
+
+
             if (count($message->mentions)) {
-                /** @var User $mentionTo */
+                /** @var Mention $mentionTo */
                 $mentionTo = $message->mentions->first();
 
-                $answerTo = $mentionTo->id === $bot->id
+                $answerTo = $mentionTo->isMentionOf($bot)
                     ? $message->user
-                    : $mentionTo;
+                    : $mentionTo->user;
 
-                return trans('google.personal', [
-                    'user'  => $answerTo->credinals->login,
-                    'query' => urlencode($query),
-                ]);
+                return [
+                    trans('google.personal', [
+                        'user'  => $answerTo->credinals->login,
+                        'query' => urlencode($query),
+                    ]),
+                    $search
+                ];
             }
 
-            return trans('google.common', ['query' => urlencode($query)]);
+            return [
+                trans('google.common', ['query' => urlencode($query)]),
+                $search
+            ];
         }
     }
 
@@ -56,9 +85,9 @@ class GoogleSearchMiddleware implements Middleware
      */
     private function getGoogleQuery(Message $message) : string
     {
-        $words   = (new Collection(trans('google.queries')))->map('preg_quote')->implode('|');
+        $words = (new Collection(trans('google.queries')))->map('preg_quote')->implode('|');
         $pattern = sprintf('/^(?:@.*?\s)?(?:%s)\s(.*?)$/isu', $words);
-        $found   = preg_match($pattern, $message->text->inline, $matches);
+        $found = preg_match($pattern, $message->text->inline, $matches);
 
         if ($found) {
             return trim($matches[1]);

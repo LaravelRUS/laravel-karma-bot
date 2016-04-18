@@ -10,10 +10,12 @@
  */
 namespace Core\Providers;
 
+use Core\Io\Bus;
 use Gitter\Client;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use Interfaces\Gitter\Io;
 
 /**
  * Class GitterClientServiceProvider
@@ -22,7 +24,7 @@ use Illuminate\Support\ServiceProvider;
 class GitterClientServiceProvider extends ServiceProvider
 {
     /**
-     *
+     * @throws \Exception
      */
     public function register()
     {
@@ -33,7 +35,6 @@ class GitterClientServiceProvider extends ServiceProvider
         $this->app->singleton(Client::class, function (Container $app) use ($config) {
             return new Client($config->get('gitter.token'));
         });
-
 
         $this->app->singleton('bot', function (Container $app) {
             /** @var Client $client */

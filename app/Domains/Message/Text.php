@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @property-read string $inline
  * @property-read string $words
  * @property-read string $withoutSpecialChars
+ * @property-read array|string[] $sentences
  */
 class Text
 {
@@ -102,6 +103,22 @@ class Text
     }
 
     /**
+     * @return Text[]|array
+     */
+    public function getSentences()
+    {
+        $result = [];
+
+        foreach (preg_split('/(\n|:[a-z_]+:|\.|\){2,})/isu', $this->text) as $text) {
+            if (trim($text)) {
+                $result[] = $text;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @return string
      */
     public function getWithoutSpecialChars() : string
@@ -109,7 +126,6 @@ class Text
         $text = (string)$this->getInline();
 
         $removes = [
-            '/\@[a-z0-9\-_]+/iu',
             '/[^\s\w]/iu',
         ];
 
@@ -143,6 +159,14 @@ class Text
         return array_map(function ($word) {
             return mb_strtolower($word);
         }, $words[0]);
+    }
+
+    /**
+     * @return string
+     */
+    public function toLower() : string
+    {
+        return mb_strtolower($this->text);
     }
 
     /**

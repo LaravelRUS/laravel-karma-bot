@@ -15,6 +15,7 @@ namespace Interfaces\Console\Commands;
 
 use Carbon\Carbon;
 use Core\Doctrine\SqlMemoryLogger;
+use Core\Io\Bus;
 use Core\Repositories\MessageRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,8 +83,12 @@ class StartGitterBot extends Command
             $room = $this->getRoom($client);
             $this->comment('Join to room [' . $room->url . ']');
 
-            // Gitter Io
-            $io = new Io($client, $room);
+
+            $container->singleton(Bus::class, function(Container $app) use ($room) {
+                return $app->make(Io::class, ['room' => $room]);
+            });
+
+            $io = $container->make(Bus::class);
 
             // Current authenticated user
             $user = $io->auth();

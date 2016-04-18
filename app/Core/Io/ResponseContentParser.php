@@ -42,7 +42,7 @@ trait ResponseContentParser
                 return (string)$data->toJson();
 
             case $data instanceof Arrayable:
-                return json_encode($data->toArray());
+                return implode("\n", $data->toArray());
 
             case $data instanceof \Throwable:
                 return (string)null;
@@ -51,7 +51,7 @@ trait ResponseContentParser
                 return (string)$data;
 
             case is_array($data):
-                return (string)json_encode($data);
+                return (string)implode("\n", $data);
         }
 
         return (string)$data;

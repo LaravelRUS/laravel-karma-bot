@@ -16,6 +16,7 @@ use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\User;
 use Gitter\Client;
+use Illuminate\Support\Str;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
 use Interfaces\Gitter\Factories\User as UserFactory;
 
@@ -60,8 +61,6 @@ class Io extends Bus
     public function listen()
     {
         $this->client->stream->onMessage($this->room->id, function ($data) {
-            $data->text = MarkdownPresenter::decode($data->text);
-
             $message = MessageFactory::create($data, $this->room);
             
             $this->fire(static::EVENT_NEW_MESSAGE, $message);
@@ -81,6 +80,7 @@ class Io extends Bus
     {
         if ($this->authAs === null) {
             $response = $this->client->http->getCurrentUser()->wait();
+
             $this->authAs = UserFactory::create($response[0]);
         }
 
@@ -101,7 +101,8 @@ class Io extends Bus
 
         if (trim($text)) {
             try {
-                $decorated = MarkdownPresenter::encode('<bot>' . $text . '</bot>');
+                $decorated = $this->botAnswer($text);
+
                 $this->client->http->sendMessage($this->room->id, $decorated)->wait();
             } catch (\Throwable $e) {
                 return false;
@@ -109,6 +110,29 @@ class Io extends Bus
         }
 
         return true;
+    }
+
+    /**
+     * @param string $text
+     * @return array
+     */
+    private function botAnswer(string $text)
+    {
+        $result = [];
+        $lines = explode("\n", $text);
+        $codeOpen = false;
+
+        foreach ($lines as $line) {
+            if (Str::startsWith($line, '```')) {
+                $codeOpen = !$codeOpen;
+            }
+
+            if (!$codeOpen) {
+                $result[] = '_' . $line . '_';
+            }
+        }
+
+        return implode("\n", $result);
     }
 
     /**

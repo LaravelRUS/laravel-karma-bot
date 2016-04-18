@@ -34,4 +34,6 @@ return [
      * If message like "[$queries] some words there"
      */
     'common'   => '[помог погуглить](https://www.google.ru/webhp?#newwindow=1&hl=ru&q=:query)',
+
+    'results'  => 'Можно поискать тут:'
 ];
