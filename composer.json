@@ -25,6 +25,7 @@
         "ninsuo/php-shared-memory": "2.*",
         "filp/whoops": "2.0.*",
         "php-ds/php-ds": "dev-master@dev",
+        "league/html-to-markdown": "4.2.*",
         "big-shark/sql-to-builder": "dev-master@dev"
     },
     "require-dev": {
