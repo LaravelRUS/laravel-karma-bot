@@ -77,6 +77,8 @@ return [
         'danke',
         'herzlichen dank',
         'vielen dank',
+        'dankeshön',
+        'danke shön',
 
         // Нидерландский
         'dank',
@@ -120,6 +122,7 @@ return [
         'spasib',
         'spasibo',
         'spasibki',
+        'данк',
 
         // Сомали
         'mahad',
