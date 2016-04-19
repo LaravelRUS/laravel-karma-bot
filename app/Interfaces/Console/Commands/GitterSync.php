@@ -20,6 +20,7 @@ use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
 use Interfaces\Gitter\Factories\Room as RoomFactory;
+use Interfaces\Gitter\Factories\User as UserFactory;
 use Interfaces\Gitter\Io;
 use Serafim\Evacuator\Evacuator;
 
@@ -62,17 +63,39 @@ class GitterSync extends Command
             return $app->make(Io::class, ['room' => $room]);
         });
 
+        $iterator = $client->http->getRoomUsersIterator($room->id);
+        foreach ($iterator as $data) {
+            $user = UserFactory::create($data);
+            $this->info('User @' . $user->credinals->login);
+            $em->merge($user);
+            $em->flush();
+        }
+
+
         $iterator = $this->getMessagesIterator($client, $room->id);
 
+
+        $i = 0;
+        $chunk = [];
         foreach ($iterator as $data) {
+            $i++;
             $message = MessageFactory::create($data, $room);
+
             try {
+                $chunk[] = $message;
                 $em->persist($message);
                 $em->flush();
-                $this->info('Message: ' . mb_substr($message->text->inline, 0, 64));
+
+                if ($i > 100) {
+                    foreach ($chunk as $m) {
+                        $this->comment('Message: ' . mb_substr($m->text->inline, 0, 64));
+                    }
+                    $chunk = [];
+                    $i = 0;
+                }
 
             } catch (\Throwable $e) {
-                $this->error($e->getMessage());
+
             }
         }
     }
