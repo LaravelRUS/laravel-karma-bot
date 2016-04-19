@@ -163,9 +163,15 @@ class User
         return $this;
     }
 
-    public function addAchieve(AchieveInterface $achieve)
+    /**
+     * @param AchieveInterface $achieve
+     * @return User
+     */
+    public function addAchieve(AchieveInterface $achieve) : User
     {
-        //
+        $this->achievements->add($achieve);
+
+        return $this;
     }
 
     /**
