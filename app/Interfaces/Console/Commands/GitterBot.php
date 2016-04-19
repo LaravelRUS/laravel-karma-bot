@@ -17,7 +17,6 @@ use Carbon\Carbon;
 use Core\Doctrine\SqlMemoryLogger;
 use Core\Io\Bus;
 use Doctrine\ORM\EntityManagerInterface;
-use Domains\Achieve\Achieve;
 use Domains\Achieve\AchieveInterface;
 use Domains\Bot\Middlewares;
 use Domains\Bot\ProcessId;
@@ -110,15 +109,22 @@ class GitterBot extends Command
             });
 
             $this->info(str_repeat('=', 80));
-            
+
             /** @var Dispatcher $events */
             $events = $container->make('events');
-            $events->listen(AchieveInterface::EVENT_ADD, function(AchieveInterface $achieve, User $user) use ($io, $em) {
+            $events->listen(AchieveInterface::EVENT_ADD, function (AchieveInterface $achieve, User $user) use ($io, $em) {
                 $user->addAchieve($achieve);
 
                 $em->persist($user);
 
-                $io->send('Ачивка: ' . basename(get_class($achieve)));
+                $message = trans('achieve.receiving', [
+                    'title'       => $achieve->getTitle(),
+                    'user'        => $user->credinals->login,
+                    'description' => $achieve->getDescription(),
+                    'image'       => $achieve->getImage(),
+                ]);
+
+                $io->send($message);
             });
 
 
