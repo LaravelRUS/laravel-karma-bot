@@ -26,16 +26,16 @@ return [
     */
     'rooms'       => [
         env('GITTER_DEBUG_ROOM', 'KarmaBot/KarmaTest') => ['*'],
-        'LaravelRUS/chat'              => ['common', 'karma', 'improvements', 'laravel'],
-        'LaravelRUS/laravel.ru'        => ['common', 'karma', 'improvements', 'laravel'],
+        //'LaravelRUS/chat'              => ['common', 'karma', 'improvements', 'laravel'],
+        //'LaravelRUS/laravel.ru'        => ['common', 'karma', 'improvements', 'laravel'],
         'LaravelRUS/GitterBot'         => ['common', 'karma', 'improvements', 'laravel'],
-        'DrupalRu/drupal.ru'           => ['common', 'karma', 'improvements'],
-        'dru-io/Drupal'                => ['common', 'karma', 'improvements'],
-        'yiisoft/yii2/offtopic-rus'    => ['common', 'karma', 'improvements'],
-        'yiisoft/yii2/rus'             => ['common', 'karma', 'improvements'],
-        'php-ua/symfony'               => ['common', 'karma', 'improvements'],
-        'php-ua/php'                   => ['common', 'karma', 'improvements'],
-        'vuejs-ru/Discussion'          => ['common', 'karma', 'improvements'],
+        //'DrupalRu/drupal.ru'           => ['common', 'karma', 'improvements'],
+        //'dru-io/Drupal'                => ['common', 'karma', 'improvements'],
+        //'yiisoft/yii2/offtopic-rus'    => ['common', 'karma', 'improvements'],
+        //'yiisoft/yii2/rus'             => ['common', 'karma', 'improvements'],
+        //'php-ua/symfony'               => ['common', 'karma', 'improvements'],
+        //'php-ua/php'                   => ['common', 'karma', 'improvements'],
+        //'vuejs-ru/Discussion'          => ['common', 'karma', 'improvements'],
     ],
 
 

@@ -69,16 +69,7 @@ class GitterBot extends Command
      */
     public function handle(Container $container, Client $client, EntityManagerInterface $em)
     {
-        \Registry::getConnection()
-            ->getConfiguration()
-            ->setSQLLogger(new SqlMemoryLogger());
-
-
-        $this->call('doctrine:generate:proxies');
-
-        // Create an a pid file
-        $this->pid = new ProcessId();
-        $this->pid->create();
+        $this->registerSqlLogger();
 
         try {
             // Current room
@@ -150,10 +141,17 @@ class GitterBot extends Command
         } catch (\Throwable $e) {
             throw $e;
 
-        } finally {
-
-            $this->pid->delete();
         }
+    }
+
+    /**
+     * @return void
+     */
+    private function registerSqlLogger()
+    {
+        \Registry::getConnection()
+            ->getConfiguration()
+            ->setSQLLogger(new SqlMemoryLogger());
     }
 
     /**

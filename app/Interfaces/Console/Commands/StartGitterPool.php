@@ -12,9 +12,11 @@ namespace Interfaces\Console\Commands;
 
 
 use Illuminate\Console\Command;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
+use Interfaces\Console\Commands\Support\Process;
+use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
 
 
 /**
@@ -27,8 +29,7 @@ class StartGitterPool extends Command
      *
      * @var string
      */
-    protected $signature = 'gitter:pool {action=start}';
-
+    protected $signature = 'gitter:pool';
 
     /**
      * The console command description.
@@ -37,76 +38,77 @@ class StartGitterPool extends Command
      */
     protected $description = 'Start gitter chat pool.';
 
+    /**
+     * @var array|Process[]
+     */
+    private $processes = [];
 
     /**
-     * @var Container
+     * @var bool
      */
-    protected $container;
-
-    /**
-     * @var Repository
-     */
-    protected $config;
+    private $disposed = false;
 
     /**
      * Execute the console command.
      *
      * @param Repository $config
      * @param Container $container
-     *
-     * @return mixed
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \Exception
      */
     public function handle(Repository $config, Container $container)
     {
-        $this->container = $container;
-        $this->config = $config;
+        /** @var LoopInterface $loop */
+        $loop = Factory::create();
+
+        $this->call('doctrine:generate:proxies');
+
+        $rooms = $config->get('gitter.rooms');
 
 
-        $action = $this->argument('action');
-        switch ($action) {
-            case 'start':
-            case 'restart':
-                $this->stop();
-                $this->start();
-                break;
-            case 'stop':
-                $this->stop();
-                break;
-            default:
-                throw new \InvalidArgumentException('Action ' . $action . ' not found');
+        foreach ($rooms as $room => $middlewares) {
+            $process = new Process('gitter:listen ' . $room);
+
+            $this->processes[] = $process;
+
+            $process->start();
+
+            $this->info('Starting process ' . $process->getCommand());
+        }
+
+
+        $loop->addPeriodicTimer(1, function () {
+            foreach ($this->processes as $process) {
+                if (!$process->isRunning()) {
+                    $this->error('Process ' . $process->getCommand() . ' was be shutting down. Restarting');
+                    $process->start();
+                }
+            }
+        });
+
+        register_shutdown_function([$this, 'dispose']);
+
+        $loop->run();
+    }
+
+    /**
+     * @return void
+     */
+    public function dispose()
+    {
+        if (!$this->disposed) {
+            foreach ($this->processes as $process) {
+                if ($process->isRunning()) {
+                    $process->stop();
+                }
+            }
+            $this->disposed = true;
         }
     }
 
     /**
-     * Start processes
+     * @return void
      */
-    protected function start()
+    public function __destruct()
     {
-        foreach ($this->config->get('gitter.rooms') as $key => $id) {
-            shell_exec('nohup php artisan gitter:listen ' . $key . ' > /dev/null 2>&1 &');
-
-            $this->line('Starting ' . $key . ' => ' . $id . ' listener.');
-        }
-    }
-
-    /**
-     * Stop all processes
-     */
-    protected function stop()
-    {
-        $finder = (new Finder())
-            ->files()
-            ->name('*.pid')
-            ->in(storage_path('pids'));
-
-        foreach ($finder as $file) {
-            $pid = file_get_contents($file->getRealpath());
-            shell_exec('kill ' . $pid);
-            unlink($file->getRealpath());
-        }
+        $this->dispose();
     }
 }

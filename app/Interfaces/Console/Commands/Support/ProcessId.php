@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Domains\Bot;
+namespace Interfaces\Console\Commands\Support;
 
 /**
  * Class ProcessId
- * @package Domains\Bot
+ * @package Interfaces\Console\Commands\Support
  */
 class ProcessId
 {
@@ -32,7 +32,7 @@ class ProcessId
      */
     public function __construct($pid = null)
     {
-        $this->current = (int)$pid ?: getmygid();
+        $this->current = $pid ?: getmygid();
         $this->file = $this->getPath(date('Y_m_d_tis_') . microtime(1));
     }
 
