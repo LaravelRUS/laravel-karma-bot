@@ -43,6 +43,11 @@ class SqlMemoryLogger extends Memory implements LoggerInterface
 
         $data = $this->open()->get(static::MEMORY_KEY);
         $data[] = $sql;
+
+        while (count($data) > 100) {
+            array_shift($data);
+        }
+
         $this->open()->set(static::MEMORY_KEY, $data);
 
         $this->open()->unlock();

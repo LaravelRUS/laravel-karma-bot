@@ -32,7 +32,7 @@ class Io extends Bus
     private $client;
 
     /**
-     * @var Room
+     * @var Room|null
      */
     private $room;
 
@@ -44,9 +44,9 @@ class Io extends Bus
     /**
      * Response constructor.
      * @param Client $client
-     * @param Room $room
+     * @param Room|null $room
      */
-    public function __construct(Client $client, Room $room)
+    public function __construct(Client $client, Room $room = null)
     {
         parent::__construct();
 

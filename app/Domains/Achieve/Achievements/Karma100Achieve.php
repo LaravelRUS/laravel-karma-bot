@@ -10,15 +10,45 @@
  */
 namespace Domains\Achieve\Achievements;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping as ORM;
 use Domains\Achieve\Achieve;
 use Domains\Achieve\AchieveInterface;
-use Domains\Karma;
+use Domains\Achieve\Meta\Event;
+use Domains\User\User;
 
 /**
  * Class Karma100Achieve
+ * @package Domains\Achieve\Achievements
+ * @ORM\Entity
+ * @ORM\Table(name="achievements")
+ * @ORM\AttributeOverrides({})
  */
 class Karma100Achieve extends Achieve implements AchieveInterface
 {
+    /**
+     * @param LifecycleEventArgs $event
+     * @Event(name=Core\Doctrine\Events::POST_PERSIST, entity=Karma::class)
+     * @return User|void
+     */
+    public static function onKarma(LifecycleEventArgs $event)
+    {
+        /** @var User $user */
+        $user = $event->getEntity()->target;
+
+        if ($user->karma->count() >= 100) {
+            return $user;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getType() : int
+    {
+        return static::PERMANENT;
+    }
+
     /**
      * @return string
      */

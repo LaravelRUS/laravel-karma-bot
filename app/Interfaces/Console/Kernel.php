@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         \Interfaces\Console\Commands\StartGitterPool::class,
         \Interfaces\Console\Commands\GitterBot::class,
         \Interfaces\Console\Commands\GitterSync::class,
+        \Interfaces\Console\Commands\GitterKarmaRecount::class,
     ];
 
     /**

@@ -12,16 +12,16 @@ namespace Interfaces\Console\Commands;
 
 use Core\Doctrine\SqlMemoryLogger;
 use Core\Io\Bus;
-use Core\Repositories\KarmaRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Domains\Bot\Middlewares\Karma\Validation\Validator;
 use Domains\Room\Room;
 use Gitter\Client;
+use Gitter\Support\RequestIterator;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
-use Interfaces\Gitter\Factories\Room as RoomFactory;
 use Interfaces\Gitter\Factories\Message as MessageFactory;
+use Interfaces\Gitter\Factories\Room as RoomFactory;
 use Interfaces\Gitter\Io;
+use Serafim\Evacuator\Evacuator;
 
 /**
  * Class GitterSync
@@ -41,7 +41,7 @@ class GitterSync extends Command
      *
      * @var string
      */
-    protected $description = 'Start gitter bot syncronization.';
+    protected $description = 'Start gitter bot messages (and users) syncronization.';
 
     /**
      * @param Container $container
@@ -62,10 +62,8 @@ class GitterSync extends Command
             return $app->make(Io::class, ['room' => $room]);
         });
 
+        $iterator = $this->getMessagesIterator($client, $room->id);
 
-        $validator = new Validator(new KarmaRepository($em));
-
-        $iterator = $client->http->getMessagesIterator($room->id);
         foreach ($iterator as $data) {
             $message = MessageFactory::create($data, $room);
             try {
@@ -77,6 +75,37 @@ class GitterSync extends Command
                 $this->error($e->getMessage());
             }
         }
+    }
+
+    /**
+     * @param Client $client
+     * @param string $roomId
+     * @param int $chain
+     * @return RequestIterator
+     */
+    private function getMessagesIterator(Client $client, string $roomId, int $chain = 100)
+    {
+        $lastMessageId  = null;
+
+        return new RequestIterator(function($page) use ($client, $roomId, $chain, &$lastMessageId) {
+            $query = ['limit' => $chain];
+
+            if ($lastMessageId !== null) {
+                $query['beforeId'] = $lastMessageId;
+            }
+
+            $rescuer = rescue(function() use ($client, $roomId, $query) {
+                return $client->http->getMessages($roomId, $query)->wait();
+            });
+
+            $result = $rescuer(Evacuator::INFINITY_RETRIES);
+
+            if (count($result) > 0) {
+                $lastMessageId = $result[0]->id;
+            }
+
+            return $result;
+        });
     }
 
     /**

@@ -13,10 +13,23 @@ namespace Domains\Achieve;
 /**
  * Interface AchieveInterface
  * @package Domains\Achieve
+ * @property-read string $type
+ * @property-read string $title
+ * @property-read string $description
+ * @property-read string $image
  */
 interface AchieveInterface
 {
-    const EVENT_ADD = 'on:achieve';
+    const PERMANENT  = 1;
+    const CHANGEABLE = 2;
+    const SPECIAL    = 3;
+
+    const EVENT_ADD = 'achieve:add';
+
+    /**
+     * @return int
+     */
+    public function getType() : int;
 
     /**
      * @return string

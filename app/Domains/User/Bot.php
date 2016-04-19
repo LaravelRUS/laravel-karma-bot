@@ -10,11 +10,16 @@
  */
 namespace Domains\User;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Interface Bot
  * @package Domains\User
+ * @ORM\Entity
+ * @ORM\Table(name="users")
+ * @ORM\AttributeOverrides({})
  */
-interface Bot
+class Bot extends User
 {
 
 }

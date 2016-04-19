@@ -14,6 +14,7 @@ namespace Domains\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Domains\Achieve\Achieve;
+use Domains\Achieve\AchieveInterface;
 use Domains\Karma\Karma;
 use Domains\Message\Message;
 use EndyJasmi\Cuid;
@@ -34,7 +35,7 @@ use Serafim\Properties\Getters;
  * @property-read ArrayCollection|Karma[] $thanks
  * @property-read ArrayCollection|Achieve[] $achievements
  */
-class User implements Bot
+class User
 {
     use Getters;
 
@@ -160,6 +161,11 @@ class User implements Bot
         $this->messages->add($message);
 
         return $this;
+    }
+
+    public function addAchieve(AchieveInterface $achieve)
+    {
+        //
     }
 
     /**

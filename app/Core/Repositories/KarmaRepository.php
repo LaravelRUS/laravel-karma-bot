@@ -26,7 +26,7 @@ class KarmaRepository extends Repository
 {
     /**
      * MessageRepository constructor.
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface|EntityManager $em
      */
     public function __construct(EntityManagerInterface $em)
     {
@@ -43,9 +43,17 @@ class KarmaRepository extends Repository
 
         $this->matchUser($query, $user);
 
-        return $query
-            ->add('orderBy', new OrderBy('k.created', 'desc'))
-            ->getQuery();
+        $this->orderLatest($query);
+
+        return $query->getQuery();
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     */
+    private function orderLatest(QueryBuilder $qb)
+    {
+        $qb->add('orderBy', new OrderBy('k.created', 'desc'));
     }
 
     /**

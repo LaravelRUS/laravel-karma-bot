@@ -51,7 +51,7 @@ class GitterBot extends Command
      *
      * @var string
      */
-    protected $description = 'Start gitter bot thread for target room.';
+    protected $description = 'Start gitter bot process for target room.';
 
     /**
      * @var string
@@ -66,6 +66,7 @@ class GitterBot extends Command
      * @param EntityManagerInterface $em
      * @return mixed
      * @throws \Throwable
+     * @throws \Exception
      */
     public function handle(Container $container, Client $client, EntityManagerInterface $em)
     {
@@ -112,9 +113,9 @@ class GitterBot extends Command
             
             /** @var Dispatcher $events */
             $events = $container->make('events');
-            $events->listen(AchieveInterface::EVENT_ADD, function(Achieve $achieve, User $user) use ($io, $em) {
-                $user->achievements->add($achieve);
-                
+            $events->listen(AchieveInterface::EVENT_ADD, function(AchieveInterface $achieve, User $user) use ($io, $em) {
+                $user->addAchieve($achieve);
+
                 $em->persist($user);
 
                 $io->send('Ачивка: ' . basename(get_class($achieve)));

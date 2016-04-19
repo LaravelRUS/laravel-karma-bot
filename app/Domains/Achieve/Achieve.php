@@ -21,7 +21,6 @@ use Serafim\Properties\Getters;
  * Class Achieve
  * @package Domains\Karma
  * @ORM\Entity
- * @ORM\Table(name="achievements")
  * @property-read string $id
  * @property-read string $name
  * @property-read User $user

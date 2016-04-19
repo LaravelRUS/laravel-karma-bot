@@ -10,14 +10,28 @@
  */
 namespace Domains\Achieve\Achievements;
 
+use Doctrine\ORM\Mapping as ORM;
 use Domains\Achieve\Achieve;
+use Domains\Achieve\AchieveInterface;
 use Domains\Karma;
 
 /**
  * Class DocsAchieve
+ * @package Domains\Achieve\Achievements
+ * @ORM\Entity
+ * @ORM\Table(name="achievements")
+ * @ORM\AttributeOverrides({})
  */
-class DocsAchieve extends Achieve
+class DocsAchieve extends Achieve implements AchieveInterface
 {
+    /**
+     * @return int
+     */
+    public function getType() : int
+    {
+        return static::SPECIAL;
+    }
+
     /**
      * @return string
      */
@@ -40,13 +54,5 @@ class DocsAchieve extends Achieve
     public function getImage() : string
     {
         return '//karma.laravel.su/img/achievements/docs.gif';
-    }
-
-    /**
-     * @throws \LogicException
-     */
-    public function handle()
-    {
-        // Only manual addition
     }
 }

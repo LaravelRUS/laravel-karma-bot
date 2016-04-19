@@ -10,19 +10,45 @@
  */
 namespace Domains\Achieve\Achievements;
 
-use Core\Doctrine\Events;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping as ORM;
+use Domains\Achieve\Achieve;
 use Domains\Achieve\AchieveInterface;
 use Domains\Achieve\Meta\Event;
-use Domains\Achieve\Achieve;
-use Domains\Karma\Karma;
 use Domains\User\User;
 
 /**
  * Class Karma10Achieve
+ * @package Domains\Achieve\Achievements
+ * @ORM\Entity
+ * @ORM\Table(name="achievements")
+ * @ORM\AttributeOverrides({})
  */
 class Karma10Achieve extends Achieve implements AchieveInterface
 {
+    /**
+     * @param LifecycleEventArgs $event
+     * @Event(name=Core\Doctrine\Events::POST_PERSIST, entity=Karma::class)
+     * @return User|void
+     */
+    public static function onKarma(LifecycleEventArgs $event)
+    {
+        /** @var User $user */
+        $user = $event->getEntity()->target;
+
+        if ($user->karma->count() >= 10) {
+            return $user;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getType() : int
+    {
+        return static::PERMANENT;
+    }
+
     /**
      * @return string
      */
@@ -45,25 +71,5 @@ class Karma10Achieve extends Achieve implements AchieveInterface
     public function getImage() : string
     {
         return '//karma.laravel.su/img/achievements/karma-10.gif';
-    }
-
-    /**
-     * @param LifecycleEventArgs $event
-     * @Event(name=Events::POST_PERSIST, entity=Karma::class)
-     * @return User|void
-     */
-    public static function onKarma(LifecycleEventArgs $event)
-    {
-        /** @var Karma $entity */
-        $entity = $event->getEntity();
-
-        /** @var User $user */
-        $user = $entity->target;
-
-        $count = $user->karma->count();
-
-        if ($count >= 1) {
-            return $user;
-        }
     }
 }

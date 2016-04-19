@@ -19,6 +19,7 @@ use Domains\Bot\Middlewares\Karma\Validation\Validator;
 use Domains\User\Bot;
 use Domains\Bot\Middlewares\Karma\Validation\Status;
 use Domains\User\User;
+use Interfaces\Gitter\Io;
 
 /**
  * Проверяет "спасибо" и выводит инкремент.
@@ -65,7 +66,7 @@ class KarmaCounterMiddleware implements Middleware
             }
 
             if (!$state->isNothing()) {
-                $count = '+' . $state->user->karma->count();
+                $count = $state->user->karma->count();
                 $answers[] = $state->getTranslation($count);
             }
         }
