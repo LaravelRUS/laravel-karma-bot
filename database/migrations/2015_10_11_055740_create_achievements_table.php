@@ -15,7 +15,7 @@ class CreateAchievementsTable extends Migration
         Schema::create('achievements', function(Blueprint $t){
             $t->uuid('id')->unique()->primary();
             $t->string('name')->index();
-            $t->integer('user_id')->index();
+            $t->uuid('user_id')->index();
             $t->timestamp('created_at');
         });
     }

@@ -5,6 +5,7 @@ use Domains\Message\Message;
 
 
 /**
+ * TODO
  * Class InlineDataMiddleware
  */
 class InlineDataMiddleware implements Middleware

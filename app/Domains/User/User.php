@@ -13,6 +13,7 @@ namespace Domains\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Domains\Achieve\Achieve;
 use Domains\Karma\Karma;
 use Domains\Message\Message;
 use EndyJasmi\Cuid;
@@ -31,6 +32,7 @@ use Serafim\Properties\Getters;
  * @property-read ArrayCollection|Message[] $messages
  * @property-read ArrayCollection|Karma[] $karma
  * @property-read ArrayCollection|Karma[] $thanks
+ * @property-read ArrayCollection|Achieve[] $achievements
  */
 class User implements Bot
 {
@@ -54,6 +56,7 @@ class User implements Bot
      */
     protected $credinals;
 
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -75,6 +78,12 @@ class User implements Bot
      * @ORM\Column(type="string")
      */
     protected $id;
+
+    /**
+     * @var Achieve[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity=Achieve::class, mappedBy="user", cascade={"persist"})
+     */
+    protected $achievements;
 
     /**
      * @var Message[]|ArrayCollection
@@ -126,6 +135,7 @@ class User implements Bot
         $this->thanks = new ArrayCollection();
         $this->mentions = new ArrayCollection();
         $this->mentioned = new ArrayCollection();
+        $this->achievements = new ArrayCollection();
     }
 
     /**

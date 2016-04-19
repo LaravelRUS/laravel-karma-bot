@@ -153,6 +153,7 @@ return [
         Core\Providers\EventServiceProvider::class,
         Core\Providers\RouteServiceProvider::class,
         Core\Providers\GitterClientServiceProvider::class,
+        Core\Providers\OrmServiceProvider::class,
     ],
 
     /*

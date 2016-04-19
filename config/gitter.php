@@ -60,7 +60,7 @@ return [
             Domains\Bot\Middlewares\Karma\KarmaCounterMiddleware::class,
 
             // Подписывается на создание ачивки и отправляет сообщеньку в чат
-            //Domains\Bot\AchieveSubscriber::class,
+            Domains\Bot\Middlewares\Karma\AchievementsMiddleware::class,
         ],
 
         'laravel' => [

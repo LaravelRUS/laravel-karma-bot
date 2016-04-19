@@ -17,14 +17,18 @@ use Carbon\Carbon;
 use Core\Doctrine\SqlMemoryLogger;
 use Core\Io\Bus;
 use Doctrine\ORM\EntityManagerInterface;
+use Domains\Achieve\Achieve;
+use Domains\Achieve\AchieveInterface;
 use Domains\Bot\Middlewares;
 use Domains\Bot\ProcessId;
 use Domains\Message\Message;
 use Domains\Room\Room;
 use Domains\User\Bot;
+use Domains\User\User;
 use Gitter\Client;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Foundation\Application;
 use Interfaces\Gitter\Factories\Room as RoomFactory;
 use Interfaces\Gitter\Io;
@@ -59,11 +63,11 @@ class GitterBot extends Command
      *
      * @param Container|Application $container
      * @param Client $client
-     * @param EntityManagerInterface $manager
+     * @param EntityManagerInterface $em
      * @return mixed
      * @throws \Throwable
      */
-    public function handle(Container $container, Client $client, EntityManagerInterface $manager)
+    public function handle(Container $container, Client $client, EntityManagerInterface $em)
     {
         \Registry::getConnection()
             ->getConfiguration()
@@ -105,18 +109,28 @@ class GitterBot extends Command
             });
 
             $this->info(str_repeat('=', 80));
+            
+            /** @var Dispatcher $events */
+            $events = $container->make('events');
+            $events->listen(AchieveInterface::EVENT_ADD, function(Achieve $achieve, User $user) use ($io, $em) {
+                $user->achievements->add($achieve);
+                
+                $em->persist($user);
+
+                $io->send('Ачивка: ' . basename(get_class($achieve)));
+            });
 
 
-            $io->onMessage(function (Message $message) use ($middlewares, $io, $manager, $user) {
-                $manager->persist($message);
-                $manager->flush();
+            $io->onMessage(function (Message $message) use ($middlewares, $io, $em, $user) {
+                $em->persist($message);
+                $em->flush();
 
                 $result = $middlewares->handle($message);
 
                 $io->send($result);
 
-                $manager->merge($message);
-                $manager->flush();
+                $em->merge($message);
+                $em->flush();
             });
 
 
