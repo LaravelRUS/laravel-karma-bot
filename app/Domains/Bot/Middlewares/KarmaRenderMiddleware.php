@@ -38,8 +38,12 @@ class KarmaRenderMiddleware implements MiddlewareInterface
                 $karmaMessage[] = $achievements;
             }
 
-            // Profile link
-            $karmaMessage[] = \Lang::get('karma.account', $args);
+            if (in_array($message->room_id, ['55dc21c10fc9f982beae822c', '555086c915522ed4b3e03631'], true)) {
+                // Profile link
+                $karmaMessage[] = \Lang::get('karma.account_yii', $args);
+            } else {
+                $karmaMessage[] = \Lang::get('karma.account', $args);
+            }
 
             $message->italic(implode("\n", $karmaMessage));
 
