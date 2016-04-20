@@ -12,7 +12,7 @@ namespace Domains\Bot\Middlewares\Common;
 
 use Domains\Bot\Middlewares\Middleware;
 use Domains\Message\Message;
-use Domains\User\Bot;
+use Domains\User\User;
 use Illuminate\Support\Collection;
 
 /**
@@ -22,11 +22,11 @@ use Illuminate\Support\Collection;
 class PersonalAnswersMiddleware implements Middleware
 {
     /**
-     * @param Bot $bot
+     * @param User $bot
      * @param Message $message
      * @return mixed
      */
-    public function handle(Bot $bot, Message $message)
+    public function handle(User $bot, Message $message)
     {
         $hasHello = $this->isHello($bot, $message);
 
@@ -34,17 +34,17 @@ class PersonalAnswersMiddleware implements Middleware
             $answerId = array_rand(trans('personal.hello.answers'));
 
             return trans('personal.hello.answers.' . $answerId, [
-                'user' => $message->user->credinals->login
+                'user' => $message->user->credinals->login,
             ]);
         }
     }
 
     /**
-     * @param Bot $bot
+     * @param User $bot
      * @param Message $message
      * @return mixed
      */
-    private function isHello(Bot $bot, Message $message)
+    private function isHello(User $bot, Message $message)
     {
         $words = (new Collection(trans('personal.hello.queries')))
             ->map('preg_quote')

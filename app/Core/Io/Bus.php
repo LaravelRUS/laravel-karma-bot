@@ -11,6 +11,7 @@
 namespace Core\Io;
 
 use Domains\Message\Message;
+use Domains\User\Bot;
 use Domains\User\User;
 use Illuminate\Events\Dispatcher;
 

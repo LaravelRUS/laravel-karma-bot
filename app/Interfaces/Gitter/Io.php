@@ -13,6 +13,7 @@ namespace Interfaces\Gitter;
 use Core\Io\Bus;
 use Domains\Message\Message;
 use Domains\Room\Room;
+use Domains\User\Bot;
 use Domains\User\User;
 use Gitter\Client;
 use Illuminate\Support\Str;

@@ -95,7 +95,7 @@ class GitterBot extends Command
                 $this->comment(' > ' . get_class($middleware));
             }
 
-            $container->singleton(Bot::class, function () use ($user) {
+            $container->singleton(User::class, function () use ($user) {
                 return $user;
             });
 

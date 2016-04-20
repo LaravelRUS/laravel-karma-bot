@@ -12,14 +12,11 @@ namespace Domains\Bot\Middlewares\Karma;
 
 use Core\Repositories\KarmaRepository;
 use Doctrine\ORM\EntityManager;
-use Domains\Bot\Middlewares\Middleware;
-use Domains\Karma\Karma;
-use Domains\Message\Message;
-use Domains\Bot\Middlewares\Karma\Validation\Validator;
-use Domains\User\Bot;
 use Domains\Bot\Middlewares\Karma\Validation\Status;
+use Domains\Bot\Middlewares\Karma\Validation\Validator;
+use Domains\Bot\Middlewares\Middleware;
+use Domains\Message\Message;
 use Domains\User\User;
-use Interfaces\Gitter\Io;
 
 /**
  * Проверяет "спасибо" и выводит инкремент.
@@ -43,15 +40,15 @@ class KarmaCounterMiddleware implements Middleware
     }
 
     /**
-     * @param Bot $bot
+     * @param User $bot
      * @param Message $message
      * @param EntityManager $em
      * @return mixed
      */
-    public function handle(Bot $bot, Message $message, EntityManager $em)
+    public function handle(User $bot, Message $message, EntityManager $em)
     {
         $collection = $this->validator->validate($message);
-        $answers    = [];
+        $answers = [];
 
         /** @var Status $state */
         foreach ($collection as $state) {

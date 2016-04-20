@@ -10,13 +10,11 @@
  */
 namespace Domains\Bot\Middlewares\Common;
 
-use Domains\Message\Message;
 use Domains\Bot\Middlewares\Middleware;
+use Domains\Message\Message;
 use Domains\Message\Text;
-use Domains\User\Bot;
 use Domains\User\Mention;
 use Domains\User\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -26,11 +24,11 @@ use Illuminate\Support\Str;
 class MarkdownAdviserMiddleware implements Middleware
 {
     /**
-     * @param Bot $bot
+     * @param User $bot
      * @param Message $message
      * @return Message|void
      */
-    public function handle(Bot $bot, Message $message)
+    public function handle(User $bot, Message $message)
     {
         $isMarkdownQuery = $this->hasMarkdownQuery($message);
 
@@ -45,7 +43,7 @@ class MarkdownAdviserMiddleware implements Middleware
                     : $mentionTo->target;
 
                 return trans('markdown.personal', [
-                    'user'  => $answerTo->credinals->login
+                    'user' => $answerTo->credinals->login,
                 ]);
             }
 
@@ -61,9 +59,9 @@ class MarkdownAdviserMiddleware implements Middleware
     {
         $keywords = trans('markdown.queries');
 
-        $text      = new Text($message->text);
-        $text      = (new Text($text))->toLower();
-        $text      = (new Text($text))->withoutSpecialChars;
+        $text = new Text($message->text);
+        $text = (new Text($text))->toLower();
+        $text = (new Text($text))->withoutSpecialChars;
         $sentences = (new Text($text))->sentences;
 
         foreach ($sentences as $sentence) {

@@ -109,7 +109,6 @@ class Repository
         // Ok, just run them
         foreach ($this->middlewares as $middleware) {
             $result = $this->container->call([$middleware, 'handle'], [
-                'user'     => $message->user,
                 'room'     => $this->room,
                 'message'  => $message,
                 'response' => $this->response,

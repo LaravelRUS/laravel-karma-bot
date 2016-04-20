@@ -11,6 +11,7 @@
 namespace Interfaces\Gitter\Factories;
 
 use Core\Entity\Builder;
+use Domains\User\Bot;
 use Domains\User\User as Entity;
 use Domains\User\Credinals;
 
@@ -22,7 +23,9 @@ class User
 {
     /**
      * @param \StdClass $data
+     * @param string $entity
      * @return Entity
+     * @throws \RuntimeException
      */
     public static function create($data) : Entity
     {

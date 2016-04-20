@@ -11,12 +11,12 @@
 namespace Domains\Bot\Middlewares\Common;
 
 
-use Core\Io\Bus;
 use Domains\Bot\Middlewares\Common\GoogleSearch\GoogleSearch;
 use Domains\Bot\Middlewares\Middleware;
 use Domains\Message\Message;
 use Domains\User\Bot;
 use Domains\User\Mention;
+use Domains\User\User;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 
@@ -40,11 +40,11 @@ class GoogleSearchMiddleware implements Middleware
     }
 
     /**
-     * @param Bot $bot
+     * @param User $bot
      * @param Message $message
      * @return string|void
      */
-    public function handle(Bot $bot, Message $message)
+    public function handle(User $bot, Message $message)
     {
         $query = $this->getGoogleQuery($message);
 
@@ -52,7 +52,8 @@ class GoogleSearchMiddleware implements Middleware
             $search = '';
             try {
                 $search = $this->search->searchGetMessage($query);
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+            }
 
 
             if (count($message->mentions)) {
@@ -68,13 +69,13 @@ class GoogleSearchMiddleware implements Middleware
                         'user'  => $answerTo->credinals->login,
                         'query' => urlencode($query),
                     ]),
-                    $search
+                    $search,
                 ];
             }
 
             return [
                 trans('google.common', ['query' => urlencode($query)]),
-                $search
+                $search,
             ];
         }
     }
