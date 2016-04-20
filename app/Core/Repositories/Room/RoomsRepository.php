@@ -3,23 +3,23 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
- * @date 13.04.2016 16:02
+ * @date 20.04.2016 21:01
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Core\Io;
-
-use Domains\User\User;
+namespace Core\Repositories\Room;
+use Domains\Room\Room;
 
 /**
- * Interface Authentication
- * @package Core\Io
+ * Interface RoomsRepository
+ * @package Core\Repositories\Room
  */
-interface Authentication
+interface RoomsRepository
 {
     /**
-     * @return User
+     * @param $id
+     * @return Room|null
      */
-    public function auth() : User;
+    public function find($id);
 }

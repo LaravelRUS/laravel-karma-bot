@@ -11,62 +11,24 @@
  */
 namespace Domains\Achieve;
 
-use Doctrine\ORM\Mapping as ORM;
-use Domains\User\User;
-use EndyJasmi\Cuid;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Serafim\Properties\Getters;
+use Core\Mappers\Achieve\AchieveMapper;
 
 /**
  * Class Achieve
  * @package Domains\Karma
- * @ORM\Entity
- * @property-read string $id
- * @property-read string $name
- * @property-read User $user
- * @property-read \DateTime $created
  */
-class Achieve
+class Achieve extends AchieveMapper
 {
-    use Getters;
-
-    /**
-     * @var string
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(type="string")
-     */
-    protected $id;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    protected $name;
-
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="achievements", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id")
-     */
-    protected $user;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $created;
-
     /**
      * Achieve constructor.
-     * @param User $user
+     * @param array $attributes
      */
-    public function __construct(User $user)
+    public function __construct(array $attributes)
     {
-        $this->id = Cuid::cuid();
-        $this->name = basename(static::class);
-        $this->user = $user;
-        $this->created = new \DateTime();
+        parent::__construct($attributes);
+
+        if (!$attributes['name']) {
+            $attributes['name'] = basename(static::class);
+        }
     }
 }

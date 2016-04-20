@@ -3,7 +3,10 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMentionsTable extends Migration
+/**
+ * Class CreateServicesTable
+ */
+class CreateServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +15,10 @@ class CreateMentionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mentions', function(Blueprint $t) {
+        Schema::create('services', function(Blueprint $t) {
             $t->uuid('id')->unique()->primary();
-            $t->uuid('user_id')->index();
-            $t->uuid('user_target_id')->index();
-            $t->uuid('message_id')->index();
-
-            $t->unique(['user_id', 'user_target_id', 'message_id']);
+            $t->string('service_id')->index();
+            $t->string('name')->nullable();
         });
     }
 
@@ -29,6 +29,6 @@ class CreateMentionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('mentions');
+        Schema::drop('services');
     }
 }

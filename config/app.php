@@ -141,19 +141,17 @@ return [
          * Vendor Service Providers
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         GrahamCampbell\GitHub\GitHubServiceProvider::class,
-        LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
         Core\Providers\AppServiceProvider::class,
-        Core\Providers\AuthServiceProvider::class,
-        Core\Providers\EventServiceProvider::class,
         Core\Providers\RouteServiceProvider::class,
         Core\Providers\GitterClientServiceProvider::class,
-        Core\Providers\OrmServiceProvider::class,
+        Core\Providers\AnnotationsServiceProvider::class,
+        Core\Io\IoServiceProvider::class,
+        Core\Repositories\RepositoriesServiceProvider::class,
     ],
 
     /*
@@ -202,9 +200,6 @@ return [
         'URL'           => Illuminate\Support\Facades\URL::class,
         'Validator'     => Illuminate\Support\Facades\Validator::class,
         'View'          => Illuminate\Support\Facades\View::class,
-        'EntityManager' => LaravelDoctrine\ORM\Facades\EntityManager::class,
-        'Registry'      => LaravelDoctrine\ORM\Facades\Registry::class,
-        'Doctrine'      => LaravelDoctrine\ORM\Facades\Doctrine::class,
         'GitHub'        => GrahamCampbell\GitHub\Facades\GitHub::class,
     ],
 

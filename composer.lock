@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94bcd1f14519ed1c27af0ca00ef5233d",
-    "content-hash": "4a556dde7a89fa584ea391f97ddf4802",
+    "hash": "22c06b087d92f502bd0eda61208009a9",
+    "content-hash": "e15ad0f848566f64e9cee635a9ca4f95",
     "packages": [
         {
             "name": "amphp/amp",
@@ -353,6 +353,108 @@
             "time": "2016-04-06 16:38:57"
         },
         {
+            "name": "analogue/orm",
+            "version": "v5.1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/analogueorm/analogue.git",
+                "reference": "5fd45e327f1576356a29dec3ac046e6b3c1d9430"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/analogueorm/analogue/zipball/5fd45e327f1576356a29dec3ac046e6b3c1d9430",
+                "reference": "5fd45e327f1576356a29dec3ac046e6b3c1d9430",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.0",
+                "illuminate/events": "~5.0",
+                "illuminate/pagination": "~5.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "analogue/laravel-auth": "Analogue's authentication driver for Laravel."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Analogue\\ORM\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rémi Collin",
+                    "email": "remi@plateau.io"
+                }
+            ],
+            "description": "An intuitive Data Mapper ORM for PHP and Laravel",
+            "homepage": "http://github.com/analogueorm/analogue",
+            "keywords": [
+                "datamapper",
+                "entity",
+                "laravel",
+                "mapper",
+                "orm",
+                "repository"
+            ],
+            "time": "2015-11-18 08:35:16"
+        },
+        {
+            "name": "analogue/support",
+            "version": "v5.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/analogueorm/support.git",
+                "reference": "bfc58097f353ba324e0bd96ee4299aa1428ff0b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/analogueorm/support/zipball/bfc58097f353ba324e0bd96ee4299aa1428ff0b9",
+                "reference": "bfc58097f353ba324e0bd96ee4299aa1428ff0b9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Analogue\\Support\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rémi Collin",
+                    "email": "remi@plateau.io"
+                }
+            ],
+            "description": "Common shared classes for Analogue",
+            "homepage": "http://github.com/analogueorm/support",
+            "keywords": [
+                "analogue",
+                "datamapper",
+                "entity",
+                "laravel",
+                "mapper"
+            ],
+            "time": "2015-09-08 13:03:06"
+        },
+        {
             "name": "barryvdh/laravel-ide-helper",
             "version": "v2.1.4",
             "source": {
@@ -414,46 +516,6 @@
                 "sublime"
             ],
             "time": "2016-03-03 08:45:00"
-        },
-        {
-            "name": "behat/transliterator",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Behat/Transliterator.git",
-                "reference": "868e05be3a9f25ba6424c2dd4849567f50715003"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/868e05be3a9f25ba6424c2dd4849567f50715003",
-                "reference": "868e05be3a9f25ba6424c2dd4849567f50715003",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Behat\\Transliterator": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Artistic-1.0"
-            ],
-            "description": "String transliterator",
-            "keywords": [
-                "i18n",
-                "slug",
-                "transliterator"
-            ],
-            "time": "2015-09-28 16:26:35"
         },
         {
             "name": "big-shark/sql-to-builder",
@@ -1344,55 +1406,6 @@
             "time": "2016-01-05 21:34:58"
         },
         {
-            "name": "endyjasmi/cuid",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/endyjasmi/cuid.git",
-                "reference": "c410a702d7089cdd2e96f416ffc9bfb3f7130b88"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/endyjasmi/cuid/zipball/c410a702d7089cdd2e96f416ffc9bfb3f7130b88",
-                "reference": "c410a702d7089cdd2e96f416ffc9bfb3f7130b88",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">= 5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "satooshi/php-coveralls": "0.*",
-                "squizlabs/php_codesniffer": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "EndyJasmi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Endy Jasmi",
-                    "email": "endyjasmi@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Cuid php port",
-            "keywords": [
-                "UID",
-                "cuid",
-                "guid",
-                "id",
-                "uuid"
-            ],
-            "time": "2014-11-08 02:31:32"
-        },
-        {
             "name": "evenement/evenement",
             "version": "v2.0.0",
             "source": {
@@ -1496,85 +1509,6 @@
                 "zf2"
             ],
             "time": "2016-01-06 17:51:21"
-        },
-        {
-            "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "5f4b6c848f0d6834a434a62a09a0935d147082e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/5f4b6c848f0d6834a434a62a09a0935d147082e1",
-                "reference": "5f4b6c848f0d6834a434a62a09a0935d147082e1",
-                "shasum": ""
-            },
-            "require": {
-                "behat/transliterator": "~1.0",
-                "doctrine/common": "~2.4",
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "doctrine/common": ">=2.5.0",
-                "doctrine/mongodb-odm": ">=1.0.2",
-                "doctrine/orm": ">=2.5.0",
-                "phpunit/phpunit": "~4.4",
-                "phpunit/phpunit-mock-objects": "~2.3",
-                "symfony/yaml": "~2.6"
-            },
-            "suggest": {
-                "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
-                "doctrine/orm": "to use the extensions with the ORM"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Gedmo\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Buchmann",
-                    "email": "david@liip.ch"
-                },
-                {
-                    "name": "Gediminas Morkevicius",
-                    "email": "gediminas.morkevicius@gmail.com"
-                },
-                {
-                    "name": "Gustavo Falco",
-                    "email": "comfortablynumb84@gmail.com"
-                }
-            ],
-            "description": "Doctrine2 behavioral extensions",
-            "homepage": "http://gediminasm.org/",
-            "keywords": [
-                "Blameable",
-                "behaviors",
-                "doctrine2",
-                "extensions",
-                "gedmo",
-                "loggable",
-                "nestedset",
-                "sluggable",
-                "sortable",
-                "timestampable",
-                "translatable",
-                "tree",
-                "uploadable"
-            ],
-            "time": "2016-02-18 15:33:43"
         },
         {
             "name": "graham-campbell/github",
@@ -2157,67 +2091,6 @@
             "time": "2016-02-24 05:52:33"
         },
         {
-            "name": "laravel-doctrine/extensions",
-            "version": "1.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel-doctrine/extensions.git",
-                "reference": "0ae8f6ac8617004ffada469af8d05a5fc87f1d1f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel-doctrine/extensions/zipball/0ae8f6ac8617004ffada469af8d05a5fc87f1d1f",
-                "reference": "0ae8f6ac8617004ffada469af8d05a5fc87f1d1f",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/auth": "5.1.*|5.2.*",
-                "illuminate/config": "5.1.*|5.2.*",
-                "illuminate/contracts": "5.1.*|5.2.*",
-                "illuminate/http": "5.1.*|5.2.*",
-                "illuminate/support": "5.1.*|5.2.*",
-                "laravel-doctrine/orm": "1.0.*|1.1.*",
-                "php": ">=5.5.9"
-            },
-            "require-dev": {
-                "beberlei/doctrineextensions": "^1.0",
-                "gedmo/doctrine-extensions": "^2.4",
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0"
-            },
-            "suggest": {
-                "beberlei/DoctrineExtensions": "Query/Type Doctrine2 extensions (^1.0)",
-                "gedmo/doctrine-extensions": "Behavioral Doctrine2 extensions (^2.4)"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "LaravelDoctrine\\Extensions\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Patrick Brouwers",
-                    "email": "patrick@maatwebsite.nl"
-                }
-            ],
-            "description": "Doctrine extensions for Doctrine 2 and Laravel 5",
-            "keywords": [
-                "beberlei",
-                "data mapper",
-                "database",
-                "doctrine",
-                "gedmo",
-                "laravel",
-                "orm"
-            ],
-            "time": "2016-02-26 18:35:02"
-        },
-        {
             "name": "laravel-doctrine/orm",
             "version": "1.0.19",
             "source": {
@@ -2734,16 +2607,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v2.0.1",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "ce5be709d59b32dd8a88c80259028759991a4206"
+                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ce5be709d59b32dd8a88c80259028759991a4206",
-                "reference": "ce5be709d59b32dd8a88c80259028759991a4206",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
+                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
                 "shasum": ""
             },
             "require": {
@@ -2759,7 +2632,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
@@ -2781,7 +2654,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-02-28 19:48:28"
+            "time": "2016-04-19 13:41:41"
         },
         {
             "name": "ninsuo/php-shared-memory",
@@ -3165,6 +3038,84 @@
                 "shell"
             ],
             "time": "2016-03-09 05:03:14"
+        },
+        {
+            "name": "ramsey/uuid",
+            "version": "3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramsey/uuid.git",
+                "reference": "f44f53e5ceb7474a83b6e11e6623ff9d6f6da598"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/f44f53e5ceb7474a83b6e11e6623ff9d6f6da598",
+                "reference": "f44f53e5ceb7474a83b6e11e6623ff9d6f6da598",
+                "shasum": ""
+            },
+            "require": {
+                "paragonie/random_compat": "^1.0|^2.0",
+                "php": ">=5.4"
+            },
+            "replace": {
+                "rhumsaa/uuid": "self.version"
+            },
+            "require-dev": {
+                "apigen/apigen": "^4.1",
+                "ircmaxell/random-lib": "^1.1",
+                "jakub-onderka/php-parallel-lint": "^0.9.0",
+                "mockery/mockery": "^0.9.4",
+                "moontoast/math": "^1.1",
+                "phpunit/phpunit": "^4.7|^5.0",
+                "satooshi/php-coveralls": "^0.6.1",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides the PECL libsodium extension for use with the SodiumRandomGenerator",
+                "ext-uuid": "Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator",
+                "ircmaxell/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
+                "moontoast/math": "Provides support for converting UUID to 128-bit integer (in string form).",
+                "ramsey/uuid-console": "A console application for generating UUIDs with ramsey/uuid",
+                "ramsey/uuid-doctrine": "Allows the use of Ramsey\\Uuid\\Uuid as Doctrine field type."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ramsey\\Uuid\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marijn Huizendveld",
+                    "email": "marijn.huizendveld@gmail.com"
+                },
+                {
+                    "name": "Thibaud Fabre",
+                    "email": "thibaud@aztech.io"
+                },
+                {
+                    "name": "Ben Ramsey",
+                    "email": "ben@benramsey.com",
+                    "homepage": "https://benramsey.com"
+                }
+            ],
+            "description": "Formerly rhumsaa/uuid. A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
+            "homepage": "https://github.com/ramsey/uuid",
+            "keywords": [
+                "guid",
+                "identifier",
+                "uuid"
+            ],
+            "time": "2016-03-22 18:40:53"
         },
         {
             "name": "react/cache",

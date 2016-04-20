@@ -24,47 +24,15 @@ use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class OrmServiceProvider
+ * Class AnnotationsServiceProvider
  * @package Core\Providers
  */
-class OrmServiceProvider extends ServiceProvider
+class AnnotationsServiceProvider extends ServiceProvider
 {
     /**
      * @throws \InvalidArgumentException
      */
     public function register()
-    {
-        $this->registerEvents();
-        $this->registerAnnotations();
-    }
-
-    /**
-     * @return void
-     */
-    private function registerEvents()
-    {
-        $this->app->singleton(Events::class, function(Container $app) {
-            /** @var EntityManager $em */
-            $em = $app->make(EntityManager::class);
-
-            $events = (new \ReflectionClass(DeclaredEvents::class))->getConstants();
-
-            $bridge = new EventBridge();
-
-            $em->getEventManager()->addEventListener($events, $bridge);
-
-            return $bridge;
-        });
-
-        $this->app->alias(Events::class, EventBridge::class);
-    }
-
-
-    /**
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    private function registerAnnotations()
     {
         AnnotationRegistry::registerLoader(function(string $class) {
             return class_exists($class);

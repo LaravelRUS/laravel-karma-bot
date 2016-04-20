@@ -16,11 +16,13 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \Interfaces\Console\Commands\SqlLogger::class,
-        \Interfaces\Console\Commands\StartGitterPool::class,
-        \Interfaces\Console\Commands\GitterBot::class,
-        \Interfaces\Console\Commands\GitterSync::class,
-        \Interfaces\Console\Commands\GitterKarmaRecount::class,
+        \Interfaces\Console\Commands\Connections\Gitter::class,
+
+        //\Interfaces\Console\Commands\SqlLogger::class,
+        //\Interfaces\Console\Commands\StartGitterPool::class,
+        //\Interfaces\Console\Commands\GitterBot::class,
+        //\Interfaces\Console\Commands\GitterSync::class,
+        //\Interfaces\Console\Commands\GitterKarmaRecount::class,
     ];
 
     /**

@@ -9,14 +9,61 @@
  * file that was distributed with this source code.
  */
 namespace Core\Repositories;
-
-use Doctrine\ORM\EntityRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Repository
  * @package Core\Repositories
  */
-abstract class Repository extends EntityRepository
+abstract class Repository
 {
+    /**
+     * @var Model|Builder
+     */
+    private $entity;
 
+    /**
+     * Repository constructor.
+     * @param string $entity
+     */
+    public function __construct(string $entity)
+    {
+        $this->setEntity($entity);
+    }
+
+    /**
+     * @param string $entity
+     * @return Repository
+     */
+    protected function setEntity(string $entity) : Repository
+    {
+        $this->entity = new $entity;
+        return $this;
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getEntity() : Model
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|Model
+     */
+    public function query()
+    {
+        return $this->entity->newQuery();
+    }
+
+    /**
+     * @param $id
+     * @return Model
+     */
+    public function find($id)
+    {
+        return $this->entity->find($id);
+    }
 }
