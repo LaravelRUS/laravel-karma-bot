@@ -49,9 +49,12 @@ class Entity implements EntityInterface
      */
     public function listen(string $event, \Closure $callback) : EntityInterface
     {
+        // TODO Fix redis listener
         $this->database->subscribe($this->channel($event), function($data) use ($callback) {
             $callback(unserialize($data));
         });
+
+        return $this;
     }
 
     /**
@@ -62,6 +65,8 @@ class Entity implements EntityInterface
     public function fire(string $event, Model $entity) : EntityInterface
     {
         $this->publish($this->channel($event), serialize($entity));
+
+        return $this;
     }
 
     /**

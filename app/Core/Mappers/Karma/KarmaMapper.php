@@ -38,9 +38,26 @@ class KarmaMapper extends Model
     public $timestamps = ['created_at'];
 
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * @var string
      */
     protected $table = 'karma';
+
+    /**
+     * @var array
+     */
+    protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'string',
+    ];
 
     /**
      * @return void

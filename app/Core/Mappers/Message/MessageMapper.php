@@ -29,7 +29,7 @@ use Illuminate\Support\Collection;
  * @property-read Text $text
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
- * 
+ *
  * @property-read User $user
  * @property-read Room $room
  * @property-read Mention[]|Collection $mentions
@@ -37,6 +37,11 @@ use Illuminate\Support\Collection;
  */
 class MessageMapper extends Model
 {
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
+
     /**
      * @var string
      */
@@ -46,6 +51,14 @@ class MessageMapper extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id'   => 'string',
+        'text' => 'string',
+    ];
 
     /**
      * @return void

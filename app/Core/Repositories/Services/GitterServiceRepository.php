@@ -17,8 +17,7 @@ use Domains\Services\Service;
  * Class GitterServiceRepository
  * @package Core\Repositories\Services
  */
-class GitterServiceRepository extends Repository implements
-    ServiceRepository
+class GitterServiceRepository extends EloquentServiceRepository
 {
     /**
      * GitterServiceRepository constructor.
@@ -26,8 +25,6 @@ class GitterServiceRepository extends Repository implements
     public function __construct()
     {
         parent::__construct(Gitter::class);
-
-        $this->setEntity(Gitter::class);
     }
 
     /**
@@ -36,9 +33,8 @@ class GitterServiceRepository extends Repository implements
      */
     public function findByServiceId(string $serviceId)
     {
-        return $this->query()
+        return $this->queryByServiceId($serviceId)
             ->where('name', Gitter::getName())
-            ->where('service_id', $serviceId)
             ->first();
     }
 
@@ -48,9 +44,8 @@ class GitterServiceRepository extends Repository implements
      */
     public function findByInternalId(string $id)
     {
-        return $this->query()
+        return $this->queryByInternalId($id)
             ->where('name', Gitter::getName())
-            ->where('id', $id)
             ->first();
     }
 }

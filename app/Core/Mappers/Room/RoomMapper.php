@@ -35,6 +35,11 @@ class RoomMapper extends Model
     public $timestamps = false;
 
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * @var string
      */
     protected $table = 'rooms';
@@ -43,6 +48,15 @@ class RoomMapper extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id'    => 'string',
+        'url'   => 'string',
+        'title' => 'string',
+    ];
 
     /**
      * @return void

@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MentionMapper
  * @package Core\Mappers\User
-
  * @property-read string $id
  *
  * @property-read User $creator
@@ -28,19 +27,32 @@ use Illuminate\Database\Eloquent\Model;
 class MentionMapper extends Model
 {
     /**
-     * @var string
-     */
-    protected $table = 'mentions';
-
-    /**
      * @var bool
      */
     public $timestamps = false;
 
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * @var string
+     */
+    protected $table = 'mentions';
+
+    /**
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'string',
+    ];
+
 
     /**
      * @return void

@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace Core\Io;
+
 use Domains\User\User;
 
 /**

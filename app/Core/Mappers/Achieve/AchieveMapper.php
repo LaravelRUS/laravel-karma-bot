@@ -28,6 +28,16 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 class AchieveMapper extends Model
 {
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * @var array
+     */
+    public $timestamps = ['created_at'];
+
+    /**
      * @var string
      */
     protected $table = 'achievements';
@@ -35,7 +45,15 @@ class AchieveMapper extends Model
     /**
      * @var array
      */
-    public $timestamps = [ 'created_at' ];
+    protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id'   => 'string',
+        'name' => 'string',
+    ];
 
     /**
      * @return void

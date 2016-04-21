@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 namespace Core\Repositories;
+use Ds\Map;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class Repository
 {
+    /**
+     * @var Map
+     */
+    protected static $identity = null;
+
     /**
      * @var Model|Builder
      */
@@ -29,7 +35,44 @@ abstract class Repository
      */
     public function __construct(string $entity)
     {
+        if (static::$identity === null) {
+            static::$identity = new Map;
+        }
+
         $this->setEntity($entity);
+    }
+
+    /**
+     * @return IdentityMap
+     */
+    private function getIdentityMap() : IdentityMap
+    {
+        $key = get_class($this->entity);
+
+        if (!static::$identity->hasKey($key)) {
+            static::$identity->put($key, new IdentityMap());
+        }
+
+        return static::$identity->get($key);
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @throws \OutOfBoundsException
+     */
+    protected function store($key, $value)
+    {
+        $this->getIdentityMap()->store($key, $value);
+    }
+
+    /**
+     * @param $key
+     * @return mixed|null
+     */
+    protected function get($key)
+    {
+        return $this->getIdentityMap()->get($key);
     }
 
     /**

@@ -10,8 +10,6 @@
  */
 namespace Core\Mappers\Services;
 
-use Core\Observers\IdObserver;
-use Domains\Services\Service;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,17 +22,32 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceMapper extends Model
 {
     /**
-     * @var string
-     */
-    protected $table = 'services';
-
-    /**
      * @var bool
      */
     public $timestamps = false;
 
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * @var string
+     */
+    protected $table = 'services';
+
+    /**
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id'         => 'string',
+        'service_id' => 'string',
+        'name'       => 'string',
+    ];
+
 }

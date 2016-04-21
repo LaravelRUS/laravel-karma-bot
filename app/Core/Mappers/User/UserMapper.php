@@ -43,6 +43,11 @@ use Illuminate\Support\Collection;
 class UserMapper extends Model
 {
     /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * @var string
      */
     protected $table = 'users';
@@ -51,6 +56,19 @@ class UserMapper extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id'             => 'string',
+        'name'           => 'string',
+        'login'          => 'string',
+        'avatar'         => 'string',
+        'email'          => 'string',
+        'password'       => 'string',
+        'remember_token' => 'string',
+    ];
 
     /**
      * @return void

@@ -57,6 +57,7 @@ class RoomFactory extends ServiceFactory
 
         if ($sync) {
             $url = $data->uri ?? substr($data->url, 1);
+
             $room->setRawAttributes(array_merge($room->getAttributes(), [
                 'title' => $data->topic ?: $url,
                 'url'   => $url,

@@ -55,7 +55,7 @@ class MessageFactory extends ServiceFactory
     public function fromMessage($data, string $roomId, $sync = false) : Message
     {
         $service = $this->fromServiceId($data->id);
-
+        
         /** @var Message $message */
         $message = $this->messages->find($service->id);
 

@@ -12,17 +12,20 @@ namespace Interfaces\Gitter;
 
 
 use Core\Io\IoInterface;
-use Core\Repositories\Room\RoomsRepository;
 use Core\Repositories\Services\GitterServiceRepository;
+use Domains\Karma\Karma;
+use Domains\Message\Message;
 use Domains\Room\Room;
+use Domains\User\Mention;
+use Domains\User\User;
 use Ds\Map;
 use Gitter\Client;
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Interfaces\Gitter\Factories\MessageFactory;
 use Interfaces\Gitter\Factories\RoomFactory;
-use Interfaces\Gitter\Factories\ServiceFactory;
 use Interfaces\Gitter\Factories\UserFactory;
 use React\EventLoop\LoopInterface;
 use Serafim\Evacuator\Evacuator;
@@ -33,6 +36,17 @@ use Serafim\Evacuator\Evacuator;
  */
 class GitterIo
 {
+    /**
+     * @var array
+     */
+    private $listenModels = [
+        Karma::class,
+        Message::class,
+        Room::class,
+        Mention::class,
+        User::class,
+    ];
+
     /**
      * @var Client
      */
@@ -78,16 +92,25 @@ class GitterIo
      */
     public function __construct(Container $app, Client $client, IoInterface $io)
     {
-        $this->rooms    = new Map;
-        $this->client   = $client;
-        $this->io       = $io;
+        $this->rooms = new Map;
+        $this->client = $client;
+        $this->io = $io;
 
         $this->services = $app->make(GitterServiceRepository::class);
-        $this->rooms    = $app->make(RoomFactory::class);
-        $this->users    = $app->make(UserFactory::class);
+        $this->rooms = $app->make(RoomFactory::class);
+        $this->users = $app->make(UserFactory::class);
         $this->messages = $app->make(MessageFactory::class, [
             'factory' => $this->users,
         ]);
+
+
+        foreach ($this->listenModels as $model) {
+            $model::created(function(Model $data) use ($io, $model) {
+                $io->entity($model)->fire('created', $data);
+            });
+        }
+
+
 
         $this->auth();
     }
@@ -109,6 +132,7 @@ class GitterIo
 
     /**
      * @return $this|GitterIo
+     * @throws \LogicException
      */
     public function listen() : GitterIo
     {
@@ -148,7 +172,8 @@ class GitterIo
     }
 
     /**
-     * @param array $rooms
+     * @param Collection $rooms
+     * @throws \LogicException
      */
     private function listenStreams(Collection $rooms)
     {
@@ -157,7 +182,7 @@ class GitterIo
             $service = $this->services->findByInternalId($room->id);
 
             $this->client->stream->onMessage($service->service_id, function ($data) use ($service) {
-                $message = $this->messages->fromMessage($data, $service->service_id);
+                $this->messages->fromMessage($data, $service->service_id);
             });
         }
     }

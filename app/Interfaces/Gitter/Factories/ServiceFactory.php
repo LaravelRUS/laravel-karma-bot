@@ -28,17 +28,11 @@ class ServiceFactory
     private $services;
 
     /**
-     * @var Map
-     */
-    private $identityMap;
-
-    /**
      * Factory constructor.
      * @param GitterServiceRepository $services
      */
     public function __construct(GitterServiceRepository $services)
     {
-        $this->identityMap = new Map();
         $this->services    = $services;
     }
 
@@ -48,21 +42,6 @@ class ServiceFactory
      */
     public function fromServiceId(string $serviceId) : Service
     {
-        if ($this->identityMap->hasKey($serviceId)) {
-            return $serviceId;
-        }
-
-        $service = $this->services->findByServiceId($serviceId);
-
-        if ($service === null) {
-            $service = Gitter::create([
-                'id'         => Uuid::uuid3(md5($serviceId), $serviceId)->toString(),
-                'service_id' => $serviceId,
-            ]);
-
-            $this->identityMap->put($serviceId, $service);
-        }
-
-        return $service;
+        return $this->services->findOrCreateByServiceId($serviceId);
     }
 }
