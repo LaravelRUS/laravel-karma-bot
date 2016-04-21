@@ -13,7 +13,7 @@ namespace Interfaces\Http\Controllers\Api;
 use Domains\Achieve;
 use Illuminate\Support\Collection;
 use Interfaces\Http\Controllers\Controller;
-use Core\Subscribers\AchieveSubscriber;
+use Domains\Bot\AchieveSubscriber;
 use Interfaces\Gitter\Achieve\AbstractAchieve;
 
 /**
