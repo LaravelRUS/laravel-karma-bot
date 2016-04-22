@@ -10,7 +10,8 @@
  */
 namespace Core\Io;
 
-use Domains\User\User;
+use Core\Io\Commands\Command;
+use React\Promise\Promise;
 
 /**
  * Interface IoInterface
@@ -25,16 +26,16 @@ interface IoInterface
     public function entity(string $name) : EntityInterface;
 
     /**
-     * @param \Closure $callback
-     * @return IoInterface
+     * @param Command $command
+     * @return Promise
      */
-    public function onAuth(\Closure $callback) : IoInterface;
+    public function command(Command $command) : Promise;
 
     /**
-     * @param User $user
-     * @return IoInterface
+     * @param string $command
+     * @return Promise
      */
-    public function auth(User $user) : IoInterface;
+    public function onCommand(string $command) : Promise;
 
     /**
      * @return void

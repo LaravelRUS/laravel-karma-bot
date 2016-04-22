@@ -10,11 +10,12 @@
  */
 namespace Core\Io\Redis;
 
+use Core\Io\Commands\Command;
 use Core\Io\EntityInterface;
 use Core\Io\IoInterface;
-use Domains\User\User;
 use Illuminate\Redis\Database;
 use React\EventLoop\LoopInterface;
+use React\Promise\Promise;
 
 /**
  * Class Io
@@ -62,25 +63,35 @@ class Io implements IoInterface
     }
 
     /**
-     * @param \Closure $callback
-     * @return $this|IoInterface
+     * @param Command $command
+     * @return Promise
      */
-    public function onAuth(\Closure $callback) : IoInterface
+    public function command(Command $command) : Promise
     {
-        $this->observer->listen('auth', $callback);
+        return new Promise(function ($resolver) use ($command) {
+            $name = get_class($command);
 
-        return $this;
+            $this->observer->listen($name, function ($data) use ($name, $resolver) {
+                $resolver($data);
+            });
+
+            $this->observer->fire('wants:' . $name, $command);
+        });
     }
 
     /**
-     * @param User $user
-     * @return IoInterface
+     * @param string $command Command class name
+     * @return Promise
      */
-    public function auth(User $user) : IoInterface
+    public function onCommand(string $command) : Promise
     {
-        $this->observer->fire('auth', $user);
+        return new Promise(function ($resolver) use ($command) {
+            $this->observer->listen('wants:' . $command, function ($data) use ($command, $resolver) {
+                $result = $resolver($data);
 
-        return $this;
+                $this->observer->fire($command, $result);
+            });
+        });
     }
 
     /**

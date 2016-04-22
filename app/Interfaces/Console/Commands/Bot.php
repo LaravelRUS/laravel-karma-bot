@@ -15,6 +15,7 @@ namespace Interfaces\Console\Commands;
 
 use Carbon\Carbon;
 use Core\Doctrine\SqlMemoryLogger;
+use Core\Io\Commands\Auth;
 use Core\Io\IoInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Domains\Achieve\AchieveInterface;
@@ -60,8 +61,8 @@ class Bot extends Command
      */
     public function handle(Container $container, IoInterface $io)
     {
-        $io->onAuth(function($data) {
-            var_dump('AUTH', $data);
+        $io->command(new Auth())->then(function($user) {
+            var_dump('Auth::', $user);
         });
 
         $io->entity(User::class)->listen('created', function($data) {

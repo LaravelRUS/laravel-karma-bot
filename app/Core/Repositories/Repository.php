@@ -24,7 +24,7 @@ abstract class Repository
     /**
      * @var Map
      */
-    protected static $identity = null;
+    private static $identity = null;
 
     /**
      * @var array|Set|Model[]
@@ -42,12 +42,12 @@ abstract class Repository
      */
     public function __construct(string $entity)
     {
-        if (static::$identity === null) {
-            static::$identity = new Map;
+        if (self::$identity === null) {
+            self::$identity = new Map;
         }
 
-        if (static::$uow === null) {
-            static::$uow = new Set;
+        if (self::$uow === null) {
+            self::$uow = new Set;
         }
 
         $this->setEntity($entity);
@@ -77,7 +77,7 @@ abstract class Repository
      */
     public function store(Model $model) : Repository
     {
-        static::$uow->add($model);
+        self::$uow->add($model);
 
         return $this;
     }
@@ -89,13 +89,13 @@ abstract class Repository
     public function flush() : bool
     {
         return $this->transaction(function () {
-            $uow = static::$uow;
+            $uow = self::$uow;
 
             foreach ($uow as $model) {
                 $model->save();
             }
 
-            static::$uow->clear();
+            self::$uow->clear();
 
             return true;
         });
@@ -124,11 +124,11 @@ abstract class Repository
     {
         $key = get_class($this->entity);
 
-        if (!static::$identity->hasKey($key)) {
-            static::$identity->put($key, new IdentityMap());
+        if (!self::$identity->hasKey($key)) {
+            self::$identity->put($key, new IdentityMap());
         }
 
-        return static::$identity->get($key);
+        return self::$identity->get($key);
     }
 
     /**

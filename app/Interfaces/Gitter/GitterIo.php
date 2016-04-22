@@ -11,6 +11,7 @@
 namespace Interfaces\Gitter;
 
 
+use Core\Io\Commands\Auth;
 use Core\Io\IoInterface;
 use Core\Repositories\Services\GitterServiceRepository;
 use Domains\Karma\Karma;
@@ -27,7 +28,6 @@ use Illuminate\Support\Str;
 use Interfaces\Gitter\Factories\MessageFactory;
 use Interfaces\Gitter\Factories\RoomFactory;
 use Interfaces\Gitter\Factories\UserFactory;
-use React\EventLoop\LoopInterface;
 use Serafim\Evacuator\Evacuator;
 
 /**
@@ -46,6 +46,11 @@ class GitterIo
         Mention::class,
         User::class,
     ];
+
+    /**
+     * @var User|null
+     */
+    private $authUser = null;
 
     /**
      * @var Client
@@ -99,33 +104,32 @@ class GitterIo
         $this->services = $app->make(GitterServiceRepository::class);
         $this->rooms = $app->make(RoomFactory::class);
         $this->users = $app->make(UserFactory::class);
-        $this->messages = $app->make(MessageFactory::class, [
-            'factory' => $this->users,
-        ]);
-
+        $this->messages = $app->make(MessageFactory::class, ['factory' => $this->users]);
 
         foreach ($this->listenModels as $model) {
-            $model::created(function(Model $data) use ($io, $model) {
+            $model::created(function (Model $data) use ($io, $model) {
                 $io->entity($model)->fire('created', $data);
             });
         }
 
-        $this->auth();
+        $this->io->onCommand(Auth::class)->then(function ($data) {
+            return $this->auth();
+        });
     }
 
     /**
-     * @return $this|GitterIo
+     * @return User
      * @throws \Exception
      * @throws \RuntimeException
      */
-    private function auth() : GitterIo
+    private function auth() : User
     {
-        $data = $this->client->http->getCurrentUser()->wait();
-        $user = $this->users->fromUser($data[0]);
+        if ($this->authUser === null) {
+            $data = $this->client->http->getCurrentUser()->wait();
+            $this->authUser = $this->users->fromUser($data[0]);
+        }
 
-        $this->io->auth($user);
-
-        return $this;
+        return $this->authUser;
     }
 
     /**
@@ -177,7 +181,7 @@ class GitterIo
 
             $this->client->stream->onMessage($service->service_id, function ($data) use ($service) {
 
-                \DB::transaction(function() use ($data, $service) {
+                \DB::transaction(function () use ($data, $service) {
                     $this->messages->fromMessage($data, $service->service_id);
                 });
 
