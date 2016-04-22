@@ -11,6 +11,7 @@
 namespace Core\Repositories\Room;
 
 use Core\Repositories\Repository;
+use Core\Repositories\Support\Eloquent;
 use Domains\Room\Room;
 
 /**
@@ -20,6 +21,8 @@ use Domains\Room\Room;
 class EloquentRoomsRepository extends Repository implements
     RoomsRepository
 {
+    use Eloquent;
+    
     /**
      * EloquentRoomsRepository constructor.
      */

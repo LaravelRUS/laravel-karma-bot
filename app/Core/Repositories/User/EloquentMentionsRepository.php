@@ -11,6 +11,7 @@
 namespace Core\Repositories\User;
 
 use Core\Repositories\Repository;
+use Core\Repositories\Support\Eloquent;
 use Domains\User\Mention;
 use Illuminate\Support\Collection;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Collection;
 class EloquentMentionsRepository extends Repository implements
     MentionsRepository
 {
+    use Eloquent;
+
     /**
      * EloquentMentionsRepository constructor.
      */

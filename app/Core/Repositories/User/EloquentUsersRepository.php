@@ -11,6 +11,7 @@
 namespace Core\Repositories\User;
 
 use Core\Repositories\Repository;
+use Core\Repositories\Support\Eloquent;
 use Domains\User\User;
 
 /**
@@ -20,6 +21,8 @@ use Domains\User\User;
 class EloquentUsersRepository extends Repository implements
     UsersRepository
 {
+    use Eloquent;
+
     /**
      * EloquentUsersRepository constructor.
      */

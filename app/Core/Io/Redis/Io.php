@@ -14,6 +14,7 @@ use Core\Io\EntityInterface;
 use Core\Io\IoInterface;
 use Domains\User\User;
 use Illuminate\Redis\Database;
+use React\EventLoop\LoopInterface;
 
 /**
  * Class Io
@@ -22,9 +23,9 @@ use Illuminate\Redis\Database;
 class Io implements IoInterface
 {
     /**
-     * @var Database
+     * @var RedisObserver
      */
-    private $database;
+    private $observer;
 
     /**
      * @var array|EntityInterface[]|Entity[]
@@ -32,12 +33,19 @@ class Io implements IoInterface
     private $entities = [];
 
     /**
+     * @var LoopInterface
+     */
+    private $loop;
+
+    /**
      * Io constructor.
      * @param Database $database
+     * @param LoopInterface $loop
      */
-    public function __construct(Database $database)
+    public function __construct(Database $database, LoopInterface $loop)
     {
-        $this->database = $database;
+        $this->loop = $loop;
+        $this->observer = new RedisObserver($database, $loop);
     }
 
     /**
@@ -47,7 +55,7 @@ class Io implements IoInterface
     public function entity(string $name) : EntityInterface
     {
         if (!array_key_exists($name, $this->entities)) {
-            $this->entities[$name] = new Entity($this->database, $name);
+            $this->entities[$name] = new Entity($this->observer, $name);
         }
 
         return $this->entities[$name];
@@ -59,9 +67,7 @@ class Io implements IoInterface
      */
     public function onAuth(\Closure $callback) : IoInterface
     {
-        $this->database->subscribe('auth', function($data) use ($callback) {
-            $callback(unserialize($data));
-        });
+        $this->observer->listen('auth', $callback);
 
         return $this;
     }
@@ -72,8 +78,16 @@ class Io implements IoInterface
      */
     public function auth(User $user) : IoInterface
     {
-        $this->database->command('publish', ['auth', serialize($user)]);
+        $this->observer->fire('auth', $user);
 
         return $this;
+    }
+
+    /**
+     * @retun void
+     */
+    public function run()
+    {
+        $this->loop->run();
     }
 }

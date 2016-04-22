@@ -13,6 +13,7 @@ namespace Core\Io;
 use Core\Io\Redis\Io as RedisIo;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use React\EventLoop\LoopInterface;
 
 /**
  * Class IoServiceProvider
@@ -26,7 +27,7 @@ class IoServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(IoInterface::class, function(Container $app){
-            return new RedisIo(app('redis'));
+            return new RedisIo(app('redis'), app(LoopInterface::class));
         });
 
         $this->app->alias(IoInterface::class, RedisIo::class);

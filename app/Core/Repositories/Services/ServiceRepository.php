@@ -29,4 +29,10 @@ interface ServiceRepository
      * @return Service|null
      */
     public function findByInternalId(string $id);
+
+    /**
+     * @param string $serviceId
+     * @return Service
+     */
+    public function findOrCreateByServiceId(string $serviceId) : Service;
 }

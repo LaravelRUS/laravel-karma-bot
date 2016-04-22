@@ -11,6 +11,7 @@
 namespace Core\Repositories\Message;
 
 use Core\Repositories\Repository;
+use Core\Repositories\Support\Eloquent;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\OrderBy;
@@ -25,6 +26,8 @@ use Domains\Room\Room;
 class EloquentMessagesRepository extends Repository implements
     MessagesRepository
 {
+    use Eloquent;
+
     /**
      * EloquentMessagesRepository constructor.
      */

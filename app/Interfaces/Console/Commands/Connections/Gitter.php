@@ -46,11 +46,6 @@ class Gitter extends Command
 
         $gitter = new GitterIo($app, $client, $io);
 
-
-        //$client->stream->onMessage($room->id, function($data) {
-        //    dd($data);
-        //});
-
-        $gitter->listen();
+        $gitter->run();
     }
 }

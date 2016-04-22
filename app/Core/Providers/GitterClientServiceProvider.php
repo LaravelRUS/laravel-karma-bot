@@ -10,12 +10,11 @@
  */
 namespace Core\Providers;
 
-use Core\Io\Bus;
 use Gitter\Client;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
-use Interfaces\Gitter\Io;
+use React\EventLoop\LoopInterface;
 
 /**
  * Class GitterClientServiceProvider
@@ -31,14 +30,21 @@ class GitterClientServiceProvider extends ServiceProvider
         /** @var Repository $config */
         $config = $this->app->make(Repository::class);
 
-
         $this->app->singleton(Client::class, function (Container $app) use ($config) {
             return new Client($config->get('gitter.token'));
+        });
+
+        $this->app->singleton(LoopInterface::class, function (Container $app) {
+            /** @var Client $client */
+            $client = $this->app->make(Client::class);
+            
+            return $client->stream->getEventLoop();
         });
 
         $this->app->singleton('bot', function (Container $app) {
             /** @var Client $client */
             $client = $app->make(Client::class);
+
             return $client->http->getCurrentUser()->wait();
         });
     }

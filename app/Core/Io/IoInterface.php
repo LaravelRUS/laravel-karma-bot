@@ -35,4 +35,9 @@ interface IoInterface
      * @return IoInterface
      */
     public function auth(User $user) : IoInterface;
+
+    /**
+     * @return void
+     */
+    public function run();
 }

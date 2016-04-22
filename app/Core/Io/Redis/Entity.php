@@ -14,6 +14,7 @@ use Core\Io\EntityInterface;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Redis\Database;
+use React\EventLoop\LoopInterface;
 
 /**
  * Class Entity
@@ -24,7 +25,7 @@ class Entity implements EntityInterface
     /**
      * @var Database
      */
-    private $database;
+    private $observer;
 
     /**
      * @var string
@@ -33,12 +34,12 @@ class Entity implements EntityInterface
 
     /**
      * Entity constructor.
-     * @param Database $database
+     * @param RedisObserver $observer
      * @param string $name
      */
-    public function __construct(Database $database, string $name)
+    public function __construct(RedisObserver $observer, string $name)
     {
-        $this->database = $database;
+        $this->observer = $observer;
         $this->name = $name;
     }
 
@@ -49,10 +50,7 @@ class Entity implements EntityInterface
      */
     public function listen(string $event, \Closure $callback) : EntityInterface
     {
-        // TODO Fix redis listener
-        $this->database->subscribe($this->channel($event), function($data) use ($callback) {
-            $callback(unserialize($data));
-        });
+        $this->observer->listen($this->channel($event), $callback);
 
         return $this;
     }
@@ -64,7 +62,7 @@ class Entity implements EntityInterface
      */
     public function fire(string $event, Model $entity) : EntityInterface
     {
-        $this->publish($this->channel($event), serialize($entity));
+        $this->observer->fire($this->channel($event), $entity);
 
         return $this;
     }
@@ -73,17 +71,8 @@ class Entity implements EntityInterface
      * @param string $event
      * @return string
      */
-    private function channel(string $event)
+    private function channel(string $event) : string
     {
-        return $this->name . ':' . $event;
-    }
-
-    /**
-     * @param string $channel
-     * @param $data
-     */
-    private function publish(string $channel, $data)
-    {
-        $this->database->command('publish', [$channel, $data]);
+        return 'stream:' . $this->name . ':' . $event;
     }
 }

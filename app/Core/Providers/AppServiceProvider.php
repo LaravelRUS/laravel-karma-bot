@@ -2,10 +2,12 @@
 
 namespace Core\Providers;
 
-use Carbon\Carbon;
-use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider
+ * @package Core\Providers
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,12 +15,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(\DateTimeZone::class, function() {
-            return Carbon::now()->getTimezone();
-        });
-
-        $this->app->bind(\DateTime::class, function(Container $app) {
-            return new \DateTime('now', $app->make(\DateTimeZone::class));
-        });
     }
 }

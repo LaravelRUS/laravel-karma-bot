@@ -10,6 +10,7 @@
  */
 namespace Core\Repositories\Services;
 use Core\Repositories\Repository;
+use Core\Repositories\Support\Eloquent;
 use Domains\Services\Gitter;
 use Domains\Services\Service;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,8 @@ use Ramsey\Uuid\Uuid;
 abstract class EloquentServiceRepository extends Repository implements
     ServiceRepository
 {
+    use Eloquent;
+
     /**
      * @param string $serviceId
      * @return Service|Builder
@@ -47,7 +50,7 @@ abstract class EloquentServiceRepository extends Repository implements
      */
     public function findOrCreateByServiceId(string $serviceId) : Service
     {
-        $result = $this->get($serviceId);
+        $result = $this->getIdentity($serviceId);
 
         if ($result === null) {
             $result = $this->findByServiceId($serviceId);
@@ -61,7 +64,7 @@ abstract class EloquentServiceRepository extends Repository implements
                 ]);
             }
 
-            $this->store($serviceId, $result);
+            $this->storeIdentity($serviceId, $result);
         }
 
         return $result;

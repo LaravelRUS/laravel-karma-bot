@@ -110,8 +110,6 @@ class GitterIo
             });
         }
 
-
-
         $this->auth();
     }
 
@@ -131,21 +129,16 @@ class GitterIo
     }
 
     /**
-     * @return $this|GitterIo
+     * @return void
      * @throws \LogicException
      */
-    public function listen() : GitterIo
+    public function run()
     {
-        /** @var LoopInterface $loop */
-        $loop = $this->client->stream->getEventLoop();
-
         $rooms = $this->getAvailableRooms();
 
         $this->listenStreams($rooms);
 
-        $this->client->stream->listen();
-
-        return $this;
+        $this->io->run();
     }
 
     /**
@@ -174,6 +167,7 @@ class GitterIo
     /**
      * @param Collection $rooms
      * @throws \LogicException
+     * @throws \Throwable
      */
     private function listenStreams(Collection $rooms)
     {
@@ -182,7 +176,11 @@ class GitterIo
             $service = $this->services->findByInternalId($room->id);
 
             $this->client->stream->onMessage($service->service_id, function ($data) use ($service) {
-                $this->messages->fromMessage($data, $service->service_id);
+
+                \DB::transaction(function() use ($data, $service) {
+                    $this->messages->fromMessage($data, $service->service_id);
+                });
+
             });
         }
     }

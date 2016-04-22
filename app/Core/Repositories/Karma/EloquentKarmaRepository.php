@@ -11,6 +11,7 @@
 namespace Core\Repositories\Karma;
 
 use Core\Repositories\Repository;
+use Core\Repositories\Support\Eloquent;
 use Domains\Karma\Karma;
 use Illuminate\Support\Collection;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Collection;
 class EloquentKarmaRepository extends Repository implements
     KarmaRepository
 {
+    use Eloquent;
+
     /**
      * EloquentKarmaRepository constructor.
      */

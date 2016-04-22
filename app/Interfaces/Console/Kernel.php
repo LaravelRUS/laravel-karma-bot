@@ -17,10 +17,10 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \Interfaces\Console\Commands\Connections\Gitter::class,
+        \Interfaces\Console\Commands\Bot::class,
 
         //\Interfaces\Console\Commands\SqlLogger::class,
         //\Interfaces\Console\Commands\StartGitterPool::class,
-        //\Interfaces\Console\Commands\GitterBot::class,
         //\Interfaces\Console\Commands\GitterSync::class,
         //\Interfaces\Console\Commands\GitterKarmaRecount::class,
     ];
