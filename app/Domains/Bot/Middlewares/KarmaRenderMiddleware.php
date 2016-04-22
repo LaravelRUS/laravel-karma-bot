@@ -17,10 +17,10 @@ class KarmaRenderMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        if (trim(mb_strtolower($message->text)) === 'карма') {
+        if (in_array(trim(mb_strtolower($message->text)), \Lang::get('request.karma'), true)) {
             $args = [
-                'user'   => $message->user->login,
-                'karma'  => $message->user->karma_text,
+                'user' => $message->user->login,
+                'karma' => $message->user->karma_text,
                 'thanks' => $message->user->thanks_text,
             ];
 
