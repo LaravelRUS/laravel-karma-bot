@@ -7,5 +7,11 @@ return [
         'skill',
         'скилл',
         'ачивки',
+        
+        // other english
+        
+        'attainment',
+        'achievement',
+        'progress',
     ]
 ];
