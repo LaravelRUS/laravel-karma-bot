@@ -18,7 +18,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \Interfaces\Console\Commands\StartGitterPool::class,
         \Interfaces\Console\Commands\StartGitterBot::class,
-        \Interfaces\Console\Commands\GitterSync::class
     ];
 
     /**
