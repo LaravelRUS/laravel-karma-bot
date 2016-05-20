@@ -36,17 +36,14 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             return $message;
         }
 
+        $noMentions = !count($message->mentions);
+
         // Personal message
         $isBotMention = $message->hasMention(function(User $user) {
             return $user->login === \Auth::user()->login;
         });
 
-        if ($isBotMention) {
-            //$this->ai->handle($message);
-
-
-        } else {
-
+        if ($isBotMention || $noMentions) {
             // Hello all
             $isHello = Str::contains($message->text_without_special_chars, \Lang::get('personal.hello_query'));
 
@@ -57,8 +54,9 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                     'user' => $message->user->login
                 ]));
             }
+        }
 
-
+        if (!count($message->mentions)) {
             // Question
             $isQuestion = Str::contains($message->text_without_special_chars, [
                 'можно задать вопрос',
@@ -68,7 +66,6 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             if ($isQuestion) {
                 $message->italic(sprintf('@%s, и какой ответ ты ожидаешь услышать?', $message->user->login));
             }
-
         }
 
         return $message;
