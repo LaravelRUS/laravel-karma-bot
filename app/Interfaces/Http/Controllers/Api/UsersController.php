@@ -80,7 +80,7 @@ class UsersController extends Controller
                 ->each(function (User $user) use ($karmaStorage) {
                     $user->karma_count = $karmaStorage[$user->id] ?? 0;
                 })
-                ->sortBy('karma_count');
+                ->sortByDesc('karma_count')->values()->all();
         });
     }
 
