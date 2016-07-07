@@ -79,7 +79,8 @@ class UsersController extends Controller
                 ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
                 ->each(function (User $user) use ($karmaStorage) {
                     $user->karma_count = $karmaStorage[$user->id] ?? 0;
-                });
+                })
+                ->sortBy('karma_count');
         });
     }
 
