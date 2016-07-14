@@ -58,13 +58,13 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
         if (!count($message->mentions)) {
             // Question
-            $isQuestion = Str::contains($message->text_without_special_chars, [
+            $isQuestion = in_array($message->text_without_special_chars, [
                 'можно задать вопрос',
                 'хочу задать вопрос',
                 'есть кто',
                 'кто может помочь',
                 'помогите пожалуйста'
-            ]);
+            ], true);
 
             if ($isQuestion) {
                 $message->italic(sprintf('@%s, и какой ответ ты ожидаешь услышать?', $message->user->login));
