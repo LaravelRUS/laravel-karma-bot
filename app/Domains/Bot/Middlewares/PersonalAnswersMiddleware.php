@@ -81,6 +81,9 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             $isCats = Str::contains($message->text_without_special_chars, [
                 'яровая',
                 'пакет яровой',
+                'пакетом яровой',
+                'пакете яровой',
+                'пакету яровой',
                 'мизулина'
             ]);
 
