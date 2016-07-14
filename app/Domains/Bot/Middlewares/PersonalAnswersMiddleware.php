@@ -60,11 +60,21 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             // Question
             $isQuestion = Str::contains($message->text_without_special_chars, [
                 'можно задать вопрос',
-                'хочу задать вопрос'
+                'хочу задать вопрос',
+                'есть кто',
+                'кто может помочь',
+                'помогите пожалуйста'
             ]);
 
             if ($isQuestion) {
                 $message->italic(sprintf('@%s, и какой ответ ты ожидаешь услышать?', $message->user->login));
+            }
+
+            // Question
+            $isCats = Str::contains($message->text_without_special_chars, ['котаны']);
+
+            if ($isCats) {
+                $message->italic(sprintf('@%s, в Пензу езжай со своими котанами \-_\-', $message->user->login));
             }
         }
 
