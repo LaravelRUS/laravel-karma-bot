@@ -78,7 +78,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             }
 
             // Question
-            $isCats = Str::contains($message->text_without_special_chars, [
+            $isPolitics = Str::contains($message->text_without_special_chars, [
                 'яровая',
                 'пакет яровой',
                 'пакетом яровой',
@@ -87,35 +87,51 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 'мизулина'
             ]);
 
-            if ($isCats) {
+            if ($isPolitics) {
                 $message->italic(sprintf('@%s, :see_no_evil: :fire: ', $message->user->login));
             }
 
-            // Question
-            $isCats = in_array($message->text_without_special_chars, [
+            $isRules = in_array($message->text_without_special_chars, [
                 'правила чата',
                 'правила',
                 'как себя вести',
                 '9 кругов'
             ], true);
 
-            if ($isCats) {
+            if ($isRules) {
                 $message->italic(sprintf('@%s, [In rules we trust](http://laravel.su/articles/nine-circles-of-chat)', $message->user->login));
             }
 
-            // Question
-            $isCats = in_array($message->text_without_special_chars, [
+            $isBan = in_array($message->text_without_special_chars, [
                 'банхаммер',
                 'хаммер',
                 'бан',
             ], true);
 
-            if ($isCats) {
+            if ($isBan) {
                 $message->italic(sprintf(
                     '@%s, тебе выданы ' . str_repeat(' :hammer: ', random_int(1, 9)) . ' на 0.' . random_int(1, 9) . ' секунды. Наслаждайся ;)',
                         $message->user->login
                 ));
             }
+
+            $isPolitics = in_array($message->text_without_special_chars, [
+                'майдан',
+                'революция',
+                'битрикс',
+                'yii',
+                'wordpress',
+                'вордпресс',
+            ], true);
+
+            if ($isPolitics) {
+                $message->italic(sprintf(
+                    '@%s, за родину! ' . str_repeat(' :monkey: ', random_int(1, 9)),
+                    $message->user->login
+                ));
+            }
+
+
         }
 
         return $message;
