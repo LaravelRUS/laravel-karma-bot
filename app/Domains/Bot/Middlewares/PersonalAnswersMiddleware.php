@@ -90,6 +90,18 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             if ($isCats) {
                 $message->italic(sprintf('@%s, :see_no_evil: :fire: ', $message->user->login));
             }
+
+            // Question
+            $isCats = in_array($message->text_without_special_chars, [
+                'правила чата',
+                'правила',
+                'как себя вести',
+                '9 кругов'
+            ], true);
+
+            if ($isCats) {
+                $message->italic(sprintf('@%s, [In rules we trust](http://laravel.su/articles/nine-circles-of-chat)', $message->user->login));
+            }
         }
 
         return $message;
