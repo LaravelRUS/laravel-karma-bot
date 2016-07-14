@@ -76,6 +76,17 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             if ($isCats) {
                 $message->italic(sprintf('@%s, в Пензу езжай со своими котанами \-_\-', $message->user->login));
             }
+
+            // Question
+            $isCats = Str::contains($message->text_without_special_chars, [
+                'яровая',
+                'пакет яровой',
+                'мизулина'
+            ]);
+
+            if ($isCats) {
+                $message->italic(sprintf('@%s, :see_no_evil: :fire: ', $message->user->login));
+            }
         }
 
         return $message;
