@@ -21,7 +21,7 @@ class Karma1000Achieve extends AbstractAchieve
     /**
      * @var string
      */
-    public $title = 'Jhaoda';
+    public $title = 'JhaoDa';
 
     /**
      * @var string
