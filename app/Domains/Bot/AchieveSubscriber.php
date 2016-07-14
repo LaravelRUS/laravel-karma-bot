@@ -15,6 +15,7 @@ use Domains\Bot\Achievements\DocsAchieve;
 use Domains\Bot\Achievements\Karma100Achieve;
 use Domains\Bot\Achievements\Karma10Achieve;
 use Domains\Bot\Achievements\Karma500Achieve;
+use Domains\Bot\Achievements\Karma1000Achieve;
 use Domains\Bot\Achievements\Karma50Achieve;
 use Domains\Bot\Achievements\Thanks100Achieve;
 use Domains\Bot\Achievements\Thanks10Karma0Achieve;
@@ -42,6 +43,7 @@ class AchieveSubscriber implements
         Karma50Achieve::class,
         Karma100Achieve::class,
         Karma500Achieve::class,
+        Karma1000Achieve::class,
         Thanks20Achieve::class,
         Thanks50Achieve::class,
         Thanks100Achieve::class,
