@@ -134,7 +134,9 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 ));
             }
 
-
+            if (preg_match('/[a-zA-Z][0-9]/isu', $message->text_without_special_chars)) {
+                $message->italic(sprintf('@%s, %s', $message->user->login, ['мимо', 'ранил', 'убил'][random_int(0, 2)]));
+            }
         }
 
         return $message;
