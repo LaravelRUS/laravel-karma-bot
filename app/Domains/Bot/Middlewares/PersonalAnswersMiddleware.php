@@ -122,11 +122,14 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 'yii',
                 'wordpress',
                 'вордпресс',
+                'laravel',
+                'ларавель',
+                'йии',
             ], true);
 
             if ($isPolitics) {
                 $message->italic(sprintf(
-                    '@%s, за родину! ' . str_repeat(' :monkey: ', random_int(1, 9)),
+                    '@%s, за ' . $message->text_without_special_chars . '! ' . str_repeat(' :monkey: ', random_int(1, 9)),
                     $message->user->login
                 ));
             }
