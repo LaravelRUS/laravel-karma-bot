@@ -1,7 +1,6 @@
 <?php
 namespace Interfaces\Console;
 
-use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -18,6 +17,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \Interfaces\Console\Commands\StartGitterPool::class,
         \Interfaces\Console\Commands\StartGitterBot::class,
+        \Interfaces\Console\Commands\GetGitterRoomId::class
     ];
 
     /**
