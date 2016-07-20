@@ -13,14 +13,12 @@
 namespace Interfaces\Console\Commands;
 
 
-use Domains\Room;
-use Interfaces\Gitter\Client;
 use Carbon\Carbon;
+use Domains\Room;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Facades\Log;
-
+use Interfaces\Gitter\Client;
 
 /**
  * Class StartGitterBot
@@ -34,14 +32,12 @@ class StartGitterBot extends Command
      */
     protected $signature = 'gitter:listen {room}';
 
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Start gitter bot thread for target room.';
-
 
     /**
      * @var Container
@@ -52,7 +48,6 @@ class StartGitterBot extends Command
      * @var string
      */
     protected $pid;
-
 
     /**
      * Execute the console command.
@@ -73,6 +68,13 @@ class StartGitterBot extends Command
 
         $this->info(sprintf('KarmaBot %s started at %s', Client::VERSION, Carbon::now()));
 
+        if (is_array($group = \Config::get('gitter.env'))) {
+            $group = implode(', ', $group);
+        }
+
+        if (! empty($group)) {
+            $this->info(sprintf('Current group: %s', $group));
+        }
 
         $this->makePidFile();
         $client->run();

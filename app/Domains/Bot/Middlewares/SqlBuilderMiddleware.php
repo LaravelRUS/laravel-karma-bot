@@ -3,12 +3,13 @@ namespace Domains\Bot\Middlewares;
 
 use Domains\Message;
 use BigShark\SQLToBuilder\BuilderClass;
+use Interfaces\Gitter\Middleware\MiddlewareGroupableInterface;
 use Interfaces\Gitter\Middleware\MiddlewareInterface;
 
 /**
  * Class SqlBuilderMiddleware
  */
-class SqlBuilderMiddleware implements MiddlewareInterface
+class SqlBuilderMiddleware implements MiddlewareInterface, MiddlewareGroupableInterface
 {
     /**
      * @param Message $message
@@ -31,5 +32,13 @@ class SqlBuilderMiddleware implements MiddlewareInterface
         }
 
         return $message;
+    }
+
+    /**
+     * @return string|array
+     */
+    public function getGroup()
+    {
+        return ['testing'];
     }
 }
