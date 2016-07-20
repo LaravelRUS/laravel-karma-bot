@@ -12,17 +12,9 @@
     - Прочие параметры находятся в файле `config/gitter.php`
 - Выполните миграции `php artisan migrate`
 - Введите `php artisan gitter:listen $roomId`, где `$roomId` - идентификатор комнаты или его алиас. 
-
-    Самый простой вариант получения `$roomId` выполнить get запрос `https://api.gitter.im/v1/rooms?access_token=GITTER_TOKEN`
+    Самый простой вариант получения `$roomId` выполнить artisan команду `php artisan gitter:get-room-id room/Name`,
+    либо выполнить get запрос `https://api.gitter.im/v1/rooms?access_token=GITTER_TOKEN`
     
-    Либо с помощью клиента 
-    
-    ```php
-    $client = new \Gitter\Client('GITTER_TOKEN');
-    $result = $client->http->getRoomByUri('room/Name')->wait();
-    echo $result->id;
-    ```
-    где `GITTER_TOKEN` - ваш токен.
 
 ### Многопроцессовый режим
 
