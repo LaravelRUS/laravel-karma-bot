@@ -2,38 +2,41 @@
 /**
  * This file is part of GitterBot package.
  *
- * @author Serafim <nesk@xakep.ru>
- * @date 09.10.2015 16:59
+ * @author butschster <butschster@gmail.com>
+ * @date 20.207.2016 17:08
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Core\Mappers;
+namespace Interfaces\Gitter;
 
-use Domains\Room;
-use Domains\User;
-use Domains\Message;
+
 use Carbon\Carbon;
+use Domains\User;
+use Core\Mappers\UserMapper;
+use Illuminate\Contracts\Support\Arrayable;
+use Interfaces\Gitter\Room\RoomInterface;
 use Interfaces\Gitter\Support\AttributeMapper;
-use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class MessageMapperTrait
- * @deprecated
- */
-trait MessageMapperTrait
+class MessageMapper implements Arrayable
 {
     /**
-     * @param array $attributes
-     * @return Message
-     * @throws \InvalidArgumentException
+     * @var array
      */
-    public static function fromGitterObject(array $attributes)
+    protected $attributes;
+
+    /**
+     * MessageMapper constructor.
+     *
+     * @param RoomInterface $room
+     * @param array         $attributes
+     */
+    public function __construct(RoomInterface $room, array $attributes)
     {
         $fields = ['gitter_id', 'text', 'html', 'edited', 'user', 'unread',
             'read_by', 'urls', 'mentions', 'issues', 'meta', 'created_at', 'updated_at', 'room_id'];
 
-        $values = (new AttributeMapper($attributes))
+        $this->attributes = (new AttributeMapper($attributes))
             ->rename('readBy', 'read_by')
             ->rename('id', 'gitter_id')
             ->value('editedAt', function ($val) {
@@ -49,25 +52,21 @@ trait MessageMapperTrait
                 return (new Carbon($date))->setTimezone('Europe/Moscow');
             }, 'updated_at')
             ->value('mentions', function ($mentions) {
-                return static::parseMentions($mentions);
+                return $this->parseMentions($mentions);
             })
             ->only($fields)
             ->toArray();
 
-        if (!array_key_exists('room_id', $values)) {
-            $values['room_id'] = \App::make(Room::class)->id;
+        if (!array_key_exists('room_id', $this->attributes)) {
+            $this->attributes['room_id'] = $room->id();
         }
-
-        return static::unguarded(function () use ($values) {
-            return new static($values);
-        });
     }
 
     /**
      * @param array $inputMentions
      * @return array
      */
-    protected static function parseMentions(array $inputMentions)
+    protected function parseMentions(array $inputMentions)
     {
         $ids = [];
 
@@ -85,5 +84,15 @@ trait MessageMapperTrait
         }
 
         return $mentions;
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->attributes;
     }
 }

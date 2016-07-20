@@ -3,6 +3,8 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
+ *
  * @date 24.09.2015 15:27
  *
  * For the full copyright and license information, please view the LICENSE

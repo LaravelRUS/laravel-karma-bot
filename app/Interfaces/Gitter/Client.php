@@ -4,6 +4,7 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
  * @date 24.09.2015 00:00
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,10 +15,14 @@ namespace Interfaces\Gitter;
 
 use App;
 use Core\Mappers\UserMapper;
+use Domains\Bot\ClientInterface;
 use Domains\Room;
 use Domains\User;
+use Domains\Message;
 use Interfaces\Gitter\Http\Stream;
 use Interfaces\Gitter\Http\Request;
+use Interfaces\Gitter\Middleware\Storage;
+use Interfaces\Gitter\Room\RoomInterface;
 use InvalidArgumentException;
 use Interfaces\Gitter\Http\UrlStorage;
 use React\EventLoop\Factory as EventLoop;
@@ -28,34 +33,9 @@ use React\Dns\Resolver\Factory as DnsResolver;
 /**
  * Class Client
  */
-class Client
+class Client implements ClientInterface
 {
-    const VERSION = '0.1b';
-
-    /**
-     * @param $token
-     * @param $roomId
-     * @return Client
-     * @throws InvalidArgumentException
-     */
-    public static function make($token, $roomId)
-    {
-        $client = new Client($token);
-        App::singleton(Client::class, function () use ($client) {
-            return $client;
-        });
-        App::alias(Client::class, 'gitter');
-
-
-        $room = new Room($roomId);
-        App::singleton(Room::class, function () use ($room) {
-            return $room;
-        });
-        App::alias(Room::class, 'room');
-
-        return $client;
-    }
-
+    const VERSION = 'KarmaBot for Gitter 0.1b';
 
     /**
      * @var string
@@ -200,12 +180,95 @@ class Client
     }
 
     /**
-     * @return Client
+     * @return ClientInterface
      */
-    public function run(): Client
+    public function run(): ClientInterface
     {
         $this->loop->run();
 
         return $this;
+    }
+
+    /**
+     * @param RoomInterface $room
+     */
+    public function listen(RoomInterface $room)
+    {
+        $this
+            ->stream('messages', ['roomId' => $room->id()])
+            ->on(Stream::EVENT_MESSAGE, function ($stream, $data) use($room) {
+                $this->onMessage(
+                    $room->middleware(),
+                    Message::unguarded(function() use($room, $data) {
+                        return new Message(
+                            (new MessageMapper($room, $data))->toArray()
+                        );
+                    })
+                );
+            })
+            ->on(Stream::EVENT_END, [$this, 'onClose'])
+            ->on(Stream::EVENT_ERROR, [$this, 'onError']);
+    }
+
+    /**
+     * @return string
+     */
+    public function version()
+    {
+        return static::VERSION;
+    }
+
+    /**
+     * @param Storage $middleware
+     * @param Message $message
+     */
+    public function onMessage(Storage $middleware, Message $message)
+    {
+        try {
+            $middleware->handle($message);
+        } catch (\Exception $e) {
+            $this->logException($e);
+        }
+    }
+
+    /**
+     * @TODO I do not know if it works
+     * @param Stream $stream
+     */
+    protected function onClose(Stream $stream)
+    {
+        $stream->reconnect();
+    }
+
+    /**
+     * @param Stream $stream
+     * @param \Exception $e
+     */
+    protected function onError(Stream $stream, \Exception $e)
+    {
+        $this->logException($e);
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    protected function logException(\Exception $e)
+    {
+        \Log::error(
+            $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . "\n" .
+            $e->getTraceAsString() . "\n" .
+            str_repeat('=', 80) . "\n"
+        );
+    }
+
+    /**
+     * @param RoomInterface $room
+     * @param string        $message
+     */
+    public function sendMessage(RoomInterface $room, $message)
+    {
+        $this->request('message.send', ['roomId' => $room->id()], [
+            'text' => (string) $message,
+        ], 'POST');
     }
 }

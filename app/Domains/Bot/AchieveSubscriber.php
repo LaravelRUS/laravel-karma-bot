@@ -26,6 +26,7 @@ use Domains\Room;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Collection;
+use Interfaces\Gitter\Room\RoomInterface;
 use Interfaces\Gitter\Subscriber\SubscriberInterface;
 
 /**
@@ -71,13 +72,15 @@ class AchieveSubscriber implements
 
     /**
      * Subscribe achievements
+     *
+     * @param RoomInterface $room
+     *
+     * @return mixed|void
      */
-    public function handle()
+    public function handle(RoomInterface $room)
     {
-        Achieve::created(function (Achieve $achieve) {
-            $room = \App::make(Room::class);
-
-            $room->write(
+        Achieve::created(function (Achieve $achieve) use($room) {
+            $room->sendMessage(
                 \Lang::get('achieve.receiving', [
                     'user'        => $achieve->user->login,
                     'title'       => $achieve->title,

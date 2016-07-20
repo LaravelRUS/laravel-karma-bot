@@ -22,7 +22,6 @@ use Interfaces\Gitter\Subscriber\SubscriberInterface;
  */
 abstract class AbstractAchieve implements
     AchieveInterface,
-    SubscriberInterface,
     Arrayable,
     Jsonable
 {

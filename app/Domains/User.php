@@ -138,7 +138,7 @@ class User extends \Eloquent implements
     public function addKarmaTo(User $user, Message $message)
     {
         return Karma::create([
-            'room_id'        => \App::make(Room::class)->id,
+            'room_id'        => $message->room_id,
             'message_id'     => $message->gitter_id,
             'user_id'        => $this->id,
             'user_target_id' => $user->id,

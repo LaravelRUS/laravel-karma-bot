@@ -3,6 +3,7 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
  * @date 09.10.2015 16:58
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,9 +12,6 @@
 namespace Domains;
 
 use Carbon\Carbon;
-use LogicException;
-use Interfaces\Gitter\Client;
-use Core\Mappers\MessageMapperTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -41,11 +39,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
-    /**
-     * Gitter mapper
-     */
-    use MessageMapperTrait;
-
     /**
      * @param $value
      * @return Carbon
@@ -105,14 +98,7 @@ class Message extends Model
      */
     public function answer($text)
     {
-        if (\Config::get('gitter.output')) {
-            $client = \App::make(Client::class);
-            $room = \App::make(Room::class);
-
-            $client->request('message.send', ['roomId' => $room->id], [
-                'text' => (string)$text,
-            ], 'POST');
-        }
+        app('room.manager')->get($this->room_id)->sendMessage($text);
 
         return $this;
     }

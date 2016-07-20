@@ -1,24 +1,23 @@
 <?php
-
 /**
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
+ *
  * @date 24.09.2015 15:27
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
-use Domains\Room;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Interfaces\Gitter\Client;
+use Interfaces\Gitter\Room\RoomInterface;
 
 /**
  * Class StartGitterBot
@@ -52,8 +51,7 @@ class StartGitterBot extends Command
     /**
      * Execute the console command.
      *
-     * @param Repository $config
-     * @param Container $container
+     * @param Container $app
      *
      * @return mixed
      * @throws \InvalidArgumentException
@@ -61,28 +59,25 @@ class StartGitterBot extends Command
      * @throws \LogicException
      * @throws \Exception
      */
-    public function handle(Repository $config, Container $container)
+    public function handle(Container $app)
     {
         $roomId = $this->argument('room');
-        if (! is_null($env = \Config::get('gitter.envs.'.Room::getId($roomId)))) {
-            \Config::set('gitter.env', $env);
+
+        /** @var RoomInterface $room */
+        if (is_null($room = $app['room.manager']->get($roomId))) {
+            $this->warn("Room [$roomId] not found");
+
+            return;
         }
 
-        $client = Client::make($config->get('gitter.token'), $roomId);
-        $stream = $container->make(Room::class)->listen();
+        $client = $room->client();
+        $room->listen();
 
-        $this->info(sprintf('KarmaBot %s started at %s', Client::VERSION, Carbon::now()));
-
-        if (is_array($group = \Config::get('gitter.env'))) {
-            $group = implode(', ', $group);
-        }
-
-        if (! empty($group)) {
-            $this->info(sprintf('Current group: %s', $group));
-        }
+        $this->info(sprintf('%s started at %s', $client->version(), Carbon::now()));
 
         $this->makePidFile();
         $client->run();
+
         $this->removePidFile();
     }
 
