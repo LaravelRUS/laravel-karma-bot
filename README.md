@@ -8,11 +8,21 @@
 - Выполните `composer install`
 - Сконфигурируйте бота 
     - Параметр `GITTER_TOKEN` в файле `.env` (если такого нету, 
-        создайте из `.env.example`)
+        создайте из `.env.example`). Токен можно узнать по этой [ссылке](https://developer.gitter.im/apps).
     - Прочие параметры находятся в файле `config/gitter.php`
 - Выполните миграции `php artisan migrate`
-- Введите `php artisan gitter:listen $room`, где 
-$room - идентификатор комнаты или его алиас.
+- Введите `php artisan gitter:listen $roomId`, где `$roomId` - идентификатор комнаты или его алиас. 
+
+    Самый простой вариант получения `$roomId` выполнить get запрос `https://api.gitter.im/v1/rooms?access_token=GITTER_TOKEN`
+    
+    Либо с помощью клиента 
+    
+    ```php
+    $client = new \Gitter\Client('GITTER_TOKEN');
+    $result = $client->http->getRoomByUri('room/Name')->wait();
+    echo $result->id;
+    ```
+    где `GITTER_TOKEN` - ваш токен.
 
 ### Многопроцессовый режим
 
