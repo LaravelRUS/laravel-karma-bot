@@ -63,7 +63,12 @@ class StartGitterBot extends Command
      */
     public function handle(Repository $config, Container $container)
     {
-        $client = Client::make($config->get('gitter.token'), $this->argument('room'));
+        $roomId = $this->argument('room');
+        if (! is_null($env = \Config::get('gitter.envs.'.Room::getId($roomId)))) {
+            \Config::set('gitter.env', $env);
+        }
+
+        $client = Client::make($config->get('gitter.token'), $roomId);
         $stream = $container->make(Room::class)->listen();
 
         $this->info(sprintf('KarmaBot %s started at %s', Client::VERSION, Carbon::now()));

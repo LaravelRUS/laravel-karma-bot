@@ -26,6 +26,8 @@ return [
         'vuejs.chat'    => '55d5eaab0fc9f982beae0db8', // https://gitter.im/vuejs-ru/Discussion
     ],
 
+    'envs' => [],
+
 
     // Middlewares
     'middlewares' => [
