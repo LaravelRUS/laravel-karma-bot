@@ -52,6 +52,9 @@ return [
 
         // Ответы на персональные вопросы для бота
         Domains\Bot\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
+
+        // Поиск по документации Laravel
+        Domains\Bot\Middlewares\LaravelDocumentationSearcherMiddleware::class => Storage::PRIORITY_MINIMAL
     ],
 
 

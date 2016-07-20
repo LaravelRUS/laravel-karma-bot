@@ -23,7 +23,8 @@
         "doctrine/dbal": "^2.5.0",
         "filp/whoops": "2.0.*",
         "php-ds/php-ds": "dev-master@dev",
-        "big-shark/sql-to-builder": "dev-master@dev"
+        "big-shark/sql-to-builder": "dev-master@dev",
+        "algolia/algoliasearch-client-php": "^1.6.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
