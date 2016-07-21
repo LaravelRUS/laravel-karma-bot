@@ -2,25 +2,21 @@
 /**
  * This file is part of GitterBot package.
  *
- * @author Serafim <nesk@xakep.ru>
- * @date 24.09.2015 15:34
+ * @author butschster <butschster@gmail.com>
+ * @date 20.07.2016 15:34
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Interfaces\Gitter\Middleware;
-
-use Domains\Message;
+namespace Domains\Middleware;
 
 /**
  * Interface MiddlewareInterface
  */
-interface MiddlewareInterface
+interface MiddlewareGroupableInterface
 {
     /**
-     * @param $inputData
-     * @return mixed
+     * @return string|array
      */
-    public function handle(Message $inputData);
+    public function getGroup();
 }

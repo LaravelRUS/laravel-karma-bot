@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Interfaces\Gitter\Room;
+namespace Interfaces\Gitter;
 
-use Interfaces\Gitter\Middleware\Storage;
+use Domains\Room\AbstractRoom;
+use Domains\Middleware\Storage;
 
 class StandartGitterRoom extends AbstractRoom
 {
@@ -70,21 +71,5 @@ class StandartGitterRoom extends AbstractRoom
     public function driver()
     {
         return 'gitter';
-    }
-
-    /**
-     * @return \Interfaces\Gitter\Client
-     */
-    public function client()
-    {
-        return $this->client;
-    }
-
-    /**
-     * @return Storage
-     */
-    public function middleware()
-    {
-        return $this->middleware;
     }
 }

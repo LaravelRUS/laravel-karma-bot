@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Interfaces\Gitter\Room;
+namespace Domains\Room;
 
 use Domains\Bot\ClientInterface;
-use Interfaces\Gitter\Middleware\Storage;
+use Domains\Middleware\Storage;
 
 interface RoomInterface
 {

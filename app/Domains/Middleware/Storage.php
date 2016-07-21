@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Interfaces\Gitter\Middleware;
+namespace Domains\Middleware;
 
 use Illuminate\Contracts\Container\Container;
 use Interfaces\Gitter\Support\PriorityList;

@@ -4,7 +4,7 @@ namespace Domains\Bot\Middlewares;
 use Interfaces\Gitter\Ai;
 use Domains\Message;
 use Interfaces\Gitter\Karma\Validator;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareInterface;
 use Domains\User;
 use Illuminate\Support\Str;
 

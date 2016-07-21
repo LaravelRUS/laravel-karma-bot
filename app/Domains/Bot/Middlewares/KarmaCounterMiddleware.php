@@ -1,10 +1,10 @@
 <?php
 namespace Domains\Bot\Middlewares;
 
-use Interfaces\Gitter\Middleware\Storage;
+use Domains\Middleware\Storage;
 use Domains\Message;
 use Interfaces\Gitter\Karma\Validator;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareInterface;
 
 /**
  * Проверяет "спасибо" и выводит инкремент.

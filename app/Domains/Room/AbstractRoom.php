@@ -9,13 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Interfaces\Gitter\Room;
+namespace Domains\Room;
 
-use Domains\Message;
+use Domains\Bot\ClientInterface;
 use Illuminate\Foundation\Application;
 use Interfaces\Gitter\Client;
-use Interfaces\Gitter\Middleware\Storage;
-use Interfaces\Gitter\Http\Stream;
 
 abstract class AbstractRoom implements RoomInterface
 {
@@ -35,9 +33,14 @@ abstract class AbstractRoom implements RoomInterface
     protected $groups;
 
     /**
-     * @var Storage
+     * @var \Domains\Middleware\Storage
      */
     protected $middleware;
+
+    /**
+     * @var ClientInterface
+     */
+    protected $client;
 
     /**
      * @var Application
@@ -48,11 +51,29 @@ abstract class AbstractRoom implements RoomInterface
     {
         $this->app = \App::make('app');
 
-        $this->middleware = new \Interfaces\Gitter\Middleware\Storage(
+        $this->middleware = new \Domains\Middleware\Storage(
             $this->app
         );
 
-        //$this->createSubscribersStorage();
+        $this->client = app('bot.manager')->driver($this->driver());
+
+        $this->createSubscribersStorage();
+    }
+
+    /**
+     * @return ClientInterface
+     */
+    public function client()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @return \Domains\Middleware\Storage
+     */
+    public function middleware()
+    {
+        return $this->middleware;
     }
 
     /**
@@ -62,7 +83,11 @@ abstract class AbstractRoom implements RoomInterface
     {
         $subscribers = \Config::get('gitter.subscribers');
 
-        $storage = new \Interfaces\Gitter\Subscriber\Storage($this->app, $this);
+        $storage = new \Domains\Subscriber\Storage(
+            $this->app,
+            $this
+        );
+
         foreach ($subscribers as $subscriber) {
             $storage->add($subscriber);
         }

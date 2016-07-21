@@ -1,9 +1,8 @@
 <?php
-use Interfaces\Gitter\Middleware\Storage;
+use Domains\Middleware\Storage;
 
 return [
     'token'       => env('GITTER_TOKEN', null),
-    'env'         => env('GITTER_ENV', 'global'),
     'output'      => true,
 
     'rooms'       => [
@@ -25,9 +24,6 @@ return [
 
         'vuejs.chat'    => '55d5eaab0fc9f982beae0db8', // https://gitter.im/vuejs-ru/Discussion
     ],
-
-    'envs' => [],
-
 
     // Middlewares
     'middlewares' => [

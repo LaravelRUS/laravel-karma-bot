@@ -11,7 +11,8 @@
 
 namespace Domains\Bot;
 
-use Interfaces\Gitter\Room\RoomInterface;
+use Domains\Room\RoomInterface;
+use Domains\User;
 
 /**
  * Class AchieveSubscriber
@@ -42,4 +43,11 @@ interface ClientInterface
      * @return ClientInterface
      */
     public function run(): ClientInterface;
+
+    /**
+     * @param string $id
+     *
+     * @return User
+     */
+    public function getUserById($id);
 }

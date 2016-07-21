@@ -3,8 +3,8 @@ namespace Domains\Bot\Middlewares;
 
 use Domains\Message;
 use BigShark\SQLToBuilder\BuilderClass;
-use Interfaces\Gitter\Middleware\MiddlewareGroupableInterface;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareGroupableInterface;
+use Domains\Middleware\MiddlewareInterface;
 
 /**
  * Class SqlBuilderMiddleware

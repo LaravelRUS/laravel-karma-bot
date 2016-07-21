@@ -22,12 +22,11 @@ use Domains\Bot\Achievements\Thanks100Achieve;
 use Domains\Bot\Achievements\Thanks10Karma0Achieve;
 use Domains\Bot\Achievements\Thanks20Achieve;
 use Domains\Bot\Achievements\Thanks50Achieve;
-use Domains\Room;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Collection;
-use Interfaces\Gitter\Room\RoomInterface;
-use Interfaces\Gitter\Subscriber\SubscriberInterface;
+use Domains\Room\RoomInterface;
+use Domains\Subscriber\SubscriberInterface;
 
 /**
  * Class AchieveSubscriber

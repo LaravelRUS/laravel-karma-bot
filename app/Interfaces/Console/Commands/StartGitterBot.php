@@ -15,9 +15,8 @@ namespace Interfaces\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-use Interfaces\Gitter\Room\RoomInterface;
+use Domains\Room\RoomInterface;
 
 /**
  * Class StartGitterBot
@@ -76,6 +75,7 @@ class StartGitterBot extends Command
         $this->info(sprintf('%s started at %s', $client->version(), Carbon::now()));
 
         $this->makePidFile();
+
         $client->run();
 
         $this->removePidFile();

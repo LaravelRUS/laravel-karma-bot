@@ -13,9 +13,8 @@ namespace Interfaces\Gitter;
 
 use Carbon\Carbon;
 use Domains\User;
-use Core\Mappers\UserMapper;
 use Illuminate\Contracts\Support\Arrayable;
-use Interfaces\Gitter\Room\RoomInterface;
+use Domains\Room\RoomInterface;
 use Interfaces\Gitter\Support\AttributeMapper;
 
 class MessageMapper implements Arrayable

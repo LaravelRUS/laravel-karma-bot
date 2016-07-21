@@ -10,9 +10,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Interfaces\Gitter\Subscriber;
+namespace Domains\Subscriber;
 
-use Interfaces\Gitter\Room\RoomInterface;
+use Domains\Room\RoomInterface;
 
 /**
  * Interface SubscriberInterface

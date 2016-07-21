@@ -15,7 +15,6 @@ use Domains\Achieve;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
-use Interfaces\Gitter\Subscriber\SubscriberInterface;
 
 /**
  * Class AbstractAchieve
