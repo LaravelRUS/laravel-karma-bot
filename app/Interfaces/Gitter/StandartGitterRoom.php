@@ -18,20 +18,38 @@ class StandartGitterRoom extends AbstractRoom
     /**
      * AbstractRoom constructor.
      *
-     * @param string $id
      * @param string $alias
      * @param string|array $groups
      * @param array  $middleware
      */
-    public function __construct($id, $alias, $groups = '*', array $middleware = [])
+    public function __construct($alias, $groups = '*', array $middleware = [])
     {
         parent::__construct();
 
-        $this->id = $id;
         $this->alias = $alias;
         $this->groups = (array) $groups;
 
         $this->setMiddleware($middleware);
+    }
+
+    public function listen()
+    {
+        $result = $this->client()->getGitterClient()->http->getRoomByUri($this->alias())->wait();
+        $this->id = $result->id;
+
+        parent::listen();
+    }
+
+    /**
+     * @return string
+     */
+    public function id()
+    {
+        if (empty($this->id)) {
+            return $this->alias();
+        }
+
+        return parent::id();
     }
 
     /**

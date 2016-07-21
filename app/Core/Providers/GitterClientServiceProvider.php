@@ -57,18 +57,18 @@ class GitterClientServiceProvider extends ServiceProvider
 
     protected function registerGitterRooms(RoomManager $manager)
     {
-        foreach ((array) $this->app['config']->get('gitter.rooms') as $alias => $roomId) {
+        foreach ((array) $this->app['config']->get('gitter.rooms') as $room => $groups) {
             $manager->register(
-                new StandartGitterRoom($roomId, $alias, '*', \Config::get('gitter.middlewares'))
+                new StandartGitterRoom($room, $groups, \Config::get('gitter.middlewares'))
             );
         }
     }
 
     protected function registerSlackRooms(RoomManager $manager)
     {
-        foreach ((array) $this->app['config']->get('slack.rooms') as $alias => $roomId) {
+        foreach ((array) $this->app['config']->get('slack.rooms') as $roomId => $groups) {
             $manager->register(
-                new StandartSlackRoom($roomId, $alias, '*', \Config::get('slack.middlewares'))
+                new StandartSlackRoom($roomId, $groups, \Config::get('slack.middlewares'))
             );
         }
     }

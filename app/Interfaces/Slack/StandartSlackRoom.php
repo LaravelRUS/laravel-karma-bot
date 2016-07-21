@@ -12,11 +12,26 @@
 namespace Interfaces\Slack;
 
 use Domains\Room\AbstractRoom;
-use Domains\Middleware\Storage;
-use Interfaces\Gitter\StandartGitterRoom;
 
-class StandartSlackRoom extends StandartGitterRoom
+class StandartSlackRoom extends AbstractRoom
 {
+    /**
+     * AbstractRoom constructor.
+     *
+     * @param string $id
+     * @param string|array $groups
+     * @param array  $middleware
+     */
+    public function __construct($id, $groups = '*', array $middleware = [])
+    {
+        parent::__construct();
+
+        $this->id = $id;
+        $this->alias = $id;
+        $this->groups = (array) $groups;
+
+        $this->setMiddleware($middleware);
+    }
 
     /**
      * @return string

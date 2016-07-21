@@ -41,11 +41,6 @@ class Client implements ClientInterface
     protected $token;
 
     /**
-     * @var \React\HttpClient\Client
-     */
-    protected $client;
-
-    /**
      * @var \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
      */
     protected $loop;
@@ -76,6 +71,16 @@ class Client implements ClientInterface
     protected $parser;
 
     /**
+     * @var \Gitter\Client
+     */
+    protected $gitterClient;
+
+    /**
+     * @var ReactClient
+     */
+    protected $httpClient;
+
+    /**
      * Client constructor.
      *
      * @param string $token
@@ -85,8 +90,9 @@ class Client implements ClientInterface
         $this->token = $token;
         $this->loop = EventLoop::create();
         $this->dnsResolver = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
-        $this->client = (new HttpClient())->create($this->loop, $this->dnsResolver);
-        $this->urlStorage = (new UrlStorage($token));
+        $this->httpClient = (new HttpClient())->create($this->loop, $this->dnsResolver);
+        $this->urlStorage = new UrlStorage($token);
+        $this->gitterClient = new \Gitter\Client($token);
 
         $this->authAs(null);
         $this->parser = new TextParser('');
@@ -131,7 +137,7 @@ class Client implements ClientInterface
      */
     public function getHttpClient(): ReactClient
     {
-        return $this->client;
+        return $this->httpClient;
     }
 
     /**
@@ -232,6 +238,14 @@ class Client implements ClientInterface
         } catch (\Exception $e) {
             $this->logException($e);
         }
+    }
+
+    /**
+     * @return \Gitter\Client
+     */
+    public function getGitterClient(): \Gitter\Client
+    {
+        return $this->gitterClient;
     }
 
     /**

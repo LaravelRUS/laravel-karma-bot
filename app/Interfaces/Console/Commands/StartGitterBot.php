@@ -65,7 +65,6 @@ class StartGitterBot extends Command
         /** @var RoomInterface $room */
         if (is_null($room = $app['room.manager']->get($roomId))) {
             $this->warn("Room [$roomId] not found");
-
             return;
         }
 

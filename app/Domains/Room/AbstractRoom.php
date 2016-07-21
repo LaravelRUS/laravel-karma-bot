@@ -81,7 +81,7 @@ abstract class AbstractRoom implements RoomInterface
      */
     public function groups()
     {
-        return $this->groups;
+        return (array) $this->groups;
     }
 
     /**
@@ -120,12 +120,23 @@ abstract class AbstractRoom implements RoomInterface
     /**
      * Create middleware storage
      *
-     * @param array $middleware
+     * @param array $groups
      */
-    protected function setMiddleware(array $middleware)
+    protected function setMiddleware(array $groups)
     {
-        foreach ($middleware as $class => $priority) {
-            $this->middleware->add($class, $priority);
+        $registerAll = in_array('*', $this->groups());
+
+        foreach ($groups as $group => $middleware) {
+            if (is_array($middleware)) {
+                if ($registerAll or in_array($group, $this->groups())) {
+                    foreach ($middleware as $class) {
+                        $this->middleware->add($class);
+                    }
+                }
+            } else {
+
+                $this->middleware->add($group);
+            }
         }
     }
 

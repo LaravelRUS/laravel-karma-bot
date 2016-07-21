@@ -63,4 +63,12 @@ class RoomManager
 
         return $room;
     }
+
+    /**
+     * @return array
+     */
+    public function all()
+    {
+        return $this->rooms->all();
+    }
 }
