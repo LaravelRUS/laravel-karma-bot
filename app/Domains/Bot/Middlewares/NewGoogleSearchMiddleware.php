@@ -81,7 +81,7 @@ class NewGoogleSearchMiddleware implements MiddlewareInterface
     {
         $words = (new Collection(trans('google.queries')))->map('preg_quote')->implode('|');
         $pattern = sprintf('/^(?:@.*?\s)?(?:%s)\s(.*?)$/isu', $words);
-        $found = preg_match($pattern, $message->text, $matches);
+        $found = preg_match($pattern, $message->text_without_special_chars, $matches);
         if ($found) {
             return trim($matches[1]);
         }
