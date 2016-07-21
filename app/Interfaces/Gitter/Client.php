@@ -196,7 +196,8 @@ class Client implements ClientInterface
                     $room->middleware(),
                     Message::unguarded(function() use($room, $data) {
                         return new Message(
-                            (new MessageMapper($room, $data))->toArray()
+                            (new MessageMapper($room, $data))->toArray(),
+                            $room
                         );
                     })
                 );

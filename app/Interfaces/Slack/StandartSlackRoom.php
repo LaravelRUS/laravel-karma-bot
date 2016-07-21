@@ -13,52 +13,10 @@ namespace Interfaces\Slack;
 
 use Domains\Room\AbstractRoom;
 use Domains\Middleware\Storage;
+use Interfaces\Gitter\StandartGitterRoom;
 
-class StandartSlackRoom extends AbstractRoom
+class StandartSlackRoom extends StandartGitterRoom
 {
-
-    /**
-     * AbstractRoom constructor.
-     *
-     * @param string $id
-     * @param string $alias
-     * @param string|array $groups
-     * @param array  $middleware
-     */
-    public function __construct($id, $alias, $groups = '*', array $middleware = [])
-    {
-        parent::__construct();
-
-        $this->id = $id;
-        $this->alias = $alias;
-        $this->groups = (array) $groups;
-
-        $this->setMiddleware($middleware);
-    }
-
-    /**
-     * @return string
-     */
-    public function id()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function alias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     * @return array
-     */
-    public function groups()
-    {
-        return $this->groups;
-    }
 
     /**
      * @return string
@@ -66,5 +24,19 @@ class StandartSlackRoom extends AbstractRoom
     public function driver()
     {
         return 'slack';
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    public function answer($text)
+    {
+        $text = preg_replace('/\[(.*?)\]\((.*?)\)/', '<$2|$1>', $text);
+
+        $this->sendMessage($text);
+
+        return $text;
     }
 }

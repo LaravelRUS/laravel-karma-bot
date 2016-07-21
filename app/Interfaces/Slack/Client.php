@@ -62,7 +62,11 @@ class Client implements ClientInterface
     public function sendMessage(RoomInterface $room, $message)
     {
         $this->client->getChannelById($room->id())->then(function (\Slack\Channel $channel) use($message) {
-            $this->client->send((string) $message, $channel);
+            $this->client->apiCall('chat.postMessage', [
+                'text' => (string) $message,
+                'channel' => $channel->getId(),
+                'as_user' => true,
+            ]);
         });
     }
 
@@ -73,12 +77,37 @@ class Client implements ClientInterface
      */
     public function listen(RoomInterface $room)
     {
-        $this->client->on('message', function ($data) use($room) {
+        $this->client->on('message', function (\Slack\Payload $msg) use($room) {
+            if ($msg->getData()['channel'] != $room->id()) {
+                return;
+            }
+
             $this->onMessage(
                 $room->middleware(),
-                Message::unguarded(function() use($room, $data) {
+                Message::unguarded(function() use($room, $msg) {
                     return new Message(
-                        (new MessageMapper($room, $data))->toArray()
+                        (new MessageMapper($room, $msg->getData()))->toArray(),
+                        $room
+                    );
+                })
+            );
+        });
+
+        $this->client->on('reaction_added', function (\Slack\Payload $payload) use($room) {
+            if ($payload->getData()['item']['type'] != 'message' and $payload->getData()['item']['channel'] != $room->id()) {
+                return;
+            }
+
+            $this->onMessage(
+                $room->middleware(),
+                Message::unguarded(function() use($room, $payload) {
+                    $message = $payload->getData();
+                    $message['mentions'] = [$message['item_user']];
+                    $message['text'] = 'Спасибо';
+
+                    return new Message(
+                        (new MessageMapper($room, $message))->toArray(),
+                        $room
                     );
                 })
             );

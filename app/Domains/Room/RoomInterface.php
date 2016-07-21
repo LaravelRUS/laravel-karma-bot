@@ -12,9 +12,10 @@
 namespace Domains\Room;
 
 use Domains\Bot\ClientInterface;
+use Domains\Message\FormatterInterface;
 use Domains\Middleware\Storage;
 
-interface RoomInterface
+interface RoomInterface extends FormatterInterface
 {
     /**
      * @return string

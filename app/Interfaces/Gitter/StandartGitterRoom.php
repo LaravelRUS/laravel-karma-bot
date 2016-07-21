@@ -12,15 +12,9 @@
 namespace Interfaces\Gitter;
 
 use Domains\Room\AbstractRoom;
-use Domains\Middleware\Storage;
 
 class StandartGitterRoom extends AbstractRoom
 {
-    /**
-     * @var \Interfaces\Gitter\Client
-     */
-    protected $client;
-
     /**
      * AbstractRoom constructor.
      *
@@ -36,33 +30,8 @@ class StandartGitterRoom extends AbstractRoom
         $this->id = $id;
         $this->alias = $alias;
         $this->groups = (array) $groups;
-        $this->client = app('bot.manager')->driver($this->driver());
 
         $this->setMiddleware($middleware);
-    }
-
-    /**
-     * @return string
-     */
-    public function id()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function alias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     * @return array
-     */
-    public function groups()
-    {
-        return $this->groups;
     }
 
     /**
@@ -71,5 +40,79 @@ class StandartGitterRoom extends AbstractRoom
     public function driver()
     {
         return 'gitter';
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    public function answer($text)
+    {
+        $this->sendMessage($text);
+
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    public function pre($text)
+    {
+        return $this->answer($this->decorate('`', $text));
+    }
+
+    /**
+     * @param string $code
+     * @param string $lang
+     *
+     * @return string
+     */
+    public function code($code, $lang = '')
+    {
+        return $this->answer(
+            '```' . $lang . "\n" . $code . "\n" . '```'
+        );
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    public function italic($text)
+    {
+        return $this->answer($this->decorate('_', $text));
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    public function bold($text)
+    {
+        return $this->answer($this->decorate('**', $text));
+    }
+
+    /**
+     * @param $symbol
+     * @param $text
+     * @return string
+     */
+    protected function decorate($symbol, $text)
+    {
+        $result = [];
+        $strings = explode("\n", $text);
+        foreach ($strings as $string) {
+            $result[] =
+                $symbol .
+                str_replace($symbol, '\\' . $symbol, trim($string)) .
+                $symbol;
+        }
+
+        return implode("\n", $result);
     }
 }

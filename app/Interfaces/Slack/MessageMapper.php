@@ -11,8 +11,8 @@
 namespace Interfaces\Slack;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Support\Arrayable;
 use Domains\Room\RoomInterface;
+use Illuminate\Contracts\Support\Arrayable;
 use Interfaces\Gitter\Support\AttributeMapper;
 
 class MessageMapper implements Arrayable
@@ -33,7 +33,7 @@ class MessageMapper implements Arrayable
         $fields = ['gitter_id', 'text', 'html', 'edited', 'user', 'unread',
             'read_by', 'urls', 'mentions', 'issues', 'meta', 'created_at', 'updated_at', 'room_id'];
 
-        $this->attributes = (new AttributeMapper(json_decode($attributes, true)))
+        $this->attributes = (new AttributeMapper($attributes))
             ->rename('channel', 'room_id')
             ->value('user', function ($user) use($room) {
                 return $room->client()->getUserById($user);
@@ -41,6 +41,16 @@ class MessageMapper implements Arrayable
             ->value('ts', function ($date) {
                 return Carbon::createFromTimestamp($date)->setTimezone('Europe/Moscow');
             }, 'created_at')
+            ->value('mentions', function ($ids) use($room) {
+                $users = [];
+                if (is_array($ids)) {
+                    foreach ($ids as $userId) {
+                        $users[] = $room->client()->getUserById($userId);
+                    }
+                }
+
+                return $users;
+            })
             ->only($fields)
             ->toArray();
 

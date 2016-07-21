@@ -12,6 +12,8 @@
 namespace Domains;
 
 use Carbon\Carbon;
+use Domains\Message\FormatterInterface;
+use Domains\Room\RoomInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -37,8 +39,26 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $text_without_special_chars
  *
  */
-class Message extends Model
+class Message extends Model implements FormatterInterface
 {
+    /**
+     * @var RoomInterface
+     */
+    protected $room;
+
+    /**
+     * Message constructor.
+     *
+     * @param array         $attributes
+     * @param RoomInterface $room
+     */
+    public function __construct(array $attributes, RoomInterface $room)
+    {
+        parent::__construct($attributes);
+
+        $this->room = $room;
+    }
+
     /**
      * @param $value
      * @return Carbon
@@ -98,7 +118,7 @@ class Message extends Model
      */
     public function answer($text)
     {
-        app('room.manager')->get($this->room_id)->sendMessage($text);
+        $this->room->answer($text);
 
         return $this;
     }
@@ -109,7 +129,9 @@ class Message extends Model
      */
     public function pre($text)
     {
-        return $this->answer($this->decorate('`', $text));
+        $this->room->pre($text);
+
+        return $this;
     }
 
     /**
@@ -119,9 +141,9 @@ class Message extends Model
      */
     public function code($code, $lang = '')
     {
-        return $this->answer(
-            '```' . $lang . "\n" . $code . "\n" . '```'
-        );
+        $this->room->code($code, $lang);
+
+        return $this;
     }
 
     /**
@@ -130,7 +152,9 @@ class Message extends Model
      */
     public function italic($text)
     {
-        return $this->answer($this->decorate('_', $text));
+        $this->room->italic($text);
+
+        return $this;
     }
 
     /**
@@ -139,25 +163,8 @@ class Message extends Model
      */
     public function bold($text)
     {
-        return $this->answer($this->decorate('**', $text));
-    }
+        $this->room->bold($text);
 
-    /**
-     * @param $symbol
-     * @param $text
-     * @return string
-     */
-    protected function decorate($symbol, $text)
-    {
-        $result = [];
-        $strings = explode("\n", $text);
-        foreach ($strings as $string) {
-            $result[] =
-                $symbol .
-                str_replace($symbol, '\\' . $symbol, trim($string)) .
-                $symbol;
-        }
-
-        return implode("\n", $result);
+        return $this;
     }
 }

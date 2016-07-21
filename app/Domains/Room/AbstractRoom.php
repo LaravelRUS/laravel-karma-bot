@@ -61,6 +61,30 @@ abstract class AbstractRoom implements RoomInterface
     }
 
     /**
+     * @return string
+     */
+    public function id()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function alias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @return array
+     */
+    public function groups()
+    {
+        return $this->groups;
+    }
+
+    /**
      * @return ClientInterface
      */
     public function client()
