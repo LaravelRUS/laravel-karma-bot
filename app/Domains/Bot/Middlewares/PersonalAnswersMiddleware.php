@@ -99,7 +99,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             ], true);
 
             if ($isRules) {
-                $message->italic(sprintf('@%s, [In rules we trust](http://laravel.su/articles/nine-circles-of-chat)', $message->user->login));
+                $message->italic(sprintf('@%s, [url=http://laravel.su/articles/nine-circles-of-chat]In rules we trust[/url]', $message->user->login));
             }
 
             $isBan = in_array($message->text_without_special_chars, [

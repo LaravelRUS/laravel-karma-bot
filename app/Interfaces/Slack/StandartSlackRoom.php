@@ -25,18 +25,4 @@ class StandartSlackRoom extends StandartGitterRoom
     {
         return 'slack';
     }
-
-    /**
-     * @param string $text
-     *
-     * @return string
-     */
-    public function answer($text)
-    {
-        $text = preg_replace('/\[(.*?)\]\((.*?)\)/', '<$2|$1>', $text);
-
-        $this->sendMessage($text);
-
-        return $text;
-    }
 }

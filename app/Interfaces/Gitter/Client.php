@@ -14,6 +14,7 @@
 namespace Interfaces\Gitter;
 
 use Domains\Bot\ClientInterface;
+use Domains\Bot\TextParserInterface;
 use Domains\User;
 use Domains\Message;
 use Interfaces\Gitter\Http\Stream;
@@ -70,9 +71,14 @@ class Client implements ClientInterface
     protected $user;
 
     /**
+     * @var TextParserInterface
+     */
+    protected $parser;
+
+    /**
      * Client constructor.
+     *
      * @param string $token
-     * @throws InvalidArgumentException
      */
     public function __construct($token)
     {
@@ -83,6 +89,7 @@ class Client implements ClientInterface
         $this->urlStorage = (new UrlStorage($token));
 
         $this->authAs(null);
+        $this->parser = new TextParser('');
     }
 
     /**
@@ -264,7 +271,7 @@ class Client implements ClientInterface
     public function sendMessage(RoomInterface $room, $message)
     {
         $this->request('message.send', ['roomId' => $room->id()], [
-            'text' => (string) $message,
+            'text' => (string) $this->parser->parse($message),
         ], 'POST');
     }
 

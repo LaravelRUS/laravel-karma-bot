@@ -40,6 +40,11 @@ class Client implements ClientInterface
     protected $client;
 
     /**
+     * @var TextParser
+     */
+    protected $parser;
+
+    /**
      * Client constructor.
      *
      * @param string $token
@@ -51,6 +56,7 @@ class Client implements ClientInterface
         $this->client = new \Slack\RealTimeClient($this->loop);
 
         $this->client->setToken($token);
+        $this->parser = new TextParser('');
     }
 
     /**
@@ -63,7 +69,7 @@ class Client implements ClientInterface
     {
         $this->client->getChannelById($room->id())->then(function (\Slack\Channel $channel) use($message) {
             $this->client->apiCall('chat.postMessage', [
-                'text' => (string) $message,
+                'text' => (string) $this->parser->parse($message),
                 'channel' => $channel->getId(),
                 'as_user' => true,
             ]);

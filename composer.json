@@ -24,7 +24,8 @@
         "filp/whoops": "2.0.*",
         "php-ds/php-ds": "dev-master@dev",
         "big-shark/sql-to-builder": "dev-master@dev",
-        "coderstephen/slack-client": "^0.2.4"
+        "coderstephen/slack-client": "^0.2.4",
+        "3f/converter": "^1.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

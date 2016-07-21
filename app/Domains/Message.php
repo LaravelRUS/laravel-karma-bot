@@ -118,7 +118,7 @@ class Message extends Model implements FormatterInterface
      */
     public function answer($text)
     {
-        $this->room->answer($text);
+        $this->room->sendMessage($text);
 
         return $this;
     }
@@ -129,9 +129,7 @@ class Message extends Model implements FormatterInterface
      */
     public function pre($text)
     {
-        $this->room->pre($text);
-
-        return $this;
+        return $this->answer("[pre]{$text}[/pre]");
     }
 
     /**
@@ -141,9 +139,11 @@ class Message extends Model implements FormatterInterface
      */
     public function code($code, $lang = '')
     {
-        $this->room->code($code, $lang);
+        if (! empty($lang)) {
+            return $this->answer("[code={$lang}]{$code}[/code]");
+        }
 
-        return $this;
+        return $this->answer("[code]{$code}[/code]");
     }
 
     /**
@@ -152,9 +152,7 @@ class Message extends Model implements FormatterInterface
      */
     public function italic($text)
     {
-        $this->room->italic($text);
-
-        return $this;
+        return $this->answer("[i]{$text}[/i]");
     }
 
     /**
@@ -163,8 +161,6 @@ class Message extends Model implements FormatterInterface
      */
     public function bold($text)
     {
-        $this->room->bold($text);
-
-        return $this;
+        return $this->answer("[b]{$text}[/b]");
     }
 }
