@@ -4,7 +4,7 @@ namespace Domains\Bot\Middlewares;
 use Interfaces\Gitter\Ai;
 use Domains\Message;
 use Interfaces\Gitter\Karma\Validator;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareInterface;
 use Domains\User;
 use Illuminate\Support\Str;
 
@@ -45,12 +45,12 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
         if ($isBotMention || $noMentions) {
             // Hello all
-            $isHello = Str::contains($message->text_without_special_chars, \Lang::get('personal.hello_query'));
+            $isHello = Str::contains($message->text_without_special_chars, trans('personal.hello_query'));
 
             if ($isHello) {
-                $id = array_rand(\Lang::get('personal.hello'));
+                $id = array_rand(trans('personal.hello'));
 
-                $message->italic(\Lang::get('personal.hello.' . $id, [
+                $message->italic(trans('personal.hello.' . $id, [
                     'user' => $message->user->login
                 ]));
             }
@@ -99,7 +99,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             ], true);
 
             if ($isRules) {
-                $message->italic(sprintf('@%s, [In rules we trust](http://laravel.su/articles/nine-circles-of-chat)', $message->user->login));
+                $message->italic(sprintf('@%s, [url=http://laravel.su/articles/nine-circles-of-chat]In rules we trust[/url]', $message->user->login));
             }
 
             $isBan = in_array($message->text_without_special_chars, [

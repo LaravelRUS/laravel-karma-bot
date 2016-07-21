@@ -1,8 +1,8 @@
 <?php
 return [
     'receiving' =>
-        '> #### :title' . "\n" .
-        '> @:user, вы выполнили условие: _":description"_.' . "\n" .
+        '> [h4]:title[/h4]' . "\n" .
+        '> [user]:user[/user], вы выполнили условие: [i]":description"[/i].' . "\n" .
         '> С чем и поздравляем =)' . "\n" .
-        '> ![:title](:image)'
+        '> [img]:image[/img]'
 ];

@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Core\Mappers;
+namespace Interfaces\Gitter;
 
 use Domains\User;
-use InvalidArgumentException;
 use Interfaces\Gitter\Support\AttributeMapper;
 
 /**
@@ -27,7 +26,7 @@ class UserMapper
      */
     public static function fromGitterObject($attributes)
     {
-        $values = (new AttributeMapper((array)$attributes))
+        $values = (new AttributeMapper((array) $attributes))
             ->rename('id', 'gitter_id')
             ->rename('username', 'login')
             ->rename('displayName', 'name')

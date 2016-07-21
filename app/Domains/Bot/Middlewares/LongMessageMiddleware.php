@@ -2,7 +2,7 @@
 namespace Domains\Bot\Middlewares;
 
 use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareInterface;
 
 /**
  * Class LongMessageMiddleware
@@ -35,18 +35,18 @@ class LongMessageMiddleware implements MiddlewareInterface
 
             if ($codeLines > self::MAX_CODE_LINES) {
 
-                $answer = \Lang::get('long.code_personal', [
+                $answer = trans('long.code_personal', [
                     'user'  => $message->user->login,
                 ]);
 
-                $message->italic($answer);
+                $message->answer($answer);
 
                 return null;
             }
 
         } elseif ($lines > self::MAX_LINES || $chars > self::MAX_CHARS) {
 
-            $answer = \Lang::get('long.text_personal', [
+            $answer = trans('long.text_personal', [
                 'user'  => $message->user->login,
             ]);
 

@@ -143,6 +143,11 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
+         * GiiterBot
+         */
+        Core\Providers\GitterClientServiceProvider::class,
+
+        /*
          * Application Service Providers...
          */
         Core\Providers\AppServiceProvider::class,
@@ -150,7 +155,6 @@ return [
         Core\Providers\AuthServiceProvider::class,
         Core\Providers\EventServiceProvider::class,
         Core\Providers\RouteServiceProvider::class,
-        Core\Providers\GitterClientServiceProvider::class,
     ],
 
     /*

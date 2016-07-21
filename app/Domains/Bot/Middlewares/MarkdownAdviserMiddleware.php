@@ -2,7 +2,7 @@
 namespace Domains\Bot\Middlewares;
 
 use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareInterface;
 
 /**
  * Class MarkdownAdviserMiddleware
@@ -29,10 +29,10 @@ class MarkdownAdviserMiddleware implements MiddlewareInterface
             }
 
             $answer = $mention
-                ? \Lang::get('markdown.personal', [
+                ? trans('markdown.personal', [
                     'user'  => $mention->login,
                 ])
-                : \Lang::get('markdown.common');
+                : trans('markdown.common');
 
             $message->italic($answer);
 

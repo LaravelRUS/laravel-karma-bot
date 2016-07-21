@@ -4,6 +4,7 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
  * @date 24.09.2015 00:00
  *
  * For the full copyright and license information, please view the LICENSE
@@ -12,12 +13,14 @@
 
 namespace Interfaces\Gitter;
 
-use App;
-use Core\Mappers\UserMapper;
-use Domains\Room;
+use Domains\Bot\ClientInterface;
+use Domains\Bot\TextParserInterface;
 use Domains\User;
+use Domains\Message;
 use Interfaces\Gitter\Http\Stream;
 use Interfaces\Gitter\Http\Request;
+use Domains\Middleware\Storage;
+use Domains\Room\RoomInterface;
 use InvalidArgumentException;
 use Interfaces\Gitter\Http\UrlStorage;
 use React\EventLoop\Factory as EventLoop;
@@ -28,44 +31,14 @@ use React\Dns\Resolver\Factory as DnsResolver;
 /**
  * Class Client
  */
-class Client
+class Client implements ClientInterface
 {
-    const VERSION = '0.1b';
-
-    /**
-     * @param $token
-     * @param $roomId
-     * @return Client
-     * @throws InvalidArgumentException
-     */
-    public static function make($token, $roomId)
-    {
-        $client = new Client($token);
-        App::singleton(Client::class, function () use ($client) {
-            return $client;
-        });
-        App::alias(Client::class, 'gitter');
-
-
-        $room = new Room($roomId);
-        App::singleton(Room::class, function () use ($room) {
-            return $room;
-        });
-        App::alias(Room::class, 'room');
-
-        return $client;
-    }
-
+    const VERSION = 'KarmaBot for Gitter 0.1b';
 
     /**
      * @var string
      */
     protected $token;
-
-    /**
-     * @var \React\HttpClient\Client
-     */
-    protected $client;
 
     /**
      * @var \React\EventLoop\ExtEventLoop|\React\EventLoop\LibEventLoop|\React\EventLoop\LibEvLoop|\React\EventLoop\StreamSelectLoop
@@ -93,20 +66,36 @@ class Client
     protected $user;
 
     /**
+     * @var TextParserInterface
+     */
+    protected $parser;
+
+    /**
+     * @var \Gitter\Client
+     */
+    protected $gitterClient;
+
+    /**
+     * @var ReactClient
+     */
+    protected $httpClient;
+
+    /**
      * Client constructor.
+     *
      * @param string $token
-     * @throws InvalidArgumentException
      */
     public function __construct($token)
     {
         $this->token = $token;
         $this->loop = EventLoop::create();
         $this->dnsResolver = (new DnsResolver())->createCached('8.8.8.8', $this->loop);
-        $this->client = (new HttpClient())->create($this->loop, $this->dnsResolver);
-        $this->urlStorage = (new UrlStorage($token));
-
+        $this->httpClient = (new HttpClient())->create($this->loop, $this->dnsResolver);
+        $this->urlStorage = new UrlStorage($token);
+        $this->gitterClient = new \Gitter\Client($token);
 
         $this->authAs(null);
+        $this->parser = new TextParser('');
     }
 
     /**
@@ -116,8 +105,7 @@ class Client
      */
     public function authAs($gitterUserId = null)
     {
-        $auth = $this->request('user', ['userId' => $gitterUserId])[0];
-        $this->user = UserMapper::fromGitterObject($auth);
+        $this->user = $this->getUserById($gitterUserId);
 
         \Auth::loginUsingId($this->user->id);
 
@@ -149,7 +137,7 @@ class Client
      */
     public function getHttpClient(): ReactClient
     {
-        return $this->client;
+        return $this->httpClient;
     }
 
     /**
@@ -200,12 +188,116 @@ class Client
     }
 
     /**
-     * @return Client
+     * @return ClientInterface
      */
-    public function run(): Client
+    public function run(): ClientInterface
     {
         $this->loop->run();
 
         return $this;
+    }
+
+    /**
+     * @param RoomInterface $room
+     */
+    public function listen(RoomInterface $room)
+    {
+        $this
+            ->stream('messages', ['roomId' => $room->id()])
+            ->on(Stream::EVENT_MESSAGE, function ($stream, $data) use($room) {
+                $this->onMessage(
+                    $room->middleware(),
+                    Message::unguarded(function() use($room, $data) {
+                        return new Message(
+                            (new MessageMapper($room, $data))->toArray(),
+                            $room
+                        );
+                    })
+                );
+            })
+            ->on(Stream::EVENT_END, [$this, 'onClose'])
+            ->on(Stream::EVENT_ERROR, [$this, 'onError']);
+    }
+
+    /**
+     * @return string
+     */
+    public function version()
+    {
+        return static::VERSION;
+    }
+
+    /**
+     * @param Storage $middleware
+     * @param Message $message
+     */
+    public function onMessage(Storage $middleware, Message $message)
+    {
+        try {
+            $middleware->handle($message);
+        } catch (\Exception $e) {
+            $this->logException($e);
+        }
+    }
+
+    /**
+     * @return \Gitter\Client
+     */
+    public function getGitterClient(): \Gitter\Client
+    {
+        return $this->gitterClient;
+    }
+
+    /**
+     * @TODO I do not know if it works
+     * @param Stream $stream
+     */
+    protected function onClose(Stream $stream)
+    {
+        $stream->reconnect();
+    }
+
+    /**
+     * @param Stream $stream
+     * @param \Exception $e
+     */
+    protected function onError(Stream $stream, \Exception $e)
+    {
+        $this->logException($e);
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    protected function logException(\Exception $e)
+    {
+        \Log::error(
+            $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() . "\n" .
+            $e->getTraceAsString() . "\n" .
+            str_repeat('=', 80) . "\n"
+        );
+    }
+
+    /**
+     * @param RoomInterface $room
+     * @param string        $message
+     */
+    public function sendMessage(RoomInterface $room, $message)
+    {
+        $this->request('message.send', ['roomId' => $room->id()], [
+            'text' => (string) $this->parser->parse($message),
+        ], 'POST');
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return User
+     */
+    public function getUserById($id)
+    {
+        return UserMapper::fromGitterObject(
+            $this->request('user', ['userId' => $id])[0]
+        );
     }
 }

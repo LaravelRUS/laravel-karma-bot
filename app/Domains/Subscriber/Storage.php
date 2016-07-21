@@ -3,14 +3,16 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
  * @date 11.10.2015 8:26
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Interfaces\Gitter\Subscriber;
+namespace Domains\Subscriber;
 
 use Illuminate\Contracts\Container\Container;
+use Domains\Room\RoomInterface;
 
 /**
  * Class Storage
@@ -28,12 +30,20 @@ class Storage
     protected $container;
 
     /**
-     * Storage constructor.
-     * @param Container $container
+     * @var RoomInterface
      */
-    public function __construct(Container $container)
+    protected $room;
+
+    /**
+     * Storage constructor.
+     *
+     * @param Container     $container
+     * @param RoomInterface $room
+     */
+    public function __construct(Container $container, RoomInterface $room)
     {
         $this->container = $container;
+        $this->room = $room;
     }
 
     /**
@@ -47,7 +57,7 @@ class Storage
 
         $this->subscribers[] = $subscriber;
 
-        $subscriber->handle();
+        $subscriber->handle($this->room);
 
         return $this;
     }

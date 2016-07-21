@@ -3,6 +3,7 @@
  * This file is part of GitterBot package.
  *
  * @author Serafim <nesk@xakep.ru>
+ * @author butschster <butschster@gmail.com>
  * @date 09.10.2015 16:58
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,9 +12,8 @@
 namespace Domains;
 
 use Carbon\Carbon;
-use LogicException;
-use Interfaces\Gitter\Client;
-use Core\Mappers\MessageMapperTrait;
+use Domains\Message\FormatterInterface;
+use Domains\Room\RoomInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -39,12 +39,25 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $text_without_special_chars
  *
  */
-class Message extends Model
+class Message extends Model implements FormatterInterface
 {
     /**
-     * Gitter mapper
+     * @var RoomInterface
      */
-    use MessageMapperTrait;
+    protected $room;
+
+    /**
+     * Message constructor.
+     *
+     * @param array         $attributes
+     * @param RoomInterface $room
+     */
+    public function __construct(array $attributes, RoomInterface $room)
+    {
+        parent::__construct($attributes);
+
+        $this->room = $room;
+    }
 
     /**
      * @param $value
@@ -105,14 +118,7 @@ class Message extends Model
      */
     public function answer($text)
     {
-        if (\Config::get('gitter.output')) {
-            $client = \App::make(Client::class);
-            $room = \App::make(Room::class);
-
-            $client->request('message.send', ['roomId' => $room->id], [
-                'text' => (string)$text,
-            ], 'POST');
-        }
+        $this->room->sendMessage($text);
 
         return $this;
     }
@@ -123,7 +129,7 @@ class Message extends Model
      */
     public function pre($text)
     {
-        return $this->answer($this->decorate('`', $text));
+        return $this->answer("[pre]{$text}[/pre]");
     }
 
     /**
@@ -133,9 +139,11 @@ class Message extends Model
      */
     public function code($code, $lang = '')
     {
-        return $this->answer(
-            '```' . $lang . "\n" . $code . "\n" . '```'
-        );
+        if (! empty($lang)) {
+            return $this->answer("[code={$lang}]{$code}[/code]");
+        }
+
+        return $this->answer("[code]{$code}[/code]");
     }
 
     /**
@@ -144,7 +152,7 @@ class Message extends Model
      */
     public function italic($text)
     {
-        return $this->answer($this->decorate('_', $text));
+        return $this->answer("[i]{$text}[/i]");
     }
 
     /**
@@ -153,25 +161,6 @@ class Message extends Model
      */
     public function bold($text)
     {
-        return $this->answer($this->decorate('**', $text));
-    }
-
-    /**
-     * @param $symbol
-     * @param $text
-     * @return string
-     */
-    protected function decorate($symbol, $text)
-    {
-        $result = [];
-        $strings = explode("\n", $text);
-        foreach ($strings as $string) {
-            $result[] =
-                $symbol .
-                str_replace($symbol, '\\' . $symbol, trim($string)) .
-                $symbol;
-        }
-
-        return implode("\n", $result);
+        return $this->answer("[b]{$text}[/b]");
     }
 }

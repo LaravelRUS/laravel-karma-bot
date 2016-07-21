@@ -2,7 +2,7 @@
 namespace Domains\Bot\Middlewares;
 
 use Domains\Message;
-use Interfaces\Gitter\Middleware\MiddlewareInterface;
+use Domains\Middleware\MiddlewareInterface;
 
 /**
  * Class GoogleSearchMiddleware
@@ -32,7 +32,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
             }
 
             $answer = trim($matches[1]) && $mention
-                ? \Lang::get('google.personal', [
+                ? trans('google.personal', [
                     'user'  => $mention->login,
                     'query' => urlencode($matches[2]),
                 ])
@@ -40,7 +40,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                     'query' => urlencode($matches[2]),
                 ]);
 
-            $message->answer($answer);
+            $message->italic($answer);
 
             return null;
         }
