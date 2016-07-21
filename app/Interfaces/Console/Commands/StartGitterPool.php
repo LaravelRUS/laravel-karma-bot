@@ -86,9 +86,7 @@ class StartGitterPool extends Command
     protected function start()
     {
         foreach ($this->container['room.manager']->all() as $room) {
-            $bg = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'start /min /normal' : 'nohup';
-
-            shell_exec("{$bg} php artisan gitter:listen {$room->id()}");
+            shell_exec('nohup php artisan gitter:listen '.$room->id().' > /dev/null 2>&1 &');
             $this->line('Starting ' . $room->id() . ' listener.');
         }
     }
