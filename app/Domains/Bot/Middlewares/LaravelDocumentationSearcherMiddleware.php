@@ -17,9 +17,10 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $pattern = '/^(@.*)?.*?\s(информация|доки|документация|larvel doc)\s+(?:про|по)?\s*(.*?)$/isu';
+        $pattern = '/^(@?.*?\s?)(информация|доки|документация|larvel doc)\s+(?:про|по)?\s*(.*?)$/isu';
         if (preg_match($pattern, $message->text_without_special_chars, $matches)) {
-            if (!trim($matches[3])) {
+
+            if (!trim($query = $matches[3])) {
                 return $message;
             }
 
@@ -28,12 +29,11 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
                 '8e1d446d61fce359f69cd7c8b86a50de'
             );
 
-            $result = $client->initIndex('docs')->search($matches[3]);
+            $result = $client->initIndex('docs')->search($query);
 
-            if (!isset($result['hits'])) {
-                $message->italic('По вашему запросу ничего не найдено');
-
-                return null;
+            if ((int) array_get($result, 'nbHits') === 0) {
+                $message->text = "погугли {$query}";
+                return app(NewGoogleSearchMiddleware::class)->handle($message);
             }
 
             $response = '';
@@ -44,7 +44,6 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
                 return $row['h1'];
             })->map(function ($row) {
                 $row['link'] = 'https://laravel.com/docs/5.2/' . $row['link'];
-
                 return $row;
             })->take(3)->each(function ($row) use (&$response) {
                 $title = '';
@@ -59,7 +58,7 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
 
             if (!empty($response)) {
                 $message->answer(trans('search.results', [
-                    'results' => ' [list]' . PHP_EOL . $response . PHP_EOL . '[/list]',
+                    'results' => '[list]' . PHP_EOL . $response . PHP_EOL . '[/list]',
                 ]));
             }
 
