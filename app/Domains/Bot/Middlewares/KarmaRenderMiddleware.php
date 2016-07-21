@@ -17,7 +17,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        if (in_array(trim(mb_strtolower($message->text)), \Lang::get('request.karma'), true)) {
+        if (in_array(trim(mb_strtolower($message->text)), trans('request.karma'), true)) {
             $args = [
                 'user' => $message->user->login,
                 'karma' => $message->user->karma_text,
@@ -29,8 +29,8 @@ class KarmaRenderMiddleware implements MiddlewareInterface
 
             // Karma info
             $karmaMessage[] = $args['karma']
-                ? \Lang::get('karma.count.message', $args)
-                : \Lang::get('karma.count.empty', $args);
+                ? trans('karma.count.message', $args)
+                : trans('karma.count.empty', $args);
 
             // If has achievements
             $achievements = $this->getAchievements($message);
@@ -40,9 +40,9 @@ class KarmaRenderMiddleware implements MiddlewareInterface
 
             if (in_array($message->room_id, ['55dc21c10fc9f982beae822c', '555086c915522ed4b3e03631'], true)) {
                 // Profile link
-                $karmaMessage[] = \Lang::get('karma.account_yii', $args);
+                $karmaMessage[] = trans('karma.account_yii', $args);
             } else {
-                $karmaMessage[] = \Lang::get('karma.account', $args);
+                $karmaMessage[] = trans('karma.account', $args);
             }
 
             $message->answer(implode("\n", $karmaMessage));
@@ -65,7 +65,7 @@ class KarmaRenderMiddleware implements MiddlewareInterface
         }
 
         if (count($achievements)) {
-            return \Lang::get('karma.achievements', [
+            return trans('karma.achievements', [
                 'achievements' => implode(', ', $achievements),
             ]);
         }

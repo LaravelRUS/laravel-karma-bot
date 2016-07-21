@@ -30,7 +30,7 @@ class Validator
      */
     public function __construct()
     {
-        $this->likes = \Lang::get('thanks.likes');
+        $this->likes = trans('thanks.likes');
     }
 
     /**

@@ -45,12 +45,12 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
         if ($isBotMention || $noMentions) {
             // Hello all
-            $isHello = Str::contains($message->text_without_special_chars, \Lang::get('personal.hello_query'));
+            $isHello = Str::contains($message->text_without_special_chars, trans('personal.hello_query'));
 
             if ($isHello) {
-                $id = array_rand(\Lang::get('personal.hello'));
+                $id = array_rand(trans('personal.hello'));
 
-                $message->italic(\Lang::get('personal.hello.' . $id, [
+                $message->italic(trans('personal.hello.' . $id, [
                     'user' => $message->user->login
                 ]));
             }

@@ -11,7 +11,6 @@
 namespace Interfaces\Gitter\Karma;
 
 use Domains\User;
-use Lang;
 
 class Status
 {
@@ -109,16 +108,16 @@ class Status
 
         switch ($this->status) {
             case static::STATUS_INCREMENT:
-                return Lang::get('karma.increment', $args);
+                return trans('karma.increment', $args);
 
             case static::STATUS_TIMEOUT:
-                return Lang::get('karma.timeout', $args);
+                return trans('karma.timeout', $args);
 
             case static::STATUS_SELF:
-                return Lang::get('karma.self', $args);
+                return trans('karma.self', $args);
 
             case static::STATUS_NO_USER:
-                return Lang::get('karma.nouser', $args);
+                return trans('karma.nouser', $args);
         }
 
         return null;

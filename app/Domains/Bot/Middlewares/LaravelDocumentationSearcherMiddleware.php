@@ -55,7 +55,9 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
             });
 
             if (! empty($response)) {
-                $message->answer('[i]Вот что нашел в документации:[/i] [list]'.PHP_EOL.$response.PHP_EOL.'[/list]');
+                $message->answer(trans('search.results', [
+                    'results' => '[i]Вот что нашел в документации:[/i] [list]'.PHP_EOL.$response.PHP_EOL.'[/list]'
+                ]));
             }
 
 

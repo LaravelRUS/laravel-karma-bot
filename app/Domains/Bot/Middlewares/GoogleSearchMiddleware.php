@@ -32,7 +32,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
             }
 
             $answer = trim($matches[1]) && $mention
-                ? \Lang::get('google.personal', [
+                ? trans('google.personal', [
                     'user'  => $mention->login,
                     'query' => urlencode($matches[2]),
                 ])

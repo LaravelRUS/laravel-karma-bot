@@ -35,7 +35,7 @@ class LongMessageMiddleware implements MiddlewareInterface
 
             if ($codeLines > self::MAX_CODE_LINES) {
 
-                $answer = \Lang::get('long.code_personal', [
+                $answer = trans('long.code_personal', [
                     'user'  => $message->user->login,
                 ]);
 
@@ -46,7 +46,7 @@ class LongMessageMiddleware implements MiddlewareInterface
 
         } elseif ($lines > self::MAX_LINES || $chars > self::MAX_CHARS) {
 
-            $answer = \Lang::get('long.text_personal', [
+            $answer = trans('long.text_personal', [
                 'user'  => $message->user->login,
             ]);
 

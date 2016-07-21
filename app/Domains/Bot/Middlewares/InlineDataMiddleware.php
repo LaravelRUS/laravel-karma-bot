@@ -24,7 +24,7 @@ class InlineDataMiddleware implements MiddlewareInterface
         , ' ' . $message->text);
 
         if (($isImage || $isVideo) && $message->user->login !== \Auth::user()->login) {
-            $answer = \Lang::get('gitter.inline', [
+            $answer = trans('gitter.inline', [
                 'user' => $message->user->login
             ]);
             $message->italic($answer);

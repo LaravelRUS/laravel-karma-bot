@@ -80,7 +80,7 @@ class AchieveSubscriber implements
     {
         Achieve::created(function (Achieve $achieve) use($room) {
             $room->sendMessage(
-                \Lang::get('achieve.receiving', [
+                trans('achieve.receiving', [
                     'user'        => $achieve->user->login,
                     'title'       => $achieve->title,
                     'description' => $achieve->description,
