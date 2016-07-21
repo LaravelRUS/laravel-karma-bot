@@ -91,7 +91,7 @@ class GoogleSearch
                 continue;
             }
 
-            $result[] = sprintf('[*] [url=%s]%s[/url]', $link->title, $link->link);
+            $result[] = sprintf('[*] [url=%s]%s[/url]', $link->link, $link->title);
         }
 
         if (! empty($result)) {

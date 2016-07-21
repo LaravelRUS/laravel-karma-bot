@@ -53,17 +53,17 @@ class NewGoogleSearchMiddleware implements MiddlewareInterface
                 $answerTo = $message->user;
 
                 $message->answer(trans('google.personal', [
-                        'user' => $mention->login,
-                        'query' => urlencode($query),
-                    ]).PHP_EOL.$search);
-
-                return;
+                    'user' => $mention->login,
+                    'query' => urlencode($query),
+                ]).PHP_EOL.$search);
             }
 
             $message->answer(trans('google.common', [
-                    'query' => urlencode($query),
-                ]).PHP_EOL.$search);
+                'query' => urlencode($query),
+            ]).PHP_EOL.$search);
         }
+
+        return $message;
     }
 
     /**
