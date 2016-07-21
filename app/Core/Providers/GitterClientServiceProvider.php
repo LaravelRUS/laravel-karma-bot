@@ -14,9 +14,10 @@ namespace Core\Providers;
 use Domains\BotManager;
 use Domains\RoomManager;
 use Gitter\Client;
-use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use Interfaces\Gitter\StandartGitterRoom;
+use Interfaces\Slack\StandartSlackRoom;
 
 /**
  * Class GitterClientServiceProvider
@@ -27,11 +28,8 @@ class GitterClientServiceProvider extends ServiceProvider
 
     public function register()
     {
-        /** @var Repository $config */
-        $config = $this->app->make(Repository::class);
-
-        $this->app->singleton(Client::class, function (Container $app) use ($config) {
-            return new Client($config->get('gitter.token'));
+        $this->app->singleton(Client::class, function (Container $app) {
+            return new Client($app['config']->get('gitter.token'));
         });
 
         $this->app->singleton('bot', function (Container $app) {
@@ -48,7 +46,30 @@ class GitterClientServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('room.manager', function (Container $app) {
-            return new RoomManager((array) $app['config']['gitter']['rooms']);
+            $manager = new RoomManager();
+
+            $this->registerGitterRooms($manager);
+            $this->registerSlackRooms($manager);
+
+            return $manager;
         });
+    }
+
+    protected function registerGitterRooms(RoomManager $manager)
+    {
+        foreach ((array) $this->app['config']->get('gitter.rooms') as $alias => $roomId) {
+            $manager->register(
+                new StandartGitterRoom($roomId, $alias, '*', \Config::get('gitter.middlewares'))
+            );
+        }
+    }
+
+    protected function registerSlackRooms(RoomManager $manager)
+    {
+        foreach ((array) $this->app['config']->get('slack.rooms') as $alias => $roomId) {
+            $manager->register(
+                new StandartSlackRoom($roomId, $alias, '*', \Config::get('slack.middlewares'))
+            );
+        }
     }
 }

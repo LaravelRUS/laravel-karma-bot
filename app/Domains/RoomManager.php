@@ -11,10 +11,9 @@
  */
 namespace Domains;
 
+use Domains\Room\RoomInterface;
 use Illuminate\Support\Collection;
-use Interfaces\Gitter\Room\RoomInterface;
-use Interfaces\Gitter\Room\StandartGitterRoom;
-use Interfaces\Gitter\Subscriber\Storage as Subscribers;
+use Interfaces\Gitter\StandartGitterRoom;
 
 /**
  * Class RoomManager
@@ -35,10 +34,6 @@ class RoomManager
     public function __construct(array $rooms = [])
     {
         $this->rooms = new Collection();
-
-        foreach ($rooms as $alias => $roomId) {
-            $this->register(new StandartGitterRoom($roomId, $alias, '*', \Config::get('gitter.middlewares')));
-        }
     }
 
     /**

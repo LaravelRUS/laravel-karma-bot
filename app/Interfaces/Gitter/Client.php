@@ -13,16 +13,13 @@
 
 namespace Interfaces\Gitter;
 
-use App;
-use Core\Mappers\UserMapper;
 use Domains\Bot\ClientInterface;
-use Domains\Room;
 use Domains\User;
 use Domains\Message;
 use Interfaces\Gitter\Http\Stream;
 use Interfaces\Gitter\Http\Request;
-use Interfaces\Gitter\Middleware\Storage;
-use Interfaces\Gitter\Room\RoomInterface;
+use Domains\Middleware\Storage;
+use Domains\Room\RoomInterface;
 use InvalidArgumentException;
 use Interfaces\Gitter\Http\UrlStorage;
 use React\EventLoop\Factory as EventLoop;
@@ -85,7 +82,6 @@ class Client implements ClientInterface
         $this->client = (new HttpClient())->create($this->loop, $this->dnsResolver);
         $this->urlStorage = (new UrlStorage($token));
 
-
         $this->authAs(null);
     }
 
@@ -96,8 +92,7 @@ class Client implements ClientInterface
      */
     public function authAs($gitterUserId = null)
     {
-        $auth = $this->request('user', ['userId' => $gitterUserId])[0];
-        $this->user = UserMapper::fromGitterObject($auth);
+        $this->user = $this->getUserById($gitterUserId);
 
         \Auth::loginUsingId($this->user->id);
 
@@ -270,5 +265,17 @@ class Client implements ClientInterface
         $this->request('message.send', ['roomId' => $room->id()], [
             'text' => (string) $message,
         ], 'POST');
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return User
+     */
+    public function getUserById($id)
+    {
+        return UserMapper::fromGitterObject(
+            $this->request('user', ['userId' => $id])[0]
+        );
     }
 }

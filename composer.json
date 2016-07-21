@@ -23,7 +23,8 @@
         "doctrine/dbal": "^2.5.0",
         "filp/whoops": "2.0.*",
         "php-ds/php-ds": "dev-master@dev",
-        "big-shark/sql-to-builder": "dev-master@dev"
+        "big-shark/sql-to-builder": "dev-master@dev",
+        "coderstephen/slack-client": "^0.2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -64,6 +65,7 @@
             "php artisan key:generate"
         ]
     },
+    "minimum-stability": "dev",
     "config": {
         "preferred-install": "dist"
     }

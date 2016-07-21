@@ -11,7 +11,8 @@
 namespace Domains;
 
 use Illuminate\Support\Manager;
-use Interfaces\Gitter\Client;
+use Interfaces\Gitter\Client as GitterClient;
+use Interfaces\Slack\Client as SlackClient;
 
 /**
  * Class BotManager
@@ -34,6 +35,14 @@ class BotManager extends Manager
      */
     public function createGitterDriver()
     {
-        return new Client(\Config::get('gitter.token'));
+        return new GitterClient($this->app['config']->get('gitter.token'));
+    }
+
+    /**
+     * @return \Illuminate\Foundation\Application|mixed
+     */
+    public function createSlackDriver()
+    {
+        return new SlackClient($this->app['config']->get('slack.token'));
     }
 }
