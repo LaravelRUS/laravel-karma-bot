@@ -20,7 +20,7 @@ return [
     'middlewares' => [
         'common' => [
             // Google поисковик
-            Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
+            Domains\Bot\Middlewares\NewGoogleSearchMiddleware::class,
             // Советник по оформлению сообщений
             Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class,
             // Ответы на персональные вопросы для бота
