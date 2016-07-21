@@ -30,13 +30,15 @@ class NewGoogleSearchMiddleware implements MiddlewareInterface
     /**
      * @param Message $message
      *
-     * @return array
+     * @return Message
      */
     public function handle(Message $message)
     {
         $query = $this->getGoogleQuery($message);
+
         if ($query) {
             $search = '';
+
             try {
                 $search = $this->search->searchGetMessage($query);
             } catch (\Throwable $e) {
@@ -52,13 +54,13 @@ class NewGoogleSearchMiddleware implements MiddlewareInterface
             if (count($message->mentions)) {
                 $answerTo = $message->user;
 
-                $message->answer(trans('google.personal', [
+                return $message->answer(trans('google.personal', [
                     'user' => $mention->login,
                     'query' => urlencode($query),
                 ]).PHP_EOL.$search);
             }
 
-            $message->answer(trans('google.common', [
+            return $message->answer(trans('google.common', [
                 'query' => urlencode($query),
             ]).PHP_EOL.$search);
         }

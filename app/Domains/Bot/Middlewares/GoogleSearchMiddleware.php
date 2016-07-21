@@ -36,7 +36,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                     'user'  => $mention->login,
                     'query' => urlencode($matches[2]),
                 ])
-                : \Lang::get('google.common', [
+                : trans('google.common', [
                     'query' => urlencode($matches[2]),
                 ]);
 
