@@ -37,6 +37,9 @@ return [
         ],
 
         'laravel' => [
+			// Поиск по документации Laravel
+			Domains\Bot\Middlewares\LaravelDocumentationSearcherMiddleware::class,
+
             // SQL билдер
             Domains\Bot\Middlewares\SqlBuilderMiddleware::class,
         ],

@@ -12,10 +12,9 @@ namespace Interfaces\Console\Commands;
 
 
 use Illuminate\Console\Command;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
-
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class StartGitterPool
@@ -86,10 +85,11 @@ class StartGitterPool extends Command
      */
     protected function start()
     {
-        foreach ($this->config->get('gitter.rooms') as $key => $id) {
-            shell_exec('nohup php artisan gitter:listen ' . $key . ' > /dev/null 2>&1 &');
+        foreach ($this->container['room.manager']->all() as $room) {
+            $bg = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'start /min /normal' : 'nohup';
 
-            $this->line('Starting ' . $key . ' => ' . $id . ' listener.');
+            shell_exec("{$bg} php artisan gitter:listen {$room->id()}");
+            $this->line('Starting ' . $room->id() . ' listener.');
         }
     }
 

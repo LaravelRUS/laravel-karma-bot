@@ -39,7 +39,7 @@ class LongMessageMiddleware implements MiddlewareInterface
                     'user'  => $message->user->login,
                 ]);
 
-                $message->italic($answer);
+                $message->answer($answer);
 
                 return null;
             }

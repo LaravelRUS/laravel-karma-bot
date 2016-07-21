@@ -40,7 +40,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
                     'query' => urlencode($matches[2]),
                 ]);
 
-            $message->answer($answer);
+            $message->italic($answer);
 
             return null;
         }

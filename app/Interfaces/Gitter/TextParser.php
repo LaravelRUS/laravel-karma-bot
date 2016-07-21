@@ -20,6 +20,22 @@ class TextParser extends BBCodeConverter implements TextParserInterface
     public function __construct() {}
 
     /**
+     * @brief Replaces BBCode italic.
+     */
+    protected function replaceItalic() {
+
+        $this->text = preg_replace_callback('%\[i\]([\W\D\w\s]*?)\[/i\]%iu',
+
+            function ($matches) {
+                return "_".trim($matches[1], " ")."_";
+            },
+
+            $this->text
+        );
+
+    }
+
+    /**
      * @brief Removes BBCode center.
      */
     protected function removeUser() {

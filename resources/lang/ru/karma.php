@@ -5,12 +5,21 @@ return [
     'self'          => 'Так не честно, [user]:user[/user]. Нельзя добавлять карму самому себе.',
     'bot'           => '[user]:user[/user], [i]не за что, я всегда к твоим услугам[/i] =)',
     'nouser'        => '[user]:user[/user], в этом чате принято добавлять имя пользователя, чтобы его поблагодарить.',
-    'achievements'  => '- Достижения: :achievements',
-    'account'       => '- [url=http://karma.laravel.su/user/:user]Профиль :user на laravel.su[/url]',
-    'account_yii'   => '- [url=http://karma.yiiframework.ru/user/:user]Профиль :user на yiiframework.ru[/url]',
+    'achievements'  => '
+    [list]
+        [*] [i]Достижения: :achievements[/i]
+    [/list]',
+    'account'       => '
+    [list]
+        [*] [i][url=http://karma.laravel.su/user/:user]Профиль :user на laravel.su[/url][/i]
+    [/list]',
+    'account_yii'   => '
+    [list]
+        [*] [i][url=http://karma.yiiframework.ru/user/:user]Профиль :user на yiiframework.ru[/url][/i]
+    [/list]',
 
     'count'     => [
-        'message' => '[user]:user[/user], Ваша карма [b]:karma[/b]. Вы благодарили [b]:thanks[/b] раз.',
-        'empty'   => '[user]:user[/user], Вас ещё никто не благодарил.'
+        'message' => '[user]:user[/user], [i]Ваша карма [b]:karma[/b]. Вы благодарили [b]:thanks[/b] раз.[/i]',
+        'empty'   => '[user]:user[/user], [i]Вас ещё никто не благодарил.[/i]'
     ]
 ];
