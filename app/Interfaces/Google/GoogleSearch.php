@@ -91,10 +91,10 @@ class GoogleSearch
                 continue;
             }
 
-            $result[] = sprintf('[*] [url=%s]%s[/url]', $link->link, $link->title);
+            $result[] = sprintf('[*] [i][url=%s]%s[/url][/i]', $link->link, $link->title);
         }
 
-        if (! empty($result)) {
+        if (!empty($result)) {
             $result = '[list]'.implode(PHP_EOL, $result).'[/list]';
         }
 

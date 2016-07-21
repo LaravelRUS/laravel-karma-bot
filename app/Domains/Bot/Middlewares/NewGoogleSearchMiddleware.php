@@ -48,21 +48,25 @@ class NewGoogleSearchMiddleware implements MiddlewareInterface
             $mention = null;
 
             if ($hasMentions) {
-                $mention = $message->mentions[0]->login === \Auth::user()->login ? $message->user : $message->mentions[0];
+                $mention = $message->mentions[0]->login === \Auth::user()->login
+                    ? $message->user
+                    : $message->mentions[0];
             }
 
             if (count($message->mentions)) {
-                $answerTo = $message->user;
-
-                return $message->answer(trans('google.personal', [
-                    'user' => $mention->login,
-                    'query' => urlencode($query),
-                ]).PHP_EOL.$search);
+                return $message->answer(
+                    trans('google.personal', [
+                        'user' => $mention->login,
+                        'query' => urlencode($query),
+                    ]) .
+                    PHP_EOL . $search
+                );
             }
 
-            return $message->answer(trans('google.common', [
-                'query' => urlencode($query),
-            ]).PHP_EOL.$search);
+            return $message->answer(
+                trans('google.common', ['query' => urlencode($query)]) .
+                    PHP_EOL . $search
+            );
         }
 
         return $message;

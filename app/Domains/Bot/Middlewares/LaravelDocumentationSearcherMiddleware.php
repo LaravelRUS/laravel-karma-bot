@@ -29,8 +29,9 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
 
             $result = $client->initIndex('docs')->search($matches[3]);
 
-            if (! isset($result['hits'])) {
+            if (!isset($result['hits'])) {
                 $message->italic('По вашему запросу ничего не найдено');
+
                 return null;
             }
 
@@ -38,28 +39,28 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
 
             $hits = new Collection($result['hits']);
 
-            $hits->unique(function($row) {
+            $hits->unique(function ($row) {
                 return $row['h1'];
-            })->map(function($row) {
-                $row['link'] = 'https://laravel.com/docs/5.2/'.$row['link'];
+            })->map(function ($row) {
+                $row['link'] = 'https://laravel.com/docs/5.2/' . $row['link'];
+
                 return $row;
-            })->take(3)->each(function($row) use(&$response) {
+            })->take(3)->each(function ($row) use (&$response) {
                 $title = '';
                 foreach (['h1', 'h2', 'h3', 'h4', 'h5'] as $tag) {
                     if (isset($row[$tag])) {
-                        $title .= ' : '.$row[$tag];
+                        $title .= ' ' . $row[$tag];
                     }
                 }
 
-                $response .= "[*] [i][url={$row['link']}]{$title}[/url][/i]".PHP_EOL;
+                $response .= "[*] [i][url={$row['link']}]{$title}[/url][/i]" . PHP_EOL;
             });
 
-            if (! empty($response)) {
+            if (!empty($response)) {
                 $message->answer(trans('search.results', [
-                    'results' => '[i]Вот что нашел в документации:[/i] [list]'.PHP_EOL.$response.PHP_EOL.'[/list]'
+                    'results' => ' [list]' . PHP_EOL . $response . PHP_EOL . '[/list]',
                 ]));
             }
-
 
 
             return null;
