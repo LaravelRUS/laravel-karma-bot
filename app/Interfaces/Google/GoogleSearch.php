@@ -46,11 +46,15 @@ class GoogleSearch
     /**
      * @param string $query
      *
-     * @return mixed
+     * @return array
      * @throws \Throwable
      */
     public function search(string $query)
     {
+        if (empty($this->token)) {
+            return [];
+        }
+
         $url = 'https://www.googleapis.com/customsearch/v1?'.http_build_query([
             'key' => $this->token,
             'lr' => 'lang_ru',

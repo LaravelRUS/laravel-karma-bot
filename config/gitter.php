@@ -21,6 +21,7 @@ return [
         'common' => [
             // Google поисковик
             Domains\Bot\Middlewares\NewGoogleSearchMiddleware::class,
+            // Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
 
             // Советник по оформлению сообщений
             Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class,
