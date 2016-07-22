@@ -27,7 +27,7 @@ interface RoomInterface
     public function alias();
 
     /**
-     * @return string
+     * @return array
      */
     public function groups();
 
