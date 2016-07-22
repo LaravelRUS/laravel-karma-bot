@@ -4,13 +4,15 @@ return [
     'token' => env('SLACK_TOKEN', null),
 
     'rooms' => [
-        'C125407FG' => ['common', 'improvements']
+        env('SLACK_DEBUG_ROOM', null) => ['common', 'improvements']
     ],
 
     'middlewares' => [
         'common' => [
             // Google поисковик
-            Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
+            Domains\Bot\Middlewares\NewGoogleSearchMiddleware::class,
+            // Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
+
             // Советник по оформлению сообщений
             Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class,
             // Ответы на персональные вопросы для бота
