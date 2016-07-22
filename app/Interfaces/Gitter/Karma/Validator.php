@@ -101,8 +101,10 @@ class Validator
      */
     protected function validateTimeout(Message $message, User $mention)
     {
-        return $mention->getLastKarmaTimeForRoom($message->room_id)->timestamp + 60
-            < $message->created_at->timestamp;
+        return $mention
+            ->getLastKarmaTimeForRoom($message->room_id)
+            ->addSeconds(60)
+            ->lt($message->created_at);
     }
 
 
