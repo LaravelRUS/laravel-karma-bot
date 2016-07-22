@@ -39,7 +39,7 @@ class Validator
      */
     public function validate(Message $message)
     {
-        $response = new Collection([]);
+        $response = new Collection();
 
         // If has no mentions
         if (!count($message->mentions)) {
@@ -52,7 +52,7 @@ class Validator
 
         foreach ($message->mentions as $mention) {
             // Ignore bot queries
-            if (\Auth::user()->login === $message->user->login) {
+            if ($message->user->isBot()) {
                 continue;
             }
 

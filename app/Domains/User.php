@@ -145,4 +145,22 @@ class User extends \Eloquent implements
             'created_at'     => $message->created_at,
         ]);
     }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function is(User $user)
+    {
+        return $this->login === $user->login;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBot()
+    {
+        return $this->is(\Auth::user());
+    }
 }
