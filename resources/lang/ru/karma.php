@@ -9,14 +9,10 @@ return [
     [list]
         [*] [i]Достижения: :achievements[/i]
     [/list]',
-    'account'       => '
-    [list]
-        [*] [i][url=http://karma.laravel.su/user/:user]Профиль :user на laravel.su[/url][/i]
-    [/list]',
-    'account_yii'   => '
-    [list]
-        [*] [i][url=http://karma.yiiframework.ru/user/:user]Профиль :user на yiiframework.ru[/url][/i]
-    [/list]',
+    'account'       => [
+        'laravel' => ' [*] [i][url=http://karma.laravel.su/user/:user]Профиль :user на laravel.su[/url][/i]',
+        'yii' => ' [*] [i][url=http://karma.yiiframework.ru/user/:user]Профиль :user на yiiframework.ru[/url][/i]',
+    ],
 
     'count'     => [
         'message' => '[user]:user[/user], [i]Ваша карма [b]:karma[/b]. Вы благодарили [b]:thanks[/b] раз.[/i]',

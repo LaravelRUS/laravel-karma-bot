@@ -24,7 +24,6 @@ class KarmaRenderMiddleware implements MiddlewareInterface
                 'thanks' => $message->user->thanks_text,
             ];
 
-
             $karmaMessage = [];
 
             // Karma info
@@ -38,11 +37,16 @@ class KarmaRenderMiddleware implements MiddlewareInterface
                 $karmaMessage[] = $achievements;
             }
 
-            if (in_array($message->room_id, ['55dc21c10fc9f982beae822c', '555086c915522ed4b3e03631'], true)) {
-                // Profile link
-                $karmaMessage[] = trans('karma.account_yii', $args);
-            } else {
-                $karmaMessage[] = trans('karma.account', $args);
+            $groups = $message->getRoom()->groups();
+
+            if (in_array('karma', $groups)) {
+                $karmaMessage[] = '[list]';
+                foreach ($groups as $group) {
+                    if (trans()->has($key = "karma.account.{$group}")) {
+                        $karmaMessage[] = trans($key, $args);
+                    }
+                }
+                $karmaMessage[] = '[/list]';
             }
 
             $message->answer(implode("\n", $karmaMessage));
