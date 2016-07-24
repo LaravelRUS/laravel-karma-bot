@@ -8,6 +8,7 @@ return [
         'LaravelRUS/chat'                              => ['common', 'karma', 'improvements', 'laravel'],
         'LaravelRUS/laravel.ru'                        => ['common', 'karma', 'improvements', 'laravel'],
         'LaravelRUS/GitterBot'                         => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/SleepingOwlAdmin'                  => ['common', 'karma', 'improvements', 'laravel'],
         'DrupalRu/drupal.ru'                           => ['common', 'karma', 'improvements'],
         'dru-io/Drupal'                                => ['common', 'karma', 'improvements'],
         'yiisoft/yii2/offtopic-rus'                    => ['common', 'karma', 'improvements'],
