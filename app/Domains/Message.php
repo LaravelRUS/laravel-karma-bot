@@ -163,4 +163,12 @@ class Message extends Model implements FormatterInterface
     {
         return $this->answer("[b]{$text}[/b]");
     }
+
+    /**
+     * @return RoomInterface
+     */
+    public function getRoom()
+    {
+        return $this->room;
+    }
 }

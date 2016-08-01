@@ -39,7 +39,7 @@ class Validator
      */
     public function validate(Message $message)
     {
-        $response = new Collection([]);
+        $response = new Collection();
 
         // If has no mentions
         if (!count($message->mentions)) {
@@ -52,7 +52,7 @@ class Validator
 
         foreach ($message->mentions as $mention) {
             // Ignore bot queries
-            if (\Auth::user()->login === $message->user->login) {
+            if ($message->user->isBot()) {
                 continue;
             }
 
@@ -101,8 +101,10 @@ class Validator
      */
     protected function validateTimeout(Message $message, User $mention)
     {
-        return $mention->getLastKarmaTimeForRoom($message->room_id)->timestamp + 60
-            < $message->created_at->timestamp;
+        return $mention
+            ->getLastKarmaTimeForRoom($message->room_id)
+            ->addSeconds(60)
+            ->lt($message->created_at);
     }
 
 

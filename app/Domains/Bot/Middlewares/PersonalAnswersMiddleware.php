@@ -20,10 +20,12 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
     /**
      * PersonalAnswersMiddleware constructor.
+     *
+     * @param Ai $ai
      */
-    public function __construct()
+    public function __construct(Ai $ai)
     {
-        $this->ai = new Ai();
+        $this->ai = $ai;
     }
 
     /**
@@ -32,7 +34,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        if ($message->user->login === \Auth::user()->login) {
+        if ($message->user->isBot()) {
             return $message;
         }
 
@@ -40,7 +42,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
         // Personal message
         $isBotMention = $message->hasMention(function(User $user) {
-            return $user->login === \Auth::user()->login;
+            return $user->isBot();
         });
 
         if ($isBotMention || $noMentions) {

@@ -17,26 +17,26 @@ use Domains\Bot\TextParserInterface;
 class TextParser extends BBCodeConverter implements TextParserInterface
 {
 
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    public static function escape($text)
+    {
+        $text = preg_replace('/(?P<char>(?:_|\*))(.+?)(?P=char)/isu', '\\\$1$2\\\$1', $text);
+        $text = preg_replace('/\*\*(.+?)\*\*/isu', '*\\*$1*\\*', $text);
+        $text = preg_replace('/\-\-(\-)+/isu', '\-\-\-', $text);
+        $text = preg_replace('/\n*^(?!\w\s+)(#)/isu', '\\#', $text);
+        $text = preg_replace('/\[(.*?)\]\((.*?)\)/isu', '\\[$1\\]\\($2\\)', $text);
+
+        return $text;
+    }
+
     public function __construct() {}
 
     /**
-     * @brief Replaces BBCode italic.
-     */
-    protected function replaceItalic() {
-
-        $this->text = preg_replace_callback('%\[i\]([\W\D\w\s]*?)\[/i\]%iu',
-
-            function ($matches) {
-                return "_".trim($matches[1], " ")."_";
-            },
-
-            $this->text
-        );
-
-    }
-
-    /**
-     * @brief Removes BBCode center.
+     * @brief replace BBCode user.
      */
     protected function removeUser() {
 
@@ -53,14 +53,14 @@ class TextParser extends BBCodeConverter implements TextParserInterface
     }
 
     /**
-     * @brief Removes BBCode center.
+     * @brief replace BBCode pre.
      */
     protected function removePre() {
 
         $this->text = preg_replace_callback('%\[pre\]([\W\D\w\s]*?)\[/pre\]%iu',
 
             function ($matches) {
-                return "`{$matches[1]}``";
+                return "`{$matches[1]}`";
             },
 
             $this->text);
@@ -68,7 +68,7 @@ class TextParser extends BBCodeConverter implements TextParserInterface
     }
 
     /**
-     * @brief Removes BBCode center.
+     * @brief replace BBCode header.
      */
     protected function removeHeader() {
 

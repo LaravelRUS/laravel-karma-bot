@@ -20,10 +20,12 @@ class KarmaCounterMiddleware implements MiddlewareInterface
 
     /**
      * KarmaCounterMiddleware constructor.
+     *
+     * @param Validator $validator
      */
-    public function __construct()
+    public function __construct(Validator $validator)
     {
-        $this->validator = new Validator();
+        $this->validator = $validator;
     }
 
     /**
@@ -41,7 +43,7 @@ class KarmaCounterMiddleware implements MiddlewareInterface
             if ($state->isIncrement()) {
                 $message->user->addKarmaTo($user, $message);
 
-                if ($user->id === \Auth::user()->id) {
+                if ($user->isBot()) {
                     $message->answer(trans('karma.bot', [
                         'user' => $message->user->login
                     ]));

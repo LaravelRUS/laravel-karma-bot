@@ -26,7 +26,7 @@ class GoogleSearchMiddleware implements MiddlewareInterface
             $mention = null;
 
             if ($hasMentions) {
-                $mention = $message->mentions[0]->login === \Auth::user()->login
+                $mention = $message->mentions[0]->isBot()
                     ? $message->user
                     : $message->mentions[0];
             }
