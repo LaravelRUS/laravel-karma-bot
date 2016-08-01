@@ -23,7 +23,7 @@ class InlineDataMiddleware implements MiddlewareInterface
             '/[^`]http(?:s)?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be).*?/iu'
         , ' ' . $message->text);
 
-        if (($isImage || $isVideo) && $message->user->login !== \Auth::user()->login) {
+        if (($isImage || $isVideo) && ! $message->user->isBot()) {
             $answer = trans('gitter.inline', [
                 'user' => $message->user->login
             ]);
