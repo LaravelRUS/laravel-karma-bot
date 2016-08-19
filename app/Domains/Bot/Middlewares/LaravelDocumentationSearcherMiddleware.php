@@ -17,7 +17,7 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
-        $pattern = '/^(@?.*?\s?)(информация|доки|документация|larvel doc)\s+(?:про|по)?\s*(.*?)$/isu';
+        $pattern = '/^(@?.*?\s?)(информация|доки|документация|laravel doc)\s+(?:про|по)?\s*(.*?)$/isu';
         if (preg_match($pattern, $message->text_without_special_chars, $matches)) {
 
             if (!trim($query = $matches[3])) {
