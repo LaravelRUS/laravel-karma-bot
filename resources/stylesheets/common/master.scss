@@ -1,0 +1,88 @@
+body {
+  @extend .font-optimize;
+  font-family: $font;
+  font-size: 14px;
+  font-weight: 400;
+  background: #fff;
+  color: #222;
+  min-height: 100%;
+
+  & > main {
+    min-height: inherit;
+    position: relative;
+  }
+
+  .text {
+    &-right {
+      text-align: right;
+    }
+
+    &-invalid {
+      color: $color-alert;
+    }
+
+    &-active {
+      color: $color-main;
+    }
+
+    &-no-overflow {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  a {
+    color: $color-main;
+
+    &.active,
+    &:hover {
+      color: darken($color-main, 20%);
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .main {
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(-20px);
+
+    &.visible {
+      transform: translateY(0);
+      opacity: 1;
+      transition: .5s ease;
+    }
+  }
+
+  .form {
+    @include clear;
+    width: 100%;
+    padding: 10px 0;
+    min-height: $height;
+    line-height: $height;
+
+    & > * {
+      min-height: $height;
+      line-height: $height;
+    }
+
+    aside {
+      text-align: right;
+    }
+  }
+
+  hr {
+    display: block;
+    border: none;
+    height: 1px;
+    margin: $height 0;
+    background: #ddd;
+  }
+}

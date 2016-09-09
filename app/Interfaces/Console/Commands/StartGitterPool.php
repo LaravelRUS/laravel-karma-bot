@@ -11,10 +11,13 @@
 namespace Interfaces\Console\Commands;
 
 
+use Domains\Room\RoomInterface;
+use Domains\RoomManager;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class StartGitterPool
@@ -69,8 +72,8 @@ class StartGitterPool extends Command
         switch ($action) {
             case 'start':
             case 'restart':
-                $this->stop();
-                $this->start();
+                $this->stop()
+                    ->start($container->make(RoomManager::class));
                 break;
             case 'stop':
                 $this->stop();
@@ -81,30 +84,39 @@ class StartGitterPool extends Command
     }
 
     /**
-     * Start processes
-     */
-    protected function start()
-    {
-        foreach ($this->container['room.manager']->all() as $room) {
-            shell_exec('nohup php artisan gitter:listen '.$room->id().' > /dev/null 2>&1 &');
-            $this->line('Starting ' . $room->id() . ' listener.');
-        }
-    }
-
-    /**
-     * Stop all processes
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @return $this
      */
     protected function stop()
     {
         $finder = (new Finder())
             ->files()
             ->name('*.pid')
-            ->in(storage_path('pids'));
+            ->in(storage_path('pids'))
+        ;
 
+        /** @var SplFileInfo $file */
         foreach ($finder as $file) {
-            $pid = file_get_contents($file->getRealpath());
+            $pid = $file->getContents();
             shell_exec('kill ' . $pid);
-            unlink($file->getRealpath());
+            unlink($file->getRealPath());
         }
+
+        return $this;
+    }
+
+    /**
+     * @param RoomManager $manager
+     * @return $this
+     */
+    protected function start(RoomManager $manager)
+    {
+        /** @var RoomInterface $room */
+        foreach ($manager->all() as $room) {
+            shell_exec('nohup php artisan gitter:listen ' . $room->id() . ' > /dev/null 2>&1 &');
+            $this->line('Starting ' . $room->id() . ' listener.');
+        }
+        return $this;
     }
 }

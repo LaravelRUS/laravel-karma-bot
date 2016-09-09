@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8" />
     <title>@section('title') Laravel Karma @show</title>
-
     <script>var config = {!! json_encode([
         'csrf' => csrf_token(),
         'user' => Auth::user()
@@ -16,11 +15,11 @@
     <link rel="icon" type="image/png"    href="{{ asset_ts('favicon.png', true) }}" />
 </head>
 <body>
-@yield('content')
-<script>
-    (function(global) {
-        global['app'] = (new (require('/Application').default)).run();
-    })(window);
-</script>
+    @yield('content')
+    <script>
+        (function(global) {
+            global['app'] = (new (require('/Application').default)).run();
+        })(window);
+    </script>
 </body>
 </html>

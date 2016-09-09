@@ -1,0 +1,111 @@
+select,
+textarea,
+.textarea,
+input[type=text] {
+  border: none !important;
+  display: block;
+  box-sizing: border-box;
+  height: 32px;
+  line-height: 32px;
+  box-shadow: 0 0 0 1px $color-border;
+  padding: 0 10px;
+  border-radius: 2px;
+  outline: none;
+  background: #fff;
+  appearance: none;
+  position: relative;
+  z-index: 1;
+
+  @include placeholder {
+    color: $color-description;
+    font-style: italic;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 1px $color-main;
+    transition: .2s box-shadow;
+    z-index: 3;
+  }
+}
+
+textarea,
+.textarea {
+  height: auto;
+  resize: none;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-weight: 300;
+  padding: 8px 10px;
+  width: 100%;
+  outline: none;
+  margin: 0;
+  display: block;
+  line-height: 20px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #444;
+  overflow: auto;
+  white-space: pre;
+  word-break: normal;
+  background: transparent;
+
+  &::selection {
+    background: $color-border;
+  }
+
+  &.disabled,
+  &.disabled:active,
+  &.disabled:hover,
+  &[readonly],
+  &[readonly]:active,
+  &[readonly]:hover {
+    cursor: default;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px $color-border;
+    color: $color-description;
+  }
+
+  &[readonly],
+  &[readonly]:active,
+  &[readonly]:hover {
+    color: #666 !important;
+  }
+
+  .bracket {
+    color: $color-main;
+  }
+
+  .dot {
+    color: lighten($color-main, 15%);
+  }
+
+  .keyword {
+    color: $color-ok;
+    border-radius: 2px;
+  }
+
+  .filter {
+    color: $color-warning;
+  }
+
+  .text {
+    &-warning {
+      color: $color-warning;
+      text-shadow: 0 0 2px #fff;
+    }
+
+    &-error {
+      color: $color-alert;
+      text-shadow: 0 0 2px #fff;
+    }
+
+    &-info {
+      color: $color-main;
+      text-shadow: 0 0 2px #fff;
+    }
+
+    &-ok {
+      color: $color-ok;
+      text-shadow: 0 0 2px #fff;
+    }
+  }
+}

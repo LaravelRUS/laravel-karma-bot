@@ -1,0 +1,101 @@
+.messages,
+.info,
+.warnings,
+.errors {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 3px;
+  margin: 10px 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 16px;
+  background: #fff;
+  position: relative;
+
+  &.top-arrow {
+    &:after {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 5%;
+      width: 0;
+      height: 0;
+      border: transparent 6px solid;
+    }
+  }
+
+  .title {
+    display: block;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
+
+  .description {
+    display: inline;
+    color: $color-description;
+    font-weight: normal;
+  }
+
+  ul {
+    margin: 0 0 0 30px;
+    padding: 0;
+
+    li {
+      list-style: square;
+      padding: 6px 0;
+    }
+  }
+}
+
+.errors {
+  box-shadow: 0 0 0 1px $color-alert;
+  color: darken($color-alert, 5%);
+  a {
+    color: darken($color-alert, 5%);
+  }
+
+  &.top-arrow:after {
+    border-bottom-color: $color-alert;
+  }
+}
+
+.warnings {
+  box-shadow: 0 0 0 1px $color-warning;
+  color: darken($color-warning, 10%);
+
+  a {
+    color: darken($color-warning, 10%);
+  }
+
+  &.top-arrow:after {
+    border-bottom-color: $color-warning;
+  }
+}
+
+.messages {
+  box-shadow: 0 0 0 1px lighten($color-description, 10%);
+  background: lighten($color-border, 10%);
+  color: #333338;
+
+  a {
+    color: #333338;
+  }
+
+  &.top-arrow:after {
+    border-bottom-color: lighten($color-description, 10%);
+  }
+}
+
+.info {
+  box-shadow: 0 0 0 1px $color-main;
+  color: darken($color-main, 10%);
+
+  a {
+    color: darken($color-main, 10%);
+  }
+
+  &.top-arrow:after {
+    border-bottom-color: $color-main;
+  }
+}

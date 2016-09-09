@@ -1,0 +1,79 @@
+$checkbox-height: 20px;
+$checkbox-width: 40px;
+$checkbox-ease: cubic-bezier(0.775, 0.005, 0.155, 1.000);
+
+.checkbox {
+  @include clear;
+  position: relative;
+  display: inline-block;
+  min-width: $checkbox-width;
+  height: $height;
+  line-height: $checkbox-height;
+  box-sizing: border-box;
+  padding: (($height - $checkbox-height) / 2) 0;
+
+  .render {
+    display: block;
+    width: $checkbox-width;
+    height: $checkbox-height;
+    line-height: $checkbox-height;
+    margin: 0 10px 0 0;
+    border-radius: ($checkbox-height / 2);
+    box-shadow: 0 0 0 1px $color-border;
+    position: relative;
+    cursor: pointer;
+    z-index: 2;
+    float: left;
+    transition: .1s $checkbox-ease;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 16px;
+      transition: .15s $checkbox-ease;
+      left: 4px;
+      top: 8px;
+      height: 4px;
+      background: $color-border;
+      border-radius: 2px;
+    }
+  }
+
+  input[type=checkbox] {
+    position: absolute;
+    z-index: 3;
+    display: block;
+    width: $checkbox-width;
+    height: $checkbox-height;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    top: (($height - $checkbox-height) / 2);
+    left: 0;
+  }
+
+  input[type=checkbox]:hover + .render {
+    box-shadow: 0 0 0 1px darken($color-border, 10%);
+    &:before {
+      background: darken($color-border, 10%);
+    }
+  }
+
+  input[type=checkbox]:checked + .render {
+    box-shadow: 0 0 0 1px $color-main;
+
+    &:before {
+      top: 3px;
+      left: 22px;
+      width: 14px;
+      height: 14px;
+      background: $color-main;
+      border-radius: 7px;
+    }
+  }
+
+  .description {
+    color: $color-description;
+  }
+}

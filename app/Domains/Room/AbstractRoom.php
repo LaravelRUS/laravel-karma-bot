@@ -12,6 +12,7 @@
 namespace Domains\Room;
 
 use Domains\Bot\ClientInterface;
+use Domains\BotManager;
 use Illuminate\Foundation\Application;
 use Interfaces\Gitter\Client;
 
@@ -47,6 +48,9 @@ abstract class AbstractRoom implements RoomInterface
      */
     protected $app;
 
+    /**
+     * AbstractRoom constructor.
+     */
     public function __construct()
     {
         $this->app = \App::make('app');
@@ -55,7 +59,7 @@ abstract class AbstractRoom implements RoomInterface
             $this->app
         );
 
-        $this->client = app('bot.manager')->driver($this->driver());
+        $this->client = $this->app->make(BotManager::class)->driver($this->driver());
 
         $this->createSubscribersStorage();
     }

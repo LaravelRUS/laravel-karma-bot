@@ -14,6 +14,7 @@ namespace Interfaces\Console\Commands;
 
 
 use Carbon\Carbon;
+use Domains\RoomManager;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\Container;
 use Domains\Room\RoomInterface;
@@ -48,23 +49,15 @@ class StartGitterBot extends Command
     protected $pid;
 
     /**
-     * Execute the console command.
-     *
      * @param Container $app
-     *
-     * @return mixed
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \Exception
+     * @param RoomManager $manager
      */
-    public function handle(Container $app)
+    public function handle(Container $app, RoomManager $manager)
     {
         $roomId = $this->argument('room');
 
-        /** @var RoomInterface $room */
-        if (is_null($room = $app['room.manager']->get($roomId))) {
-            $this->warn("Room [$roomId] not found");
+        if (!($room = $manager->get($roomId))) {
+            $this->warn(sprintf('Room [%s] not found', $roomId));
             return;
         }
 

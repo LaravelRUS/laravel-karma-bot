@@ -1,47 +1,42 @@
 .search {
-  padding: 30px 8px;
+  padding: 40px 0;
 
   input[type=text] {
-    $height: ($ui-height * 2);
-    line-height: $height;
-    height: $height;
+    line-height: 50px;
+    height: 50px;
     width: 100%;
-    font-size: 22px;
-    padding: 0 30px;
+    font-size: 18px;
+    padding: 0 20px;
 
     @include placeholder {
       font-weight: 100;
     }
   }
 
-  h1 {
-    display: block;
-  }
-
-  .search-error {
+  h2 {
+    font-weight: 300;
+    color: lighten($color-description, 15%);
+    font-size: 28px;
     text-align: center;
+    transition: color .1s $swift;
   }
 
   .search-description {
-    color: #ccc;
-    font-size: 28px;
-    text-align: left;
     font-style: italic;
-    transition: color .3s $swift;
+    text-align: left;
 
     &:before {
+      @include fa-icon;
       position: relative;
       margin: 0 15px 0 25px;
       top: -10px;
-      @include fa-icon;
       transform: rotate(180deg);
       content: $fa-var-level-down;
       font-weight: 100;
-      transition: margin .3s $swift;
     }
   }
 
   input:focus + .search-description {
-    color: #999;
+    color: $color-description;
   }
 }

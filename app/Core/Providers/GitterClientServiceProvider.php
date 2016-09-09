@@ -15,6 +15,8 @@ use Domains\BotManager;
 use Domains\RoomManager;
 use Gitter\Client;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Interfaces\Gitter\StandartGitterRoom;
 use Interfaces\Slack\StandartSlackRoom;
@@ -28,28 +30,35 @@ class GitterClientServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(Client::class, function (Container $app) {
-            return new Client($app['config']->get('gitter.token'));
+        /** @var Repository $config */
+        $config = $this->app->make(Repository::class);
+
+        $this->app->singleton(Client::class, function (Container $app) use ($config) {
+            return new Client($config->get('gitter.token'));
         });
 
         $this->app->singleton('bot', function (Container $app) {
             /** @var Client $client */
             $client = $app->make(Client::class);
+
             return $client->http->getCurrentUser()->wait();
         });
     }
 
     public function boot()
     {
-        $this->app->singleton('bot.manager', function (Container $app) {
+        /** @var Repository $config */
+        $config = $this->app->make(Repository::class);
+
+        $this->app->singleton(BotManager::class, function (Application $app) {
             return new BotManager($app);
         });
 
-        $this->app->singleton('room.manager', function (Container $app) {
+        $this->app->singleton(RoomManager::class, function (Container $app) use ($config) {
             $manager = new RoomManager();
 
-            $this->registerGitterRooms($manager);
-            $this->registerSlackRooms($manager);
+            $this->registerGitterRooms($manager, $config);
+            $this->registerSlackRooms($manager, $config);
 
             return $manager;
         });
@@ -57,32 +66,34 @@ class GitterClientServiceProvider extends ServiceProvider
 
     /**
      * @param RoomManager $manager
+     * @param Repository $config
      */
-    protected function registerGitterRooms(RoomManager $manager)
+    protected function registerGitterRooms(RoomManager $manager, Repository $config)
     {
-        foreach ((array) $this->app['config']->get('gitter.rooms') as $room => $groups) {
-            if (empty($room)) {
+        foreach ((array)$config->get('gitter.rooms') as $room => $groups) {
+            if (!$room) {
                 continue;
             }
 
             $manager->register(
-                new StandartGitterRoom($room, $groups, \Config::get('gitter.middlewares'))
+                new StandartGitterRoom($room, $groups, $config->get('gitter.middlewares'))
             );
         }
     }
 
     /**
      * @param RoomManager $manager
+     * @param Repository $config
      */
-    protected function registerSlackRooms(RoomManager $manager)
+    protected function registerSlackRooms(RoomManager $manager, Repository $config)
     {
-        foreach ((array) $this->app['config']->get('slack.rooms') as $roomId => $groups) {
-            if (empty($roomId)) {
+        foreach ((array)$config->get('slack.rooms') as $roomId => $groups) {
+            if (!$roomId) {
                 continue;
             }
 
             $manager->register(
-                new StandartSlackRoom($roomId, $groups, \Config::get('slack.middlewares'))
+                new StandartSlackRoom($roomId, $groups, $config->get('slack.middlewares'))
             );
         }
     }
