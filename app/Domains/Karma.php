@@ -15,24 +15,28 @@ use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Karma
- * @deprecated
  *
+ * @deprecated 
  * @property-read int $id
  * @property string $room_id
  * @property string $message_id
  * @property int $user_id
  * @property int $user_target_id
  * @property string $status
- *
+ * 
  * === Relations ===
- *
  * @property-read User $user
  * @property-read User $target
- *
+ * 
  * === Accessors ===
- *
  * @property string $created_at
- *
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Karma whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Karma whereRoomId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Karma whereMessageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Karma whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Karma whereUserTargetId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Karma whereCreatedAt($value)
+ * @mixin \Eloquent
  */
 class Karma extends \Eloquent
 {

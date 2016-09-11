@@ -32,4 +32,12 @@ class Kernel extends ConsoleKernel
             ->command('gitter:pool', ['restart'])
             ->everyFiveMinutes();
     }
+
+    /**
+     * @return void
+     */
+    protected function commands()
+    {
+
+    }
 }

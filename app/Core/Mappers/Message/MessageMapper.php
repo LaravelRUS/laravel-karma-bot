@@ -22,15 +22,31 @@ use Illuminate\Support\Collection;
 
 /**
  * Class Message
- * @package Domains\Message
  *
+ * @package Domains\Message
  * @property-read User $user
  * @property-read Url[]|Collection $urls
  * @property-read Message[]|Collection $answers
  * @property-read Message[]|Collection $questions
  * @property-read User[]|Collection $mentions
- *
  * @method static Message|Builder|EloquentBuilder inHistoricalOrder()
+ * @property string $id
+ * @property string $gitter_id
+ * @property string $room_id
+ * @property string $user_id
+ * @property string $text
+ * @property string $text_rendered
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereGitterId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereRoomId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereText($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereTextRendered($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class MessageMapper extends Model
 {

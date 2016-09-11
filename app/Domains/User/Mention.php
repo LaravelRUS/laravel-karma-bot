@@ -16,9 +16,17 @@ use Domains\Message\Message;
 
 /**
  * Class Mention
+ *
  * @package Domains\User
  * @property-read User $user
  * @property-read Message $message
+ * @property string $id
+ * @property string $message_id
+ * @property string $user_id
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User\Mention whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User\Mention whereMessageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User\Mention whereUserId($value)
+ * @mixin \Eloquent
  */
 class Mention extends \Eloquent
 {

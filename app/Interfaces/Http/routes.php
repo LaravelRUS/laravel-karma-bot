@@ -14,9 +14,9 @@ Route::get('/achievements', 'HomeController@index')
 Route::group(['prefix' => 'api', 'namespace' => 'Api'], function () {
     // Users
     Route::get('users.json', 'UsersController@index')->name('api.users');
-    Route::get('users/top.json', 'UsersController@getUsersTop')->name('api.top');
-    Route::get('user/{gitterId}.json', 'UsersController@getUser')->name('api.user');
+    Route::get('users/top.json', 'UsersController@top')->name('api.top');
     Route::get('user/search.json', 'SearchController@users')->name('api.users.search');
+    Route::get('user/{gitterId}.json', 'UsersController@user')->name('api.user');
 
     // Achievements
     Route::get('achievements.json', 'AchievementsController@index')->name('api.achievements');

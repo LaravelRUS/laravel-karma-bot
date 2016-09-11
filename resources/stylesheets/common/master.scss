@@ -6,6 +6,12 @@ body {
   background: #fff;
   color: #222;
   min-height: 100%;
+  opacity: 0;
+  transition: opacity .4s $swift;
+
+  &.loaded {
+    opacity: 1;
+  }
 
   & > main {
     min-height: inherit;

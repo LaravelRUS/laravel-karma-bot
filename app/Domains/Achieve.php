@@ -16,24 +16,26 @@ use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class Achieve
- * @deprecated
  *
+ * @deprecated 
  * @property-read int $id
  * @property string $name
  * @property int $user_id
- *
+ * 
  * === Relations ===
- *
  * @property-read User $user
- *
+ * 
  * === Accessors ===
- *
  * @property-read string $title
  * @property-read string $description
  * @property-read string $image
  * @property string $created_at
  * @property-read AbstractAchieve $achieve
- *
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Achieve whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Achieve whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Achieve whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Achieve whereCreatedAt($value)
+ * @mixin \Eloquent
  */
 class Achieve extends \Eloquent
 {

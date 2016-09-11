@@ -12,6 +12,7 @@ namespace Interfaces\Http\Controllers\Api;
 
 use Domains\User;
 use Domains\Karma;
+use Illuminate\Http\Request;
 use Interfaces\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -20,86 +21,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class UsersController extends Controller
 {
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
     public function index()
     {
-        return \Cache::remember('users', 1, function () {
-            $karmaStorage = [];
-            $thanksStorage = [];
 
-            (new Karma())
-                ->selectRaw('user_target_id, count(user_id) as count')
-                ->groupBy('user_target_id')
-                ->get()
-                ->each(function ($item) use (&$karmaStorage) {
-                    $karmaStorage[$item->user_target_id] = $item->count;
-                });
-
-            (new Karma())
-                ->selectRaw('user_id, count(user_target_id) as count')
-                ->groupBy('user_id')
-                ->get()
-                ->each(function ($item) use (&$thanksStorage) {
-                    $thanksStorage[$item->user_id] = $item->count;
-                });
-
-
-            return (new User())
-                ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
-                ->each(function (User $user) use ($karmaStorage, $thanksStorage) {
-                    $user->karma_count = $karmaStorage[$user->id] ?? 0;
-                    $user->thanks_count = $thanksStorage[$user->id] ?? 0;
-                });
-        });
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getUsersTop()
+    public function top()
     {
-        return \Cache::remember('top.karma', 1, function () {
-            $karmaStorage = [];
-
-            $karma = (new Karma())
-                ->selectRaw('user_target_id, count(*) as count')
-                ->groupBy('user_target_id')
-                ->orderBy('count', 'desc')
-                ->take(10)
-                ->get()
-                ->each(function ($item) use (&$karmaStorage) {
-                    $karmaStorage[$item->user_target_id] = $item->count;
-                });
-
-
-            return (new User())
-                ->whereIn('id', $karma->pluck('user_target_id'))
-                ->get(['id', 'login', 'name', 'gitter_id', 'avatar', 'url'])
-                ->each(function (User $user) use ($karmaStorage) {
-                    $user->karma_count = $karmaStorage[$user->id] ?? 0;
-                })
-                ->sortByDesc('karma_count')->values()->all();
-        });
+        return User::with('achievements')
+            ->withCount('karma')
+            ->withCount('thanks')
+            ->orderBy('karma_count', 'desc')
+            ->orderBy('thanks_count', 'desc')
+            ->paginate(12);
     }
 
-    /**
-     * @return User
-     */
-    public function getUser($gitterId)
+    public function user()
     {
-        $formatRelations = function (HasMany $query) {
-            return $query->orderBy('created_at', 'desc');
-        };
 
-        return User::query()
-            ->with([
-                'karma'        => $formatRelations,
-                'thanks'       => $formatRelations,
-                'achievements' => $formatRelations,
-            ])
-            ->where('gitter_id', $gitterId)
-            ->first();
     }
 }

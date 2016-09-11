@@ -17,12 +17,30 @@ use Domains\Analyser\UrlFinder;
 
 /**
  * Class Message
- * @package Domains\Message
  *
+ * @package Domains\Message
  * @property-read $text
  * @property-read Carbon $created_at
  * @property-read Carbon $updated_at
  * @property-read array $words
+ * @property string $id
+ * @property string $gitter_id
+ * @property string $room_id
+ * @property string $user_id
+ * @property string $text_rendered
+ * @property-read \Domains\Message\Message $answers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Domains\Message\Message[] $questions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Domains\Message\Url[] $urls
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereGitterId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereRoomId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereText($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereTextRendered($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Message whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\MessageMapper inHistoricalOrder()
+ * @mixin \Eloquent
  */
 class Message extends MessageMapper
 {

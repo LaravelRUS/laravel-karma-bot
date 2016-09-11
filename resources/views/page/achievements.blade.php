@@ -1,4 +1,5 @@
-<section class="content" data-controller="Controllers/AchievementsController" data-bind="if: visible">
+<section class="container-12" data-controller="ViewModels/AchievementsViewModel" data-bind="if: visible">
+
 
     <section class="achievements">
         <h1>Все достижения</h1>
@@ -27,7 +28,7 @@
             </span>
         </article>
         <!--/ko-->
-
     </section>
+
 
 </section>

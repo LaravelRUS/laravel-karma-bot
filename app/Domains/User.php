@@ -11,8 +11,8 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 
 /**
  * Class User
- * @deprecated
  *
+ * @deprecated 
  * @property int $id
  * @property string $gitter_id
  * @property string $name
@@ -24,18 +24,29 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
  * @property string $remember_token
  * @property Carbon $created_at
  * @property Carbon $updated_at
- *
+ * 
  * === Accessors ===
- *
  * @property-read string $karma_text
  * @property-read string $thanks_text
- *
+ * 
  * === Relations ===
- *
  * @property-read Achieve[] $achievements
  * @property-read Karma[] $karma
  * @property-read Karma[] $thanks
- *
+ * @property-read mixed $thanks_count
+ * @property-read mixed $karma_count
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereGitterId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereAvatar($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereLogin($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\User whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class User extends \Eloquent implements
     AuthenticatableContract,
@@ -145,22 +156,11 @@ class User extends \Eloquent implements
             'created_at'     => $message->created_at,
         ]);
     }
-
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function is(User $user)
-    {
-        return $this->login === $user->login;
-    }
-
     /**
      * @return bool
      */
     public function isBot()
     {
-        return $this->is(\Auth::user());
+        return $this->login === \Auth::user()->login;
     }
 }

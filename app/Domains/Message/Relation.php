@@ -15,9 +15,15 @@ use Core\Mappers\Message\RelationMapper;
 
 /**
  * Class Relation
+ *
  * @package Domains\Message
  * @property-read Message $answer
  * @property-read Message $question
+ * @property string $message_id
+ * @property string $answer_id
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Relation whereMessageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Relation whereAnswerId($value)
+ * @mixin \Eloquent
  */
 class Relation extends RelationMapper
 {

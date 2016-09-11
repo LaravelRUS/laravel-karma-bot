@@ -7,6 +7,6 @@
 
     {{-- PAGES --}}
     @include('page.search')
-    @include('page.user')
+    {{--@include('page.user')--}}
     @include('page.achievements')
 @stop

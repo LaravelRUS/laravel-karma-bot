@@ -15,8 +15,15 @@ use Core\Mappers\Message\UrlMapper;
 
 /**
  * Class Url
+ *
  * @property string $url
  * @package Domains\Message
+ * @property string $id
+ * @property string $message_id
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Url whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Url whereMessageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Domains\Message\Url whereUrl($value)
+ * @mixin \Eloquent
  */
 class Url extends UrlMapper
 {

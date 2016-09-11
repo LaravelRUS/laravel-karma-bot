@@ -1,7 +1,7 @@
-<header data-controller="Controllers/Partials/HeaderController">
+<header data-controller="ViewModels/HeaderViewModel">
     <h1>Laravel.Karma</h1>
 
-    <a class="logo" href="{{ URL::to('/') }}" data-bind="click: home">
+    <a class="logo" href="{{ URL::to('/') }}" data-bind="on.click: route('home')">
         Laravel<span>\Karma</span>
     </a>
 
@@ -12,8 +12,10 @@
     </nav>
 
     <nav>
-        <a href="{{ route('achievements') }}" data-bind="click: achievements">Достижения</a>
+        <a href="{{ route('achievements') }}"
+           data-bind="on.click: route('achievements')">Достижения</a>
 
+        {{--
         <span class="dropdown" data-bind="click: toggle, attr: {
             class: 'dropdown ' + (dropdown() ? 'active':'')
         }">
@@ -24,5 +26,6 @@
                 <a href="http://vk.com/laravel_rus">Сообщество</a>
             </nav>
         </span>
+        --}}
     </nav>
 </header>

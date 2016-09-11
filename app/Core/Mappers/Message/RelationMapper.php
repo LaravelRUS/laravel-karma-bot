@@ -16,10 +16,15 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Relation
+ *
  * @package Domains\Message
- * 
  * @property-read Message $answer
  * @property-read Message $question
+ * @property string $message_id
+ * @property string $answer_id
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\RelationMapper whereMessageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\RelationMapper whereAnswerId($value)
+ * @mixin \Eloquent
  */
 class RelationMapper extends Model
 {

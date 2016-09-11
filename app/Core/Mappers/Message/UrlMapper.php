@@ -15,9 +15,16 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class UrlMapper
- * @package Core\Mappers\Message
  *
+ * @package Core\Mappers\Message
  * @property-read Message $message
+ * @property string $id
+ * @property string $message_id
+ * @property string $url
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\UrlMapper whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\UrlMapper whereMessageId($value)
+ * @method static \Illuminate\Database\Query\Builder|\Core\Mappers\Message\UrlMapper whereUrl($value)
+ * @mixin \Eloquent
  */
 class UrlMapper extends Model
 {
