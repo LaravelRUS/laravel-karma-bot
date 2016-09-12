@@ -127,6 +127,33 @@ export default class Router {
     }
 
     /**
+     * @param name
+     * @param $default
+     * @returns {*}
+     */
+    param(name, $default = null) {
+        for (var query of this.query()) {
+            if (query.name === name) {
+                return query.value;
+            }
+        }
+        return $default;
+    }
+
+    /**
+     * @returns {Array}
+     */
+    query() {
+        return document.location.search.substring(1)
+            .toString()
+            .split('&')
+            .map(i => {
+                var parts = i.split('=');
+                return {name: parts[0], value: decodeURIComponent(parts[1])};
+            });
+    }
+
+    /**
      * @returns {string}
      */
     get path() {

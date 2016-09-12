@@ -8160,29 +8160,25 @@ var Router = function () {
         }
 
         /**
-         * @returns {string}
+         * @param name
+         * @param $default
+         * @returns {*}
          */
 
     }, {
-        key: 'match',
-
-
-        /**
-         * @returns {Router}
-         */
-        value: function match() {
+        key: 'param',
+        value: function param(name) {
+            var $default = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
             var _iteratorNormalCompletion3 = true;
             var _didIteratorError3 = false;
             var _iteratorError3 = undefined;
 
             try {
-                for (var _iterator3 = this._routes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var route = _step3.value;
+                for (var _iterator3 = this.query()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var query = _step3.value;
 
-                    var isValid = this.path.match(new RegExp('^' + route.pattern + '$'), 'g');
-                    if (isValid) {
-                        this.current(route);
-                        return this;
+                    if (query.name === name) {
+                        return query.value;
                     }
                 }
             } catch (err) {
@@ -8196,6 +8192,63 @@ var Router = function () {
                 } finally {
                     if (_didIteratorError3) {
                         throw _iteratorError3;
+                    }
+                }
+            }
+
+            return $default;
+        }
+
+        /**
+         * @returns {Array}
+         */
+
+    }, {
+        key: 'query',
+        value: function query() {
+            return document.location.search.substring(1).toString().split('&').map(function (i) {
+                var parts = i.split('=');
+                return { name: parts[0], value: decodeURIComponent(parts[1]) };
+            });
+        }
+
+        /**
+         * @returns {string}
+         */
+
+    }, {
+        key: 'match',
+
+
+        /**
+         * @returns {Router}
+         */
+        value: function match() {
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
+
+            try {
+                for (var _iterator4 = this._routes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var route = _step4.value;
+
+                    var isValid = this.path.match(new RegExp('^' + route.pattern + '$'), 'g');
+                    if (isValid) {
+                        this.current(route);
+                        return this;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
+                    }
+                } finally {
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
                     }
                 }
             }
@@ -8769,6 +8822,10 @@ var Search = function () {
 
             _this._timeout = setTimeout(function () {
                 if (value.trim().length !== 0) {
+                    history.pushState({}, value.trim(), laroute.route('home', {
+                        query: encodeURIComponent(value.trim())
+                    }));
+
                     var _iteratorNormalCompletion = true;
                     var _didIteratorError = false;
                     var _iteratorError = undefined;
@@ -8890,7 +8947,7 @@ var SearchViewModel = function () {
     }
 
     /**
-     * @returns void
+     * @param query
      */
 
 
@@ -8913,6 +8970,10 @@ var SearchViewModel = function () {
         key: 'onShow',
         value: function onShow() {
             var _this3 = this;
+
+            var query = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+            this.search.text(query || this.app.route.param('query'));
 
             this.topLoading(true);
             this.app.usersRepository.top().then(function (users) {

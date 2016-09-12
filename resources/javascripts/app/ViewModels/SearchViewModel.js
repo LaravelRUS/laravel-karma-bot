@@ -1,5 +1,3 @@
-
-
 class Search {
     /**
      * @type {KnockoutObservable<T>}
@@ -37,6 +35,10 @@ class Search {
 
             this._timeout = setTimeout(() => {
                 if (value.trim().length !== 0) {
+                    history.pushState({}, value.trim(), laroute.route('home', {
+                        query: encodeURIComponent(value.trim())
+                    }));
+
                     for (var cb of this._callbacks) {
                         cb(value.trim());
                     }
@@ -122,9 +124,11 @@ export default class SearchViewModel {
     }
 
     /**
-     * @returns void
+     * @param query
      */
-    onShow() {
+    onShow(query = null) {
+        this.search.text(query || this.app.route.param('query'));
+
         this.topLoading(true);
         this.app.usersRepository.top()
             .then(users => {
