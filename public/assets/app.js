@@ -7282,7 +7282,7 @@ var ko_punches_attributeInterpolationMarkup = ko_punches.attributeInterpolationM
 
             absolute: false,
             rootUrl: 'http://localhost',
-            routes : [{"host":null,"methods":["GET","HEAD"],"uri":"\/","name":"home","action":"Interfaces\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"user\/{user?}","name":"user","action":"Interfaces\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"achievements","name":"achievements","action":"Interfaces\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/users.json","name":"api.users","action":"Interfaces\Http\Controllers\Api\UsersController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/users\/top.json","name":"api.top","action":"Interfaces\Http\Controllers\Api\UsersController@getUsersTop"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/user\/search.json","name":"api.users.search","action":"Interfaces\Http\Controllers\Api\SearchController@users"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/user\/{gitterId}.json","name":"api.user","action":"Interfaces\Http\Controllers\Api\UsersController@getUser"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/achievements.json","name":"api.achievements","action":"Interfaces\Http\Controllers\Api\AchievementsController@index"},{"host":null,"methods":["GET","HEAD","POST","PUT","PATCH","DELETE"],"uri":"api\/{any}","name":null,"action":"Closure"},{"host":null,"methods":["GET","HEAD","POST","PUT","PATCH","DELETE"],"uri":"{any}","name":null,"action":"Closure"}],
+            routes : [{"host":null,"methods":["GET","HEAD"],"uri":"_debugbar\/open","name":"debugbar.openhandler","action":"Barryvdh\Debugbar\Controllers\OpenHandlerController@handle"},{"host":null,"methods":["GET","HEAD"],"uri":"_debugbar\/clockwork\/{id}","name":"debugbar.clockwork","action":"Barryvdh\Debugbar\Controllers\OpenHandlerController@clockwork"},{"host":null,"methods":["GET","HEAD"],"uri":"_debugbar\/assets\/stylesheets","name":"debugbar.assets.css","action":"Barryvdh\Debugbar\Controllers\AssetController@css"},{"host":null,"methods":["GET","HEAD"],"uri":"_debugbar\/assets\/javascript","name":"debugbar.assets.js","action":"Barryvdh\Debugbar\Controllers\AssetController@js"},{"host":null,"methods":["GET","HEAD"],"uri":"\/","name":"home","action":"Interfaces\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"user\/{user?}","name":"user","action":"Interfaces\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"achievements","name":"achievements","action":"Interfaces\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/users.json","name":"api.users","action":"Interfaces\Http\Controllers\Api\UsersController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/users\/top.json","name":"api.top","action":"Interfaces\Http\Controllers\Api\UsersController@top"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/user\/search.json","name":"api.users.search","action":"Interfaces\Http\Controllers\Api\SearchController@users"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/user\/{gitterId}.json","name":"api.user","action":"Interfaces\Http\Controllers\Api\UsersController@user"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/achievements.json","name":"api.achievements","action":"Interfaces\Http\Controllers\Api\AchievementsController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"api\/achieve\/{name}\/users.json","name":"api.achieve.users","action":"Interfaces\Http\Controllers\Api\AchievementsController@users"},{"host":null,"methods":["GET","HEAD","POST","PUT","PATCH","DELETE"],"uri":"api\/{any}","name":null,"action":"Closure"},{"host":null,"methods":["GET","HEAD","POST","PUT","PATCH","DELETE"],"uri":"{any}","name":null,"action":"Closure"}],
             prefix: '',
 
             route : function (name, parameters, route) {
@@ -7506,6 +7506,9 @@ var Application = function (_Pimple) {
         _this.set('usersRepository', function (app) {
             return _this.include('Entity/Repository/UserRepository');
         });
+        _this.set('achievementsRepository', function (app) {
+            return _this.include('Entity/Repository/AchieveRepository');
+        });
         return _this;
     }
 
@@ -7544,6 +7547,42 @@ var Application = function (_Pimple) {
 }(_Pimple3.default);
 
 exports.default = Application;
+  
+});
+
+
+require.register("Entity/Achieve", function(exports, require, module){
+  "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Entity2 = require("/Entity/Entity");
+
+var _Entity3 = _interopRequireDefault(_Entity2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Achieve = function (_Entity) {
+  _inherits(Achieve, _Entity);
+
+  function Achieve() {
+    _classCallCheck(this, Achieve);
+
+    return _possibleConstructorReturn(this, (Achieve.__proto__ || Object.getPrototypeOf(Achieve)).apply(this, arguments));
+  }
+
+  return Achieve;
+}(_Entity3.default);
+
+exports.default = Achieve;
   
 });
 
@@ -8602,17 +8641,59 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AchievementsViewModel = function AchievementsViewModel() {
-  _classCallCheck(this, AchievementsViewModel);
+var AchievementsViewModel = function () {
 
-  this.achievements = ko.observableArray([]);
-}
-/**
- * @type {KnockoutObservableArray<T>}
- */
-;
+  /**
+   * @param {Pimple} app
+   */
+
+
+  /**
+   * @type {Pimple}
+   */
+  function AchievementsViewModel(app) {
+    _classCallCheck(this, AchievementsViewModel);
+
+    this.achievements = ko.observableArray([]);
+    this.app = null;
+    this.loading = ko.observable(false);
+
+    this.app = app;
+  }
+
+  /**
+   * @returns void
+   */
+
+
+  /**
+   * @type {KnockoutObservable<T>}
+   */
+
+  /**
+   * @type {KnockoutObservableArray<T>}
+   */
+
+
+  _createClass(AchievementsViewModel, [{
+    key: "onShow",
+    value: function onShow() {
+      var _this = this;
+
+      this.loading(true);
+      this.app.achievementsRepository.all().then(function (list) {
+        _this.achievements(list);
+        _this.loading(false);
+      });
+    }
+  }]);
+
+  return AchievementsViewModel;
+}();
 
 exports.default = AchievementsViewModel;
   
@@ -8767,12 +8848,16 @@ var SearchViewModel = function () {
 
 
     /**
-     * @type {KnockoutObservableArray<User>}
+     * @type {KnockoutObservable<T>}
      */
 
 
     /**
-     * @type {Search}
+     * @type {KnockoutObservableArray<User>}
+     */
+
+    /**
+     * @type {Pimple}
      */
     function SearchViewModel(app) {
         var _this2 = this;
@@ -8783,24 +8868,23 @@ var SearchViewModel = function () {
         this.search = new Search();
         this.found = ko.observableArray([]);
         this.top = ko.observableArray([]);
-        this.loading = ko.observable(false);
+        this.searchLoading = ko.observable(false);
+        this.topLoading = ko.observable(false);
 
         this.app = app;
 
         this.search.text.subscribe(function (value) {
-            if (value) {
-                _this2.loading(true);
-            }
             _this2.found.removeAll();
         });
 
         this.search.onChange(function (value) {
-            _this2.loading(true);
+            _this2.searchLoading(true);
             app.usersRepository.search(value).then(function (items) {
-                _this2.loading(false);
+                _this2.searchLoading(false);
                 _this2.found(items);
             }).catch(function (e) {
-                _this2.loading(false);
+                _this2.searchLoading(false);
+                _this2.found.removeAll();
             });
         });
     }
@@ -8819,8 +8903,9 @@ var SearchViewModel = function () {
      * @type {KnockoutObservableArray<User>}
      */
 
+
     /**
-     * @type {Pimple}
+     * @type {Search}
      */
 
 
@@ -8829,8 +8914,13 @@ var SearchViewModel = function () {
         value: function onShow() {
             var _this3 = this;
 
+            this.topLoading(true);
             this.app.usersRepository.top().then(function (users) {
-                return _this3.top(users);
+                _this3.topLoading(false);
+                _this3.top(users);
+            }).catch(function (e) {
+                _this3.topLoading(false);
+                _this3.top.removeAll();
             });
         }
     }]);
@@ -8839,6 +8929,122 @@ var SearchViewModel = function () {
 }();
 
 exports.default = SearchViewModel;
+  
+});
+
+
+require.register("Entity/Repository/AchieveRepository", function(exports, require, module){
+  "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Achieve = require("/Entity/Achieve");
+
+var _Achieve2 = _interopRequireDefault(_Achieve);
+
+var _AjaxRepository2 = require("/Entity/Repository/AjaxRepository");
+
+var _AjaxRepository3 = _interopRequireDefault(_AjaxRepository2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AchieveRepository = function (_AjaxRepository) {
+    _inherits(AchieveRepository, _AjaxRepository);
+
+    function AchieveRepository() {
+        _classCallCheck(this, AchieveRepository);
+
+        return _possibleConstructorReturn(this, (AchieveRepository.__proto__ || Object.getPrototypeOf(AchieveRepository)).apply(this, arguments));
+    }
+
+    _createClass(AchieveRepository, [{
+        key: "all",
+
+        /**
+         * @returns {*|Array}
+         */
+        value: function () {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+                var result;
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.next = 2;
+                                return this.request(laroute.route('api.achievements'));
+
+                            case 2:
+                                result = _context.sent;
+                                return _context.abrupt("return", this.transform(result, _Achieve2.default));
+
+                            case 4:
+                            case "end":
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function all() {
+                return _ref.apply(this, arguments);
+            }
+
+            return all;
+        }()
+
+        /**
+         * @param name
+         * @returns {*|Array}
+         */
+
+    }, {
+        key: "find",
+        value: function () {
+            var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(name) {
+                var result;
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                _context2.next = 2;
+                                return this.request(laroute.route('api.achieve.users', { name: name }));
+
+                            case 2:
+                                result = _context2.sent;
+                                return _context2.abrupt("return", this.transform(result, _Achieve2.default));
+
+                            case 4:
+                            case "end":
+                                return _context2.stop();
+                        }
+                    }
+                }, _callee2, this);
+            }));
+
+            function find(_x) {
+                return _ref2.apply(this, arguments);
+            }
+
+            return find;
+        }()
+    }]);
+
+    return AchieveRepository;
+}(_AjaxRepository3.default);
+
+exports.default = AchieveRepository;
   
 });
 

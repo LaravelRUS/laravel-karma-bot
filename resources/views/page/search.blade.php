@@ -4,7 +4,7 @@
                data-bind="valueUpdate: 'input'" placeholder="Поиск по участникам" />
 
         @{{#if: search.text() && found().length === 0}}
-            @{{#ifnot loading}}
+            @{{#ifnot searchLoading}}
                 <h2 class="search-error text-invalid">По вашему запросу ничего не найдено</h2>
             @{{/ifnot}}
         @{{/if}}
@@ -15,7 +15,7 @@
     </article>
 
 
-    @{{#if loading}}
+    @{{#if searchLoading}}
         <section class="grid-12 preloader-container">
             @include('partials.preloader')
         </section>
@@ -24,7 +24,7 @@
 
     @{{#if found().length > 0}}
     <section class="users-list">
-        <h3>Результаты поиска</h3>
+        <h3>Результаты поиска по запросу &laquo;@{{ search.text().trim() }}&raquo;</h3>
 
         @{{#foreach found}}
             @include('partials.user-list-item')
@@ -34,7 +34,14 @@
 
 
     <section class="users-list">
-        <h3>Топ пользователей</h3>
+        <h3>Карма: Топ 12</h3>
+
+        @{{#if topLoading}}
+        <section class="grid-12 preloader-container">
+            @include('partials.preloader')
+        </section>
+        @{{/if}}
+
 
         @{{#foreach top}}
             @include('partials.user-list-item')

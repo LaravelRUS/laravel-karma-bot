@@ -90,7 +90,12 @@ export default class SearchViewModel {
     /**
      * @type {KnockoutObservable<T>}
      */
-    loading = ko.observable(false);
+    searchLoading = ko.observable(false);
+
+    /**
+     * @type {KnockoutObservable<T>}
+     */
+    topLoading = ko.observable(false);
 
     /**
      * @param app
@@ -99,21 +104,19 @@ export default class SearchViewModel {
         this.app = app;
 
         this.search.text.subscribe(value => {
-            if (value) {
-                this.loading(true);
-            }
             this.found.removeAll();
         });
 
         this.search.onChange(value => {
-            this.loading(true);
+            this.searchLoading(true);
             app.usersRepository.search(value)
                 .then(items => {
-                    this.loading(false);
-                    this.found(items)
+                    this.searchLoading(false);
+                    this.found(items);
                 })
                 .catch(e => {
-                    this.loading(false);
+                    this.searchLoading(false);
+                    this.found.removeAll();
                 })
         });
     }
@@ -122,7 +125,15 @@ export default class SearchViewModel {
      * @returns void
      */
     onShow() {
+        this.topLoading(true);
         this.app.usersRepository.top()
-            .then(users => this.top(users));
+            .then(users => {
+                this.topLoading(false);
+                this.top(users);
+            })
+            .catch(e => {
+                this.topLoading(false);
+                this.top.removeAll();
+            });
     }
 }

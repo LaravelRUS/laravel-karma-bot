@@ -1,0 +1,140 @@
+.achievements {
+  $content-width: 345px;
+  $content-height: 80px;
+
+  .achieve {
+    @include clear;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px $color-border;
+    height: $content-height;
+    margin-bottom: 20px;
+    overflow: hidden;
+    cursor: pointer;
+
+    &-icon {
+      border-radius: 3px 0 0 3px;
+      background: $color-main;
+      height: $content-height;
+      display: block;
+      float: left;
+      width: 75px;
+      padding: 0;
+      margin: 0 40px 0 0;
+      position: relative;
+
+      &:after {
+        content: '';
+        position: absolute;
+        background: $color-main;
+        width: 36px;
+        right: -20px;
+        top: -12px;
+        display: block;
+        transform: rotate(25deg);
+        height: 90px;
+      }
+
+
+      figure {
+        position: relative;
+        z-index: 3;
+        display: block;
+        border-radius: 50%;
+        width: ($content-height - 20px);
+        height: ($content-height - 20px);
+        margin: 10px 10px 10px 15px;
+        float: left;
+        box-shadow: 0 0 0 3px #fff;
+        background: #fff;
+
+        .achieve-users {
+          border-radius: 50%;
+          display: block;
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+          color: #fff;
+          font-size: 12px;
+          text-align: center;
+          background: $color-main;
+          z-index: 5;
+          box-shadow: 0 0 0 2px #fff;
+          top: -4px;
+          left: -8px;
+        }
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: inherit;
+          position: relative;
+          z-index: 3;
+        }
+
+        .preloader {
+          width: 20px;
+          height: 20px;
+          margin: -10px 0 0 -10px;
+        }
+      }
+
+      &.no-users {
+        background: $color-dark;
+        &:after {
+          background: $color-dark;
+        }
+
+        figure {
+          box-shadow: 0 0 0 3px $color-dark;
+
+          .achieve-users {
+            background: $color-border;
+            box-shadow: 0 0 0 2px $color-description;
+            color: $color-dark;
+          }
+
+          img {
+            -webkit-filter: grayscale(100%);
+            -moz-filter: grayscale(100%);
+            -ms-filter: grayscale(100%);
+            -o-filter: grayscale(100%);
+            filter: grayscale(100%);
+            filter: gray; /* IE 6-9 */
+          }
+        }
+      }
+    }
+
+    &-content {
+      width: $content-width;
+      height: inherit;
+      float: left;
+      position: relative;
+      z-index: 4;
+      padding: 10px 0;
+      box-sizing: border-box;
+
+      h4 {
+        margin: 0 0 5px 0;
+        font-weight: 300;
+      }
+
+      .achieve-description {
+        font-size: 13px;
+        color: $color-description;
+      }
+    }
+
+    &:hover {
+      box-shadow: 0 0 0 1px $color-main;
+      transition: box-shadow .2s ease;
+
+      h4 {
+        color: $color-main;
+        transition: color .2s ease;
+      }
+    }
+  }
+}

@@ -1,15 +1,11 @@
 <?php
 
-Route::get('/', 'HomeController@index')
-    ->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/user/{user?}', 'HomeController@index')
-    ->where('user', '[a-zA-Z0-9_\-]+')
-    ->name('user');
+Route::get('/user/{user?}', 'HomeController@index')->name('user')
+    ->where('user', '[a-zA-Z0-9_\-]+');
 
-Route::get('/achievements', 'HomeController@index')
-    ->name('achievements');
-
+Route::get('/achievements', 'HomeController@index')->name('achievements');
 
 Route::group(['prefix' => 'api', 'namespace' => 'Api'], function () {
     // Users
@@ -20,6 +16,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api'], function () {
 
     // Achievements
     Route::get('achievements.json', 'AchievementsController@index')->name('api.achievements');
+    Route::get('achieve/{name}/users.json', 'AchievementsController@users')->name('api.achieve.users')
+        ->where('name', '[0-9]+');
 
 
     Route::any('/{any}', function () {

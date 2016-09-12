@@ -147,6 +147,11 @@
           transition: box-shadow .3s $swift;
         }
       }
+
+      .login {
+        color: $color-main;
+        transition: color .2s ease;
+      }
     }
   }
 }

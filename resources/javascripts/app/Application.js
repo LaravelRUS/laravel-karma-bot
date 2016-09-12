@@ -12,8 +12,10 @@ export default class Application extends Pimple {
         this.set('views', app => this.include('Kernel/ViewsRepository'));
         this.register(this.include('ServiceProviders/RouterServiceProvider'));
 
+
         // Repositories
         this.set('usersRepository', app => this.include('Entity/Repository/UserRepository'));
+        this.set('achievementsRepository', app => this.include('Entity/Repository/AchieveRepository'));
     }
 
     /**

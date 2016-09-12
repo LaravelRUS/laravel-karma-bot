@@ -3270,8 +3270,15 @@ textarea,
     border-radius: inherit; }
 
 .preloader-container {
-  height: 90px;
-  display: block; }
+  min-height: 90px;
+  height: 100%;
+  display: block;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  position: absolute;
+  z-index: 10;
+  margin-top: 1px; }
 
 body {
   font-family: "FiraSans", Helvetica, Tahoma, sans-serif;
@@ -3303,6 +3310,8 @@ body {
       color: #de160f; }
   body h1, body h2, body h3, body h4, body h5, body h6 {
     font-family: "FiraSans", Helvetica, Tahoma, sans-serif; }
+  body h3 {
+    text-align: center; }
   body .hidden {
     display: none; }
   body .main {
@@ -3562,6 +3571,9 @@ header {
       .users-list .user:hover .user-avatar figure {
         box-shadow: 0 0 0 3px #585860, 0 0 0 50px rgba(255, 255, 255, 0.2);
         transition: box-shadow 0.3s cubic-bezier(0.55, 0, 0.1, 1); }
+      .users-list .user:hover .login {
+        color: #f4645f;
+        transition: color .2s ease; }
 
 .search {
   padding: 40px 0; }
@@ -3570,7 +3582,9 @@ header {
     height: 50px;
     width: 100%;
     font-size: 18px;
-    padding: 0 20px; }
+    padding: 0 20px;
+    position: relative;
+    z-index: 11; }
     .search input[type=text]::-webkit-input-placeholder {
       font-weight: 100; }
     .search input[type=text]:-moz-placeholder {
@@ -3607,5 +3621,113 @@ header {
       font-weight: 100; }
   .search input:focus + .search-description {
     color: #aaa; }
+
+.achievements .achieve {
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px #dee0df;
+  height: 80px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  cursor: pointer; }
+  .achievements .achieve:after {
+    display: table;
+    width: 100%;
+    content: '';
+    clear: both; }
+  .achievements .achieve-icon {
+    border-radius: 3px 0 0 3px;
+    background: #f4645f;
+    height: 80px;
+    display: block;
+    float: left;
+    width: 75px;
+    padding: 0;
+    margin: 0 40px 0 0;
+    position: relative; }
+    .achievements .achieve-icon:after {
+      content: '';
+      position: absolute;
+      background: #f4645f;
+      width: 36px;
+      right: -20px;
+      top: -12px;
+      display: block;
+      transform: rotate(25deg);
+      height: 90px; }
+    .achievements .achieve-icon figure {
+      position: relative;
+      z-index: 3;
+      display: block;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      margin: 10px 10px 10px 15px;
+      float: left;
+      box-shadow: 0 0 0 3px #fff;
+      background: #fff; }
+      .achievements .achieve-icon figure .achieve-users {
+        border-radius: 50%;
+        display: block;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        background: #f4645f;
+        z-index: 5;
+        box-shadow: 0 0 0 2px #fff;
+        top: -4px;
+        left: -8px; }
+      .achievements .achieve-icon figure img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        position: relative;
+        z-index: 3; }
+      .achievements .achieve-icon figure .preloader {
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px; }
+    .achievements .achieve-icon.no-users {
+      background: #27272b; }
+      .achievements .achieve-icon.no-users:after {
+        background: #27272b; }
+      .achievements .achieve-icon.no-users figure {
+        box-shadow: 0 0 0 3px #27272b; }
+        .achievements .achieve-icon.no-users figure .achieve-users {
+          background: #dee0df;
+          box-shadow: 0 0 0 2px #aaa;
+          color: #27272b; }
+        .achievements .achieve-icon.no-users figure img {
+          -webkit-filter: grayscale(100%);
+          -moz-filter: grayscale(100%);
+          -ms-filter: grayscale(100%);
+          -o-filter: grayscale(100%);
+          filter: grayscale(100%);
+          filter: gray;
+          /* IE 6-9 */ }
+  .achievements .achieve-content {
+    width: 345px;
+    height: inherit;
+    float: left;
+    position: relative;
+    z-index: 4;
+    padding: 10px 0;
+    box-sizing: border-box; }
+    .achievements .achieve-content h4 {
+      margin: 0 0 5px 0;
+      font-weight: 300; }
+    .achievements .achieve-content .achieve-description {
+      font-size: 13px;
+      color: #aaa; }
+  .achievements .achieve:hover {
+    box-shadow: 0 0 0 1px #f4645f;
+    transition: box-shadow .2s ease; }
+    .achievements .achieve:hover h4 {
+      color: #f4645f;
+      transition: color .2s ease; }
 
 /*# sourceMappingURL=app.css.map */
