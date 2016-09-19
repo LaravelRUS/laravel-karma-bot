@@ -8816,6 +8816,8 @@ var Search = function () {
         this._default = this.text();
 
         this.text.subscribe(function (value) {
+            value = value || '';
+
             if (_this._timeout !== null) {
                 clearTimeout(_this._timeout);
             }

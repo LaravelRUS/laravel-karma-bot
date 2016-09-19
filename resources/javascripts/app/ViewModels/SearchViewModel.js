@@ -29,6 +29,8 @@ class Search {
         this._default = this.text();
 
         this.text.subscribe(value => {
+            value = value || '';
+
             if (this._timeout !== null) {
                 clearTimeout(this._timeout);
             }

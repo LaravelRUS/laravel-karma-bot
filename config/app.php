@@ -156,16 +156,10 @@ return [
         Lord\Laroute\LarouteServiceProvider::class,
 
         /*
-         * GitterBot
-         */
-        Core\Providers\GitterClientServiceProvider::class,
-
-        /*
          * Application Service Providers...
          */
-        Core\Providers\OrmServiceProvider::class,
-        Core\Providers\AuthServiceProvider::class,
-        Core\Providers\RouteServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
     ],
 
     /*
