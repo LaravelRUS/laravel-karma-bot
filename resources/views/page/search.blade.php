@@ -23,7 +23,7 @@
 
 
     @{{#if found().length > 0}}
-    <section class="users-list">
+    <section class="items-list users">
         <h3>Результаты поиска по запросу &laquo;@{{ search.text().trim() }}&raquo;</h3>
 
         @{{#foreach found}}
@@ -33,7 +33,7 @@
     @{{/if}}
 
 
-    <section class="users-list">
+    <section class="items-list users">
         <h3>Карма: Топ 12</h3>
 
         @{{#if topLoading}}

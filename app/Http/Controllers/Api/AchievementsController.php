@@ -23,12 +23,10 @@ class AchievementsController
     public function index()
     {
         /** @var Collection $achievements */
-        $achievements = Achieve::query()
-            ->withCount('user')
-            ->groupBy('name')
-            ->get();
-
-        return [];
+        return Achieve::query()
+            ->withCount('users')
+            ->orderBy('users_count', 'desc')
+            ->paginate(20);
     }
 
     /**

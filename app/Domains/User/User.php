@@ -1,6 +1,7 @@
 <?php
 namespace App\Domains\User;
 
+use App\Domains\Achieve\UserAchievements;
 use App\Domains\Karma\Karma;
 use App\Domains\Achieve\Achieve;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +32,7 @@ class User extends Model
      */
     public function achievements()
     {
-        return $this->hasMany(Achieve::class, 'user_id', 'id');
+        return $this->belongsToMany(Achieve::class, 'user_achievements');
     }
 
     /**

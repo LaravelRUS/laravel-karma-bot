@@ -7,7 +7,7 @@ export default class AchieveRepository extends AjaxRepository {
      */
     async all() {
         var result = await this.request(laroute.route('api.achievements'));
-        return this.transform(result, Achieve);
+        return this.transform(result, Achieve, 'data');
     }
 
     /**
@@ -16,6 +16,6 @@ export default class AchieveRepository extends AjaxRepository {
      */
     async find(name) {
         var result = await this.request(laroute.route('api.achieve.users', {name: name}));
-        return this.transform(result, Achieve);
+        return this.transform(result, Achieve, 'data');
     }
 }

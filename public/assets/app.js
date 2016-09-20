@@ -9050,7 +9050,7 @@ var AchieveRepository = function (_AjaxRepository) {
 
                             case 2:
                                 result = _context.sent;
-                                return _context.abrupt("return", this.transform(result, _Achieve2.default));
+                                return _context.abrupt("return", this.transform(result, _Achieve2.default, 'data'));
 
                             case 4:
                             case "end":
@@ -9086,7 +9086,7 @@ var AchieveRepository = function (_AjaxRepository) {
 
                             case 2:
                                 result = _context2.sent;
-                                return _context2.abrupt("return", this.transform(result, _Achieve2.default));
+                                return _context2.abrupt("return", this.transform(result, _Achieve2.default, 'data'));
 
                             case 4:
                             case "end":

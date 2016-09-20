@@ -31,13 +31,13 @@ class Achieve extends Model
     /**
      * @var array
      */
-    protected $appends = ['title', 'description', 'image'];
+    protected $appends = [];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsToMany(User::class, 'user_achievements');
     }
 }

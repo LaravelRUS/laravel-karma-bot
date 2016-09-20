@@ -3457,21 +3457,21 @@ header {
         margin-top: 10px;
         opacity: 1; }
 
-.users-list {
+.items-list {
   padding: 15px 0; }
-  .users-list:after {
+  .items-list:after {
     display: table;
     width: 100%;
     content: '';
     clear: both; }
-  .users-list .user {
+  .items-list .item {
     border-radius: 3px;
     box-shadow: 0 0 0 1px #dee0df;
     height: 80px;
     margin-bottom: 20px;
     overflow: hidden;
     cursor: pointer; }
-    .users-list .user .user-avatar {
+    .items-list .item .avatar {
       border-radius: 3px 0 0 3px;
       background: #27272b;
       height: 80px;
@@ -3481,7 +3481,7 @@ header {
       padding: 0;
       margin: 0 40px 0 0;
       position: relative; }
-      .users-list .user .user-avatar:after {
+      .items-list .item .avatar:after {
         content: '';
         position: absolute;
         background: #27272b;
@@ -3491,7 +3491,15 @@ header {
         display: block;
         transform: rotate(25deg);
         height: 90px; }
-      .users-list .user .user-avatar figure {
+      .items-list .item .avatar .counter {
+        background: #f4645f;
+        position: absolute;
+        width: 100%;
+        padding: 4px 0 4px 6px;
+        color: #fff;
+        font-size: 11px;
+        cursor: default; }
+      .items-list .item .avatar figure {
         position: relative;
         z-index: 3;
         display: block;
@@ -3500,80 +3508,50 @@ header {
         height: 60px;
         margin: 10px 10px 10px 15px;
         box-shadow: 0 0 0 3px #27272b, 0 0 0 1px rgba(255, 255, 255, 0.2);
-        background: #fff; }
-        .users-list .user .user-avatar figure img {
+        background: #fff;
+        overflow: hidden; }
+        .items-list .item .avatar figure img {
           display: block;
           width: 100%;
           height: 100%;
           border-radius: inherit;
           position: relative;
           z-index: 3; }
-        .users-list .user .user-avatar figure .preloader {
+        .items-list .item .avatar figure .preloader {
           width: 20px;
           height: 20px;
           margin: -10px 0 0 -10px; }
-      .users-list .user .user-avatar .user-karma {
-        background: #f4645f;
-        position: absolute;
-        width: 100%;
-        padding: 4px 0 4px 6px;
-        color: #fff;
-        font-size: 11px;
-        cursor: default; }
-        .users-list .user .user-avatar .user-karma.no-karma {
-          background: #dee0df;
-          color: #27272b; }
-    .users-list .user .user-info {
+    .items-list .item .content {
       width: 180px;
       height: inherit;
       float: left;
       position: relative;
       z-index: 4;
-      padding: 10px 0; }
-      .users-list .user .user-info .login,
-      .users-list .user .user-info .name {
-        display: block;
-        width: 100%; }
-        .users-list .user .user-info .login .highlight,
-        .users-list .user .user-info .name .highlight {
-          color: #f4645f; }
-      .users-list .user .user-info .login {
-        font-size: 18px;
-        color: #27272b; }
-        .users-list .user .user-info .login:before {
-          content: '@'; }
-      .users-list .user .user-info .name {
-        font-size: 11px;
-        color: #aaa; }
-      .users-list .user .user-info .achievements {
-        margin: 6px 10px 0 0;
-        height: 20px;
-        overflow: hidden;
-        width: 170px; }
-        .users-list .user .user-info .achievements:after {
-          display: table;
-          width: 100%;
-          content: '';
-          clear: both; }
-        .users-list .user .user-info .achievements .achieve {
-          width: 20px;
-          height: 20px;
-          margin-right: 2px;
-          float: left; }
-          .users-list .user .user-info .achievements .achieve img {
-            display: block;
-            width: inherit;
-            height: inherit;
-            border-radius: inherit; }
-    .users-list .user:hover {
+      padding: 5px 0 0 0; }
+      .items-list .item .content h4 {
+        margin: 0 0 5px 0;
+        font-weight: 300; }
+      .items-list .item .content h5 {
+        font-size: 13px;
+        color: #aaa;
+        font-weight: normal;
+        margin: 5px 0 0 0;
+        line-height: 16px; }
+    .items-list .item:hover {
       box-shadow: 0 0 0 1px #f4645f;
-      transition: box-shadow .2s ease; }
-      .users-list .user:hover .user-avatar figure {
-        box-shadow: 0 0 0 3px #585860, 0 0 0 50px rgba(255, 255, 255, 0.2);
-        transition: box-shadow 0.3s cubic-bezier(0.55, 0, 0.1, 1); }
-      .users-list .user:hover .login {
+      transition: box-shadow 0.4s cubic-bezier(0.55, 0, 0.1, 1); }
+      .items-list .item:hover .avatar figure {
+        box-shadow: 0 0 0 3px #f4645f, 0 0 0 50px rgba(255, 255, 255, 0.2);
+        transition: box-shadow 0.4s cubic-bezier(0.55, 0, 0.1, 1); }
+        .items-list .item:hover .avatar figure img {
+          transform: scale(1.1);
+          transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1); }
+      .items-list .item:hover h4 {
         color: #f4645f;
-        transition: color .2s ease; }
+        transition: color 0.4s cubic-bezier(0.55, 0, 0.1, 1); }
+    .items-list .item.empty .counter {
+      background: #dee0df;
+      color: #27272b; }
 
 .search {
   padding: 40px 0; }
@@ -3622,112 +3600,41 @@ header {
   .search input:focus + .search-description {
     color: #aaa; }
 
-.achievements .achieve {
-  border-radius: 3px;
-  box-shadow: 0 0 0 1px #dee0df;
-  height: 80px;
-  margin-bottom: 20px;
+.users h5 {
+  margin: 0;
+  line-height: 11px; }
+
+.users .user-achievements {
+  padding: 6px 10px 0 0;
+  height: 20px;
   overflow: hidden;
-  cursor: pointer; }
-  .achievements .achieve:after {
+  box-sizing: content-box; }
+  .users .user-achievements:after {
     display: table;
     width: 100%;
     content: '';
     clear: both; }
-  .achievements .achieve-icon {
-    border-radius: 3px 0 0 3px;
-    background: #f4645f;
-    height: 80px;
-    display: block;
-    float: left;
-    width: 75px;
-    padding: 0;
-    margin: 0 40px 0 0;
-    position: relative; }
-    .achievements .achieve-icon:after {
-      content: '';
-      position: absolute;
-      background: #f4645f;
-      width: 36px;
-      right: -20px;
-      top: -12px;
+  .users .user-achievements .achieve {
+    width: 20px;
+    height: 20px;
+    margin-right: 2px;
+    float: left; }
+    .users .user-achievements .achieve img {
       display: block;
-      transform: rotate(25deg);
-      height: 90px; }
-    .achievements .achieve-icon figure {
-      position: relative;
-      z-index: 3;
-      display: block;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      margin: 10px 10px 10px 15px;
-      float: left;
-      box-shadow: 0 0 0 3px #fff;
-      background: #fff; }
-      .achievements .achieve-icon figure .achieve-users {
-        border-radius: 50%;
-        display: block;
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        color: #fff;
-        font-size: 12px;
-        text-align: center;
-        background: #f4645f;
-        z-index: 5;
-        box-shadow: 0 0 0 2px #fff;
-        top: -4px;
-        left: -8px; }
-      .achievements .achieve-icon figure img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        border-radius: inherit;
-        position: relative;
-        z-index: 3; }
-      .achievements .achieve-icon figure .preloader {
-        width: 20px;
-        height: 20px;
-        margin: -10px 0 0 -10px; }
-    .achievements .achieve-icon.no-users {
-      background: #27272b; }
-      .achievements .achieve-icon.no-users:after {
-        background: #27272b; }
-      .achievements .achieve-icon.no-users figure {
-        box-shadow: 0 0 0 3px #27272b; }
-        .achievements .achieve-icon.no-users figure .achieve-users {
-          background: #dee0df;
-          box-shadow: 0 0 0 2px #aaa;
-          color: #27272b; }
-        .achievements .achieve-icon.no-users figure img {
-          -webkit-filter: grayscale(100%);
-          -moz-filter: grayscale(100%);
-          -ms-filter: grayscale(100%);
-          -o-filter: grayscale(100%);
-          filter: grayscale(100%);
-          filter: gray;
-          /* IE 6-9 */ }
-  .achievements .achieve-content {
-    width: 345px;
-    height: inherit;
-    float: left;
-    position: relative;
-    z-index: 4;
-    padding: 10px 0;
-    box-sizing: border-box; }
-    .achievements .achieve-content h4 {
-      margin: 0 0 5px 0;
-      font-weight: 300; }
-    .achievements .achieve-content .achieve-description {
-      font-size: 13px;
-      color: #aaa; }
-  .achievements .achieve:hover {
-    box-shadow: 0 0 0 1px #f4645f;
-    transition: box-shadow .2s ease; }
-    .achievements .achieve:hover h4 {
-      color: #f4645f;
-      transition: color .2s ease; }
+      width: inherit;
+      height: inherit;
+      border-radius: inherit; }
+
+.achievements .item.empty img {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: gray;
+  /* IE 6-9 */ }
+
+.achievements .item .content {
+  width: 345px; }
 
 /*# sourceMappingURL=app.css.map */
