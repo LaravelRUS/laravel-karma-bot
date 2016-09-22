@@ -75,7 +75,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 '*а мои внутренности :hear_no_evil: можно добыть тут https://github.com/LaravelRUS/KarmaBot и ' .
                     'обсудить вот тут https://gitter.im/LaravelRUS/GitterBot' . "*\n" .
                 '*А чем я занимаюсь можно увидеть тут [https://karma.laravel.su](http://karma.yiiframework.ru)' .
-                    ' или тут [http://karma.yiiframework.ru](http://karma.yiiframework.ru) *' . "\n" .
+                    ' или тут [http://karma.yiiframework.ru](http://karma.yiiframework.ru) *' . "\n\n" .
                 '---------' . "\n"
             );
         }
