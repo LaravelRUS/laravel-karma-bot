@@ -60,18 +60,23 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
         if ($isBotMention && Str::contains($message->text_without_special_chars, ['кто ты', 'о себе'])) {
             $message->answer(
-                '*Привет, я бот. И я написан на:*' . "\n" .
-                '* - PHP ' . phpversion()  . "*\n" .
-                '* - Laravel ' . \App::version()  . "*\n" .
-                '* - Плюс всякие шняжки, вроде react, guzzle, doctrine, php-ds...' . "*\n\n" .
+                '---------' . "\n" .
+                ':mens: *Привет, я бот. И я написан на:*' . "\n" .
+                ' - _PHP ' . phpversion()  . "_\n" .
+                ' - _Laravel ' . \App::version()  . "_\n" .
+                ' - _Плюс всякие шняжки, вроде react, guzzle, doctrine, php-ds...' . "_\n\n" .
                 '*Моё максимальное потребление памяти за всё время жизни ' . number_format(memory_get_peak_usage(true) / 1024 / 1024, 3) . "Mb.*\n" .
-                '*Внутри меня обитают расширения: ' . implode(', ', get_loaded_extensions()) . ".*\n" .
+                '*Внутри меня обитают расширения: ' . implode(', ', get_loaded_extensions()) .
+                    " (если хотите пропатчить меня - используйте, не стесняйтесь).*\n" .
                 '*Для сайта использую KnockoutJS и EcmaScript 2016.' . "*\n" .
-                '*Обитаю в чатах: ' . implode(', ', array_keys(config('gitter.rooms'))) . ",\n" .
+                '*Обитаю в чатах: ' . implode(', ', array_map(function($chat) {
+                        return '[' . $chat . '](https://gitter.im/' . $chat . ')';
+                    }, array_keys(config('gitter.rooms')))) . ",\n" .
                 '*а мои внутренности :hear_no_evil: можно добыть тут https://github.com/LaravelRUS/KarmaBot и ' .
                     'обсудить вот тут https://gitter.im/LaravelRUS/GitterBot' . "*\n" .
                 '*А чем я занимаюсь можно увидеть тут [https://karma.laravel.su](http://karma.yiiframework.ru)' .
-                    ' или тут [http://karma.yiiframework.ru](http://karma.yiiframework.ru) *'
+                    ' или тут [http://karma.yiiframework.ru](http://karma.yiiframework.ru) *' . "\n" .
+                '---------' . "\n"
             );
         }
 

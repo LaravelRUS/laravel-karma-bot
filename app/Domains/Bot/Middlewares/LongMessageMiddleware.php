@@ -9,8 +9,8 @@ use Domains\Middleware\MiddlewareInterface;
  */
 class LongMessageMiddleware implements MiddlewareInterface
 {
-    const MAX_CHARS = 1000;
-    const MAX_LINES = 20;
+    const MAX_CHARS = 2000;
+    const MAX_LINES = 30;
     const MAX_CODE_LINES = 20;
 
     /**
