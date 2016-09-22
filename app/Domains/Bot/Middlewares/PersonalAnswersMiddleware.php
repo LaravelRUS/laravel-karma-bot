@@ -71,10 +71,10 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                     number_format(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'Mb, а сейчас примерно ' .
                     number_format(memory_get_usage(true) / 1024 / 1024, 3) . "Mb._\n\n" .
 
-                '_Внутри меня обитают расширения: **' . implode('**, **', get_loaded_extensions()) .
-                    "** (если хотите пропатчить меня - используйте, не стесняйтесь)._\n\n" .
+                '_Внутри меня обитают расширения: **' . implode(', ', get_loaded_extensions()) .
+                    "** (если хотите пропатчить меня - используйте, не стесняйтесь). _\n\n" .
 
-                '_Для сайта использую **KnockoutJS** и **EcmaScript 2016**.' . "*\n\n" .
+                '_Для сайта использую **KnockoutJS** и **EcmaScript 2016**.' . "_\n\n" .
 
                 '_Обитаю в чатах: ' . implode(', ', array_map(function($chat) {
                         return '[' . $chat . '](https://gitter.im/' . $chat . ')';
@@ -82,8 +82,8 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 '_а мои внутренности :hear_no_evil: можно добыть тут https://github.com/LaravelRUS/KarmaBot и ' .
                     'обсудить вот тут https://gitter.im/LaravelRUS/GitterBot' . "_\n\n" .
 
-                '_Чем я занимаюсь можно увидеть тут [https://karma.laravel.su](http://karma.yiiframework.ru)' .
-                    ' или тут [http://karma.yiiframework.ru](http://karma.yiiframework.ru) _' . "\n\n" .
+                '_Чем я занимаюсь можно увидеть тут [https://karma.laravel.su](laravel.su)' .
+                    ' или тут [http://karma.yiiframework.ru](yiiframework.ru) _' . "\n\n" .
 
                 '---------' . "\n"
             );
