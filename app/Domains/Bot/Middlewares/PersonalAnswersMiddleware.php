@@ -67,23 +67,23 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 ' - _Laravel **' . \App::version()  . "**_\n" .
                 ' - _Плюс всякие шняжки, вроде react, guzzle, doctrine, php-ds...' . "_\n\n" .
 
-                '_Моё максимальное потребление памяти за всё время жизни ' .
-                    number_format(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'Mb, а сейчас примерно ' .
-                    number_format(memory_get_usage(true) / 1024 / 1024, 3) . "Mb._\n\n" .
+                'Моё максимальное потребление памяти за всё время жизни ' .
+                    number_format(memory_get_peak_usage(true) / 1024 / 1024, 1) . 'Mb, а сейчас ' .
+                    number_format(memory_get_usage(true) / 1024 / 1024, 1) . "Mb.\n\n" .
 
-                '_Внутри меня обитают расширения: **' . implode(', ', get_loaded_extensions()) .
-                    "** (если хотите пропатчить меня - используйте, не стесняйтесь). _\n\n" .
+                'Внутри меня обитают расширения: **' . implode(', ', get_loaded_extensions()) .
+                    "** (если хотите пропатчить меня - используйте, не стесняйтесь).\n\n" .
 
-                '_Для сайта использую **KnockoutJS** и **EcmaScript 2016**.' . "_\n\n" .
+                'Для сайта использую **KnockoutJS** и **EcmaScript 2016**.' . "\n\n" .
 
-                '_Обитаю в чатах: ' . implode(', ', array_map(function($chat) {
+                'Обитаю в чатах: ' . implode(', ', array_map(function($chat) {
                         return '[' . $chat . '](https://gitter.im/' . $chat . ')';
                     }, array_keys(config('gitter.rooms')))) . "," .
-                '_а мои внутренности :hear_no_evil: можно добыть тут https://github.com/LaravelRUS/KarmaBot и ' .
-                    'обсудить вот тут https://gitter.im/LaravelRUS/GitterBot' . "_\n\n" .
+                'а мои внутренности [можно добыть тут](https://github.com/LaravelRUS/KarmaBot) и ' .
+                    '[обсудить вот тут](https://gitter.im/LaravelRUS/GitterBot)' . "\n\n" .
 
-                '_Чем я занимаюсь можно увидеть тут [https://karma.laravel.su](laravel.su)' .
-                    ' или тут [http://karma.yiiframework.ru](yiiframework.ru) _' . "\n\n" .
+                'Чем я занимаюсь можно увидеть на [https://karma.laravel.su](laravel.su)' .
+                    ' или на [http://karma.yiiframework.ru](yiiframework.ru) ' . "\n\n" .
 
                 '---------' . "\n"
             );
