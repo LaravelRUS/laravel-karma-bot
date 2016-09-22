@@ -58,7 +58,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             }
         }
 
-        if ($isBotMention || Str::contains($message->text_without_special_chars, ['кто ты', 'о себе'])) {
+        if ($isBotMention && Str::contains($message->text_without_special_chars, ['кто ты', 'о себе'])) {
             $message->italic(
                 'Привет, я бот. И я написан на:' . "\n" .
                 ' - PHP ' . phpversion()  . "\n" .
