@@ -58,12 +58,27 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             }
         }
 
+        if ($isBotMention || Str::contains($message->text_without_special_chars, ['кто ты', 'о себе'])) {
+            $message->italic(
+                'Привет, я бот. И я написан на:' . "\n" .
+                ' - PHP ' . phpversion()  . "\n" .
+                ' - Laravel ' . \App::version()  . "\n" .
+                ' - Плюс всякие шняжки, вроде react, guzzle, doctrine, php-ds...' . "\n\n" .
+                'Моё максимальное потребление памяти за всё время жизни ' . number_format(memory_get_peak_usage(true) / 1024 / 1024, 3) . "Mb.\n" .
+                'Внутри меня обитают расширения: ' . implode(', ', get_loaded_extensions()) . ".\n" .
+                'Для сайта использую KnockoutJS и EcmaScript 2016.' . "\n" .
+                'Обитаю вот тут https://github.com/LaravelRUS/KarmaBot и тут https://gitter.im/LaravelRUS/GitterBot' . "\n" .
+                'А чем я занимаюсь можно увидеть тут https://karma.laravel.su или тут http://karma.yiiframework.ru'
+            );
+        }
+
         if (!count($message->mentions)) {
             // Question
             $isQuestion = in_array($message->text_without_special_chars, [
                 'можно задать вопрос',
                 'хочу задать вопрос',
                 'есть кто',
+                'есть кто живой',
                 'кто может помочь',
                 'помогите пожалуйста'
             ], true);
@@ -74,9 +89,14 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
             // Question
             $isCats = Str::contains($message->text_without_special_chars, ['котаны']);
-
             if ($isCats) {
-                $message->italic(sprintf('@%s, в Пензу езжай со своими котанами \-_\-', $message->user->login));
+                $message->italic(sprintf('@%s, а не поехать ли тебе в Пензу с котанами?', $message->user->login));
+            }
+
+            // Question
+            $isPenza = Str::contains(mb_strtolower($message->text_without_special_chars), ['пенза']);
+            if ($isPenza) {
+                $message->italic(sprintf('@%s, а не приехать ли тебе обратно с котанами?', $message->user->login));
             }
 
             // Question
@@ -86,6 +106,8 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 'пакетом яровой',
                 'пакете яровой',
                 'пакету яровой',
+                'роксомнадзор',
+                'битрикс',
                 'мизулина'
             ]);
 
@@ -97,6 +119,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 'правила чата',
                 'правила',
                 'как себя вести',
+                'читай правила',
                 '9 кругов'
             ], true);
 
@@ -113,7 +136,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             if ($isBan) {
                 $message->italic(sprintf(
                     '@%s, тебе выданы ' . str_repeat(' :hammer: ', random_int(1, 9)) . ' на 0.' . random_int(1, 9) . ' секунды. Наслаждайся ;)',
-                        $message->user->login
+                    $message->user->login
                 ));
             }
 
@@ -136,8 +159,12 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 ));
             }
 
-            if (preg_match('/^[a-zA-Z][0-9]$/isu', $message->text_without_special_chars)) {
+
+            if (preg_match('/^[а-кА-К][0-9]$/isu', $message->text_without_special_chars)) {
                 $message->italic(sprintf('@%s, %s', $message->user->login, ['мимо', 'ранил', 'убил'][random_int(0, 2)]));
+
+                $char = (range('А', 'К')[random_int(0, 9)]) . '-' . random_int(1, 10);
+                $message->italic(sprintf('@%s, %s?', $message->user->login, $char));
             }
         }
 
