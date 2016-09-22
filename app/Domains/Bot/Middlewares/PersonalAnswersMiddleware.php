@@ -78,7 +78,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
 
                 'Обитаю в чатах: ' . implode(', ', array_map(function($chat) {
                         return '[' . $chat . '](https://gitter.im/' . $chat . ')';
-                    }, array_keys(config('gitter.rooms')))) . "," .
+                    }, array_keys(config('gitter.rooms')))) . ', ' .
                 'а мои внутренности [можно добыть тут](https://github.com/LaravelRUS/KarmaBot) и ' .
                     '[обсудить вот тут](https://gitter.im/LaravelRUS/GitterBot)' . "\n\n" .
 
