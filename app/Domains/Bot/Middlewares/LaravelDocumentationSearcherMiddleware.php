@@ -43,7 +43,7 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
             $hits->unique(function ($row) {
                 return $row['h1'];
             })->map(function ($row) {
-                $row['link'] = 'https://laravel.com/docs/5.2/' . $row['link'];
+                $row['link'] = 'https://laravel.com/docs/5.3/' . $row['link'];
                 return $row;
             })->take(3)->each(function ($row) use (&$response) {
                 $title = '';
