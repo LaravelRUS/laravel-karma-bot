@@ -4,8 +4,7 @@
     "babel-plugin-syntax-flow": "^6.5.0",
     "babel-plugin-transform-flow-strip-types": "^6.7.0",
     "gulp": "3.9.*",
-    "knockout-punches": "*",
     "lightweb-builder": "0.0.*",
-    "knockout": "^3.3.0"
+    "tko": "*"
   }
 }
