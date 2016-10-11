@@ -31,11 +31,6 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
 
             $result = $client->initIndex('docs')->search($query);
 
-            if ((int) array_get($result, 'nbHits') === 0) {
-                $message->text = "погугли {$query}";
-                return app(NewGoogleSearchMiddleware::class)->handle($message);
-            }
-
             $response = '';
 
             $hits = new Collection($result['hits']);
@@ -44,6 +39,7 @@ class LaravelDocumentationSearcherMiddleware implements MiddlewareInterface
                 return $row['h1'];
             })->map(function ($row) {
                 $row['link'] = 'https://laravel.com/docs/5.3/' . $row['link'];
+
                 return $row;
             })->take(3)->each(function ($row) use (&$response) {
                 $title = '';
