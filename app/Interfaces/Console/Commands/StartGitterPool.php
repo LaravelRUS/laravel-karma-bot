@@ -106,5 +106,6 @@ class StartGitterPool extends Command
             shell_exec('kill ' . $pid);
             unlink($file->getRealpath());
         }
+        shell_exec('pkill -f artisan'); // Hard shutdown of zombies
     }
 }
