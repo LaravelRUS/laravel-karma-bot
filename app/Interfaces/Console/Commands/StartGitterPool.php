@@ -107,6 +107,6 @@ class StartGitterPool extends Command
             unlink($file->getRealpath());
         }
 
-        //shell_exec('pkill -f artisan'); // Hard shutdown of zombies
+        shell_exec('pkill -f "artisan gitter:listen"'); // Hard shutdown of zombies
     }
 }
