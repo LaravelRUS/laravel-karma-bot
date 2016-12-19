@@ -4,7 +4,7 @@ services:
     karma_apps:
         image: tianon/true
         volumes:
-            - ./karmabot:/var/www/karmabot
+            - .:/var/www
 
     karma_workspace:
         build:
@@ -25,9 +25,9 @@ services:
            - "2223:22"
         tty: true
 
-    karma_php:
+    karma_bot_php:
         build:
-            context: ./docker/php-fpm
+            context: ./docker/bot-php
         command: "/bin/bash /start.sh"
         volumes_from:
             - karma_apps

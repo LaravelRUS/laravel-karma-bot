@@ -4,7 +4,7 @@
 #--------------------------------------------------------------------------
 #
 
-FROM php:7.1-fpm
+FROM php:7.1
 
 #
 #--------------------------------------------------------------------------
@@ -63,7 +63,6 @@ RUN pecl install zip && docker-php-ext-enable zip
 # Ev
 RUN pecl install ev && docker-php-ext-enable ev
 
-
 #
 #--------------------------------------------------------------------------
 # Final Touch
@@ -71,13 +70,12 @@ RUN pecl install ev && docker-php-ext-enable ev
 #
 
 ADD ./laravel.ini /usr/local/etc/php/conf.d
-ADD ./laravel.pool.conf /usr/local/etc/php-fpm.d/
 
 RUN rm -r /var/lib/apt/lists/*
 
 RUN usermod -u 1000 www-data
 
-WORKDIR /var/www
+WORKDIR /var/www/karmabot
 
 USER root
 
