@@ -1,0 +1,71 @@
+version: '2'
+
+services:
+    karma_apps:
+        image: tianon/true
+        volumes:
+            - ./karmabot:/var/www/karmabot
+
+    karma_workspace:
+        build:
+            context: ./docker/workspace
+            args:
+                - INSTALL_XDEBUG=true
+                - COMPOSER_GLOBAL_INSTALL=true
+                - INSTALL_WORKSPACE_SSH=true
+                - PUID=1000
+                - PGID=1000
+                - TZ=UTC
+        volumes_from:
+            - karma_apps
+        extra_hosts:
+            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
+            - "dockerhost:172.17.0.1"
+        ports:
+           - "2223:22"
+        tty: true
+
+    karma_php:
+        build:
+            context: ./docker/php-fpm
+        command: "/bin/bash /start.sh"
+        volumes_from:
+            - karma_apps
+        expose:
+            - "9000"
+        links:
+            - karma_workspace
+        extra_hosts:
+            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
+            - "dockerhost:172.17.0.1"
+        environment:
+            # IMPORTANT: Set the Remote Interpreter entry matching name to `laravel`
+            - PHP_IDE_CONFIG="serverName=laravel"
+
+    karma_mysql:
+        build: 
+            context: ./docker/mysql
+            args:
+                - MYSQL_DATABASE=karma
+                - MYSQL_USER=root
+                - MYSQL_PASSWORD=root
+                - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - karma_mysql:/var/lib/mysql
+        ports:
+            - "3308:3308"
+
+    karma_redis:
+        build: ./docker/redis
+        volumes:
+            - karma_redis:/data
+        ports:
+            - "6381:6381"
+
+volumes:
+    karma_mysql:
+        driver: "local"
+    karma_redis:
+        driver: "local"
+    sessions:    ## nothing is connected to this (- ./data/sessions:/sessions)
+        driver: "local"
