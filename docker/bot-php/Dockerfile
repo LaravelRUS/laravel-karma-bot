@@ -82,3 +82,7 @@ USER root
 # Poehali (c)
 ADD ./start.sh /start.sh
 RUN chmod 755 /start.sh
+
+USER www-data
+
+CMD ["/start.sh"]

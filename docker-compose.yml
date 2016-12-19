@@ -28,7 +28,6 @@ services:
     karma_bot_php:
         build:
             context: ./docker/bot-php
-        command: "/bin/bash /start.sh"
         volumes_from:
             - karma_apps
         expose:
@@ -41,6 +40,7 @@ services:
         environment:
             # IMPORTANT: Set the Remote Interpreter entry matching name to `laravel`
             - PHP_IDE_CONFIG="serverName=laravel"
+        tty: true
 
     karma_mysql:
         build: 
