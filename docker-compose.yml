@@ -1,12 +1,12 @@
 version: '2'
 
 services:
-    karma_apps:
+    apps:
         image: tianon/true
         volumes:
             - .:/var/www
 
-    karma_workspace:
+    workspace:
         build:
             context: ./docker/workspace
             args:
@@ -17,7 +17,7 @@ services:
                 - PGID=1000
                 - TZ=UTC
         volumes_from:
-            - karma_apps
+            - apps
         extra_hosts:
             # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
             - "dockerhost:172.17.0.1"
@@ -25,15 +25,15 @@ services:
            - "2223:22"
         tty: true
 
-    karma_bot_php:
+    php_bot:
         build:
-            context: ./docker/bot-php
+            context: ./docker/php-bot
         volumes_from:
-            - karma_apps
+            - apps
         expose:
             - "9000"
         links:
-            - karma_workspace
+            - workspace
         extra_hosts:
             # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
             - "dockerhost:172.17.0.1"
@@ -42,7 +42,7 @@ services:
             - PHP_IDE_CONFIG="serverName=laravel"
         tty: true
 
-    karma_mysql:
+    mysql:
         build: 
             context: ./docker/mysql
             args:
@@ -51,21 +51,21 @@ services:
                 - MYSQL_PASSWORD=root
                 - MYSQL_ROOT_PASSWORD=root
         volumes:
-            - karma_mysql:/var/lib/mysql
+            - mysql:/var/lib/mysql
         ports:
             - "3308:3308"
 
-    karma_redis:
+    redis:
         build: ./docker/redis
         volumes:
-            - karma_redis:/data
+            - redis:/data
         ports:
             - "6381:6381"
 
 volumes:
-    karma_mysql:
+    mysql:
         driver: "local"
-    karma_redis:
+    redis:
         driver: "local"
     sessions:    ## nothing is connected to this (- ./data/sessions:/sessions)
         driver: "local"
