@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Model;
+namespace KarmaBot\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Achieve
- * @package Api\Domains\Achieve
+ * @package KarmaBot\Model
  */
 class Achieve extends Model
 {

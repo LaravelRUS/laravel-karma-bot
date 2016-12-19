@@ -6,14 +6,14 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Console;
+namespace KarmaBot\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 /**
  * Class Kernel
- * @package App\Console
+ * @package KarmaBot\Console
  */
 class Kernel extends ConsoleKernel
 {

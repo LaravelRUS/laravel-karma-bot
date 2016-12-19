@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Exceptions;
+namespace KarmaBot\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 /**
  * Class Handler
- * @package App\Exceptions
+ * @package KarmaBot\Exceptions
  */
 class Handler extends ExceptionHandler
 {

@@ -21,25 +21,20 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "karmabot/database"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "KarmaBot\\": "karmabot/app/"
         }
-    },
-    "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
     },
     "scripts": {
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "php karmabot/artisan optimize"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-            "php artisan optimize"
+            "php karmabot/artisan optimize"
         ]
     },
     "config": {

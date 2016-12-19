@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace App\Providers;
+namespace KarmaBot\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class AppServiceProvider
- * @package App\Providers
+ * @package KarmaBot\Providers
  */
 class AppServiceProvider extends ServiceProvider
 {

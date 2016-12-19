@@ -9,7 +9,7 @@ build:
     tests:
         override:
             -
-                command: 'phpunit --coverage-clover=karmabot/phpunit.xml'
+                command: 'phpunit --coverage-clover=phpunit.xml'
                 coverage:
-                    file: 'karmabot/phpunit.xml'
+                    file: 'phpunit.xml'
                     format: 'clover'

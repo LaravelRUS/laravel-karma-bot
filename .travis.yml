@@ -5,7 +5,6 @@ php:
 
 before_script:
   - composer self-update
-  - cd karmabot
   - composer install --prefer-source --no-interaction --dev
 
-script: karmabot/phpunit
+script: phpunit
