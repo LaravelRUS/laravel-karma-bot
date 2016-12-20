@@ -4,7 +4,7 @@ services:
     apps:
         image: tianon/true
         volumes:
-            - .:/var/www
+            - ".:/var/www"
 
     workspace:
         build:
