@@ -5,12 +5,12 @@ services:
         image: tianon/true
         volumes:
             - ".:/var/www"
+        tty: true
 
     workspace:
         build:
             context: ./docker/workspace
             args:
-                - INSTALL_XDEBUG=true
                 - COMPOSER_GLOBAL_INSTALL=true
                 - INSTALL_WORKSPACE_SSH=true
                 - PUID=1000
@@ -28,6 +28,7 @@ services:
     php_bot:
         build:
             context: ./docker/php-bot
+        command: "/bin/bash /start.sh"
         volumes_from:
             - apps
         expose:
@@ -53,14 +54,14 @@ services:
         volumes:
             - mysql:/var/lib/mysql
         ports:
-            - "3308:3308"
+            - "3308:3306"
 
     redis:
         build: ./docker/redis
         volumes:
             - redis:/data
         ports:
-            - "6381:6381"
+            - "6381:6379"
 
 volumes:
     mysql:
