@@ -75,14 +75,10 @@ RUN rm -r /var/lib/apt/lists/*
 
 RUN usermod -u 1000 www-data
 
-WORKDIR /var/www/karmabot
+#WORKDIR /var/www/karmabot
 
 USER root
 
-# Poehali (c)
-ADD ./start.sh /start.sh
 RUN chmod 755 /start.sh
-
 USER www-data
-
-CMD ["/start.sh"]
+CMD ["./docker/php-bot/start.sh"]

@@ -11,3 +11,5 @@ $ sudo usermod -aG docker $USER
 
 - Download [Docker](https://download.docker.com/win/stable/InstallDocker.msi) or [Docker Toolbox](https://github.com/docker/toolbox/releases/tag/v1.12.5):
 - Add environment variable `COMPOSE_CONVERT_WINDOWS_PATHS` with value `0`
+
+> Your project must be located at `C:/Users/<User>/...` directory. It important!
