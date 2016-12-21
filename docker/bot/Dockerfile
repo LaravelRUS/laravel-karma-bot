@@ -13,7 +13,7 @@ RUN echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/d
     && curl -sS https://www.dotdeb.org/dotdeb.gpg | apt-key add - \
     && apt-get update
 
-# Install "libraries" and "Software's"
+# Install required libs
 RUN apt-get update && \
     apt-get install -y \
         libcurl4-openssl-dev \
@@ -31,46 +31,47 @@ RUN apt-get update && \
         libmcrypt-dev \
     && apt-get clean
 
-
-# Mcrypt extention
-RUN docker-php-ext-install mcrypt
-
-# Mysql (PDO) extention
-RUN docker-php-ext-install pdo_mysql
-
-# Pcntl
-RUN docker-php-ext-install pcntl
-
-# Sockets
-RUN docker-php-ext-install sockets
-
-# Gmp
-RUN docker-php-ext-install bcmath
-
-# GD
+#
+# Configure
+#
 RUN docker-php-ext-configure gd \
         --enable-gd-native-ttf \
         --with-jpeg-dir=/usr/lib \
-        --with-freetype-dir=/usr/include/freetype2 && \
-    docker-php-ext-install gd
+        --with-freetype-dir=/usr/include/freetype2
 
-# Xdebug
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
+#
+# Install extensions
+#
+RUN docker-php-ext-install \
+        mcrypt \
+        pdo_mysql \
+        pcntl \
+        sockets \
+        bcmath \
+        opcache \
+        gd
+
+#
+# Install non standard extensions
+#
+RUN pecl install xdebug
+RUN pecl install zip
+RUN pecl install ev
+
+#
+# Export configs
+#
 COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
-# Opcache
-RUN docker-php-ext-install opcache && \
-    docker-php-ext-enable opcache
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-# Zip
-RUN pecl install zip && \
-    docker-php-ext-enable zip
-
-# Ev
-RUN pecl install ev && \
-    docker-php-ext-enable ev
+#
+# Enable non standard extensions
+#
+RUN docker-php-ext-enable \
+    xdebug \
+    opcache \
+    zip \
+    ev
 
 #
 #--------------------------------------------------------------------------
@@ -81,6 +82,11 @@ RUN pecl install ev && \
 ADD ./laravel.ini /usr/local/etc/php/conf.d
 
 RUN rm -r /var/lib/apt/lists/*
+
+#####################################
+# Crontab
+#####################################
+COPY ./crontab /var/spool/cron/crontabs
 
 #####################################
 # Composer:

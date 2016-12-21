@@ -20,12 +20,11 @@ RUN apt-get update && \
         apt-utils \
         pkg-config \
         xz-utils \
-        curl \
         git \
         curl \
         vim \
-        nano \
         mc \
+        cron \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
     
@@ -36,11 +35,6 @@ RUN apt-get update && \
 ARG TZ=UTC
 ENV TZ ${TZ}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-#####################################
-# Crontab
-#####################################
-COPY ./crontab /var/spool/cron/crontabs
 
 # Clean up
 

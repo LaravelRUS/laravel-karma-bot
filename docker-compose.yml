@@ -14,7 +14,7 @@ services:
 
     bot:
         build:
-            context: ./docker/php-bot
+            context: ./docker/bot
         command: "/bin/bash /start.sh"
         volumes_from:
             - workspace
