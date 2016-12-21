@@ -33,6 +33,7 @@ services:
                 - DB_DATABASE=karma
                 - DB_USERNAME=root
                 - DB_PASSWORD=root
+                - MYSQL_ROOT_PASSWORD=root
         volumes:
             - mysql:/var/lib/mysql
         ports:

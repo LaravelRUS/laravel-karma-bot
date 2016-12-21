@@ -3,3 +3,5 @@
 Homestead.json
 Homestead.yaml
 .env
+/.cache
+.bash_history

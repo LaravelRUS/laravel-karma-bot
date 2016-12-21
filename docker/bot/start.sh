@@ -7,9 +7,7 @@ chmod 0777 ./karmabot
 
 php -v
 
-rm /var/www/karmabot/storage/logs/laravel.log
-touch /var/www/karmabot/storage/logs/laravel.log
-tail -f /var/www/karmabot/storage/logs/laravel.log
+watch 'bash -c "cut -c -$COLUMNS /var/www/karmabot/storage/logs/laravel.log"'
 
 
 cd /var/www/karmabot
