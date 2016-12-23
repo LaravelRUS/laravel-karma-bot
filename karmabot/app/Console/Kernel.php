@@ -23,7 +23,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\Watcher::class,
+        // Karma Bot
+        Commands\BotChannelAdd::class,
+        Commands\BotStart::class,
     ];
 
     /**
@@ -34,8 +37,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        //
     }
 
     /**

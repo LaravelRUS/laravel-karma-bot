@@ -3,5 +3,7 @@
 Homestead.json
 Homestead.yaml
 .env
-/.cache
+/.composer
 .bash_history
+_ide_helper.php
+_ide_helper_models.php

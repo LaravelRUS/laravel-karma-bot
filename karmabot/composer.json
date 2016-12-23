@@ -1,0 +1,11 @@
+{
+    "description": "This file required for 'artisan make:*' commands. Do not use for composer autoload maps and requirements",
+    "require": {
+        "ext-do-not-use-this-composer-file": ">=100500"
+    },
+    "autoload": {
+        "psr-4": {
+            "KarmaBot\\": "app/"
+        }
+    }
+}

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * This file is part of Laravel-Karma package.
  *
@@ -22,13 +22,14 @@ class CreateKarmaTable extends Migration
      */
     public function up()
     {
-        Schema::create('karma', function(Blueprint $t){
+        Schema::create('karma', function (Blueprint $t) {
             $t->increments('id');
-            $t->string('room_id');
-            $t->string('message_id');
-            $t->integer('user_id')->index();
-            $t->integer('user_target_id')->index();
-            $t->timestamp('created_at');
+            $t->unsignedInteger('system_id')->index();
+            $t->unsignedInteger('channel_id')->index();
+            $t->integer('from_user_id')->index();
+            $t->integer('to_user_id')->index();
+            $t->string('sys_message_id');
+            $t->timestamps();
         });
     }
 

@@ -23,9 +23,11 @@ class CreateSystemsTable extends Migration
     {
         Schema::create('systems', function (Blueprint $t) {
             $t->increments('id');
-            $t->string('name');
-            $t->string('adapter');
-            $t->string('token');
+            $t->string('title');    // Visible name
+            $t->string('name');     // Connection name
+            $t->string('driver');   // Driver class
+            $t->string('token');    // Access token
+            $t->string('icon')->default('');
             $t->timestamps();
         });
     }

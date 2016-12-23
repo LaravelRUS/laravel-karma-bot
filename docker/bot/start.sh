@@ -7,14 +7,12 @@ chmod 0777 ./karmabot
 
 php -v
 
-watch 'bash -c "cut -c -$COLUMNS /var/www/karmabot/storage/logs/laravel.log"'
+cd /var/www
 
-
-cd /var/www/karmabot
-
-cp -n ../.env.example .env
+cp -n .env.example karmabot/.env
 
 composer install
 
-php artisan key:generate
-php artisan migrate --force --seed
+php ./karmabot/artisan key:generate
+php ./karmabot/artisan migrate --force
+php ./karmabot/artisan watch > /dev/null

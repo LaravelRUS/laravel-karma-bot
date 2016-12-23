@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 /**
  * This file is part of Laravel-Karma package.
  *
@@ -6,8 +6,9 @@
  * file that was distributed with this source code.
  */
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use KarmaBot\Model\Achieve;
 
 /**
  * Class CreateAchievementsTable
@@ -19,17 +20,39 @@ class CreateAchievementsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('achievements', function(Blueprint $t){
+        Schema::create('achievements', function (Blueprint $t) {
             $t->increments('id');
             $t->string('name')->index();
-            $t->integer('user_id')->index();
             $t->string('title');
             $t->string('description');
             $t->string('image');
-            $t->timestamp('created_at');
         });
+
+        Schema::create('user_achievements', function (Blueprint $t) {
+            $t->increments('id');
+            $t->unsignedInteger('user_id')->index();
+            $t->unsignedInteger('achieve_id')->index();
+            $t->timestamps();
+        });
+
+        $this->fillTable();
+    }
+
+    /**
+     * Fill table
+     *
+     * @return void
+     */
+    private function fillTable(): void
+    {
+        $achievements = json_decode(file_get_contents(str_replace('.php', '.json', __FILE__)), true);
+
+        foreach ($achievements as $achieve) {
+            $model = Achieve::create($achieve);
+            echo ' + Achieve ' . $model->title . ' as ' . $model->name . "\n";
+        }
     }
 
     /**
@@ -37,8 +60,9 @@ class CreateAchievementsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::drop('achievements');
+        Schema::drop('user_achievements');
     }
 }

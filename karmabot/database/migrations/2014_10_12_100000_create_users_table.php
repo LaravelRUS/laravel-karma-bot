@@ -23,7 +23,6 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $t) {
             $t->increments('id');
-            $t->string('gitter_id')->index();
             $t->string('name');
             $t->string('avatar');
             $t->string('url');
@@ -32,6 +31,13 @@ class CreateUsersTable extends Migration
             $t->string('password', 60)->nullable();
             $t->rememberToken();
             $t->timestamps();
+        });
+
+        Schema::create('user_system', function (Blueprint $t) {
+            $t->increments('id');
+            $t->unsignedInteger('system_id')->index();
+            $t->unsignedInteger('user_id')->index();
+            $t->string('sys_user_id');
         });
     }
 
@@ -43,5 +49,6 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::drop('users');
+        Schema::drop('user_system');
     }
 }

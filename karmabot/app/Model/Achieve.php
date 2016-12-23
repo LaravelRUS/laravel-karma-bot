@@ -28,12 +28,7 @@ class Achieve extends Model
     /**
      * @var array
      */
-    protected $guarded = ['id'];
-
-    /**
-     * @var array
-     */
-    protected $appends = [];
+    protected $fillable = ['name', 'title', 'image', 'description'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

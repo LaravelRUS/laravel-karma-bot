@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 /**
  * This file is part of Laravel-Karma package.
  *
@@ -10,9 +10,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class RemoveUnusedAchievementFields
+ * Class CreateChannelsTable
  */
-class RemoveUnusedAchievementFields extends Migration
+class CreateChannelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -21,12 +21,12 @@ class RemoveUnusedAchievementFields extends Migration
      */
     public function up()
     {
-        Schema::table('achievements', function(Blueprint $t) {
-            $t->dropColumn([
-                'image',
-                'title',
-                'description'
-            ]);
+        Schema::create('channels', function (Blueprint $t) {
+            $t->increments('id');
+            $t->unsignedInteger('system_id')->index();
+            $t->string('sys_channel_id');
+            $t->string('name');
+            $t->timestamps();
         });
     }
 
@@ -37,10 +37,6 @@ class RemoveUnusedAchievementFields extends Migration
      */
     public function down()
     {
-        Schema::table('achievements', function(Blueprint $t) {
-            $t->string('title');
-            $t->string('description');
-            $t->string('image');
-        });
+        Schema::drop('channels');
     }
 }

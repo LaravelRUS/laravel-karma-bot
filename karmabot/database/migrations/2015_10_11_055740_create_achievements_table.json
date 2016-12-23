@@ -1,0 +1,68 @@
+[
+    {
+        "name":        "docs",
+        "title":       "Красавчик",
+        "description": "Переводил документацию. Настоящий мужик!",
+        "image":       "docs.gif"
+    },
+    {
+        "name":        "grumbler",
+        "title":       "Почётный ворчун",
+        "description": "Заворчит вас до смерти.",
+        "image":       "grumbler.gif"
+    },
+    {
+        "name":        "karma-10",
+        "title":       "Находчивый",
+        "description": "Набрать 10 кармы.",
+        "image":       "karma-10.gif"
+    },
+    {
+        "name":        "karma-50",
+        "title":       "Любитель сладкого",
+        "description": "Набрать 50 кармы.",
+        "image":       "karma-50.gif"
+    },
+    {
+        "name":        "karma-100",
+        "title":       "Благодетель",
+        "description": "Набрать 100 кармы.",
+        "image":       "karma-100.gif"
+    },
+    {
+        "name":        "karma-500",
+        "title":       "Рэмбо",
+        "description": "Набрать 500 кармы.",
+        "image":       "karma-500.gif"
+    },
+    {
+        "name":        "karma-1000",
+        "title":       "JhaoDa",
+        "description": "Больше Кармы Богу Кармы!",
+        "image":       "karma-1000.gif"
+    },
+    {
+        "name":        "thanks-10-kama-0",
+        "title":       "Полный паразец!",
+        "description": "Сказать 10 раз спасибо не имея ни единой благодарности.",
+        "image":       "thanks-10-karma-0.gif"
+    },
+    {
+        "name":        "thanks-20",
+        "title":       "Благодарный",
+        "description": "Высказать 20 благодарностей.",
+        "image":       "thanks-20.gif"
+    },
+    {
+        "name":        "thanks-50",
+        "title":       "Нахлебник",
+        "description": "Сказать 50 раз спасибо",
+        "image":       "thanks-50.gif"
+    },
+    {
+        "name":        "thanks-100",
+        "title":       "Вопрошайка",
+        "description": "Получить 100 раз ответ на свои вопросы.",
+        "image":       "thanks-100.gif"
+    }
+]

@@ -4,7 +4,7 @@
 #--------------------------------------------------------------------------
 #
 
-FROM php:7.1
+FROM php:7.1-zts
 
 RUN DEBIAN_FRONTEND=noninteractive
 
@@ -16,6 +16,7 @@ RUN echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/d
 # Install required libs
 RUN apt-get update && \
     apt-get install -y \
+        git \
         libcurl4-openssl-dev \
         libedit-dev \
         libssl-dev \
