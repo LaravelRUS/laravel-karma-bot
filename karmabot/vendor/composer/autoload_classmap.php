@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'KarmaBot\\Bot\\Connection' => $baseDir . '/app/Bot/Connection.php',
+    'KarmaBot\\Bot\\ChannelConnection' => $baseDir . '/app/Bot/ChannelConnection.php',
     'KarmaBot\\Console\\Commands\\BotChannelAdd' => $baseDir . '/app/Console/Commands/BotChannelAdd.php',
     'KarmaBot\\Console\\Commands\\BotStart' => $baseDir . '/app/Console/Commands/BotStart.php',
     'KarmaBot\\Console\\Commands\\Watcher' => $baseDir . '/app/Console/Commands/Watcher.php',

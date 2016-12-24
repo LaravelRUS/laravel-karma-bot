@@ -21,7 +21,7 @@ class ComposerStaticInit69dabd85cba3389ca052940510763b25
     );
 
     public static $classMap = array (
-        'KarmaBot\\Bot\\Connection' => __DIR__ . '/../..' . '/app/Bot/Connection.php',
+        'KarmaBot\\Bot\\ChannelConnection' => __DIR__ . '/../..' . '/app/Bot/ChannelConnection.php',
         'KarmaBot\\Console\\Commands\\BotChannelAdd' => __DIR__ . '/../..' . '/app/Console/Commands/BotChannelAdd.php',
         'KarmaBot\\Console\\Commands\\BotStart' => __DIR__ . '/../..' . '/app/Console/Commands/BotStart.php',
         'KarmaBot\\Console\\Commands\\Watcher' => __DIR__ . '/../..' . '/app/Console/Commands/Watcher.php',

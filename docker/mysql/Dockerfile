@@ -1,7 +1,10 @@
 FROM mysql:5.7
 
+RUN apt-get install --no-install-recommends -y tzdata
+
 ADD startup /etc/mysql/startup
 ADD my.cnf /etc/mysql/my.cnf
+RUN chmod 644 /etc/mysql/my.cnf
 
 RUN chown -R mysql:root /var/lib/mysql/
 
