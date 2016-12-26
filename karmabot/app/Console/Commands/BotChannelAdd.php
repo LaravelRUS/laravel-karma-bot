@@ -7,12 +7,10 @@
  */
 namespace KarmaBot\Console\Commands;
 
-use Illuminate\Console\Command;
-use KarmaBot\Model\Channel;
 use KarmaBot\Model\System;
-use Serafim\KarmaCore\Io\ChannelInterface;
-use Serafim\KarmaCore\Io\ManagerInterface;
-use Serafim\KarmaCore\Io\SystemInterface;
+use KarmaBot\Model\Channel;
+use Illuminate\Console\Command;
+use Illuminate\Contracts\Container\Container;
 
 /**
  * Class BotChannelAdd
@@ -25,7 +23,10 @@ class BotChannelAdd extends Command
      *
      * @var string
      */
-    protected $signature = 'bot:channel {system} {channel}';
+    protected $signature = 'bot:channel 
+        {systemId : System id} 
+        {channel : Channel external id}
+    ';
 
     /**
      * The console command description.
@@ -34,84 +35,40 @@ class BotChannelAdd extends Command
      */
     protected $description = 'Update or add channel into system';
 
-
     /**
-     * Execute the console command.
-     *
-     * @param ManagerInterface $manager
-     * @return mixed
+     * @param Container $app
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    public function handle(ManagerInterface $manager): void
+    public function handle(Container $app): void
     {
-        /**
-         * @var ChannelInterface $channelData
-         * @var SystemInterface $systemData
-         */
-        [$systemData, $channelData] = $this->findChannel($manager);
-
-        /**
-         * @var Channel $channel
-         * @var System $system
-         */
-        [$system, $channel] = $this->findChannelInStorage($systemData, $channelData);
-
-
-        $message = ($channel ? 'Updating' : 'Creating')
-            . ' channel [' . $channelData->getId() . ': ' .$channelData->getName() . ']';
-        $this->comment($message);
-
-
-        if ($channel === null) {
-            $channel = new Channel(['system_id' => $system->id]);
+        $system = System::find($this->argument('system'));
+        if (!$system) {
+            throw new \InvalidArgumentException('Invalid system id');
         }
 
-        $this->sync($channel, $channelData);
+        $channel = $this->getChannel($system);
 
-        $this->info('Success');
+        $data = $channel->getChannelConnection($app);
+        $channel->name = $data->getName();
+        $channel->save();
     }
 
     /**
-     * @param Channel $channel
-     * @param ChannelInterface $data
+     * @param System $system
      * @return Channel
      */
-    private function sync(Channel $channel, ChannelInterface $data)
+    private function getChannel(System $system): Channel
     {
-        $channel->name = $data->getName();
-        $channel->sys_channel_id = $data->getId();
-        $channel->save();
+        $channelId = $this->argument('channel');
+        $channel = Channel::inSystem($system)->withExternalId($channelId)->first();
+
+        if (!$channel) {
+            $channel = new Channel();
+            $channel->system_id = $system->id;
+            $channel->sys_channel_id = $channelId;
+        }
 
         return $channel;
-    }
-
-    /**
-     * @param ManagerInterface $manager
-     * @return array
-     */
-    private function findChannel(ManagerInterface $manager): array
-    {
-        /** @var SystemInterface $system */
-        $system = $manager->get($this->argument('system'));
-
-        /** @var ChannelInterface $channel */
-        $channel = $system->channel($this->argument('channel'));
-
-        return [$system, $channel];
-    }
-
-    /**
-     * @param SystemInterface $system
-     * @param ChannelInterface $channel
-     * @return array
-     */
-    private function findChannelInStorage(SystemInterface $system, ChannelInterface $channel): array
-    {
-        /** @var System $systemModel */
-        $systemModel  = System::withName($system->getName())->first();
-
-        /** @var Channel|null $channelModel */
-        $channelModel = Channel::inSystem($systemModel)->withExternalId($channel->getId())->first();
-
-        return [$systemModel, $channelModel];
     }
 }

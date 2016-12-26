@@ -6,8 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'KarmaBot\\Bot\\Connection' => $baseDir . '/app/Bot/Connection.php',
     'KarmaBot\\Console\\Commands\\BotChannelAdd' => $baseDir . '/app/Console/Commands/BotChannelAdd.php',
+    'KarmaBot\\Console\\Commands\\BotChannelList' => $baseDir . '/app/Console/Commands/BotChannelList.php',
     'KarmaBot\\Console\\Commands\\BotStart' => $baseDir . '/app/Console/Commands/BotStart.php',
     'KarmaBot\\Console\\Commands\\Watcher' => $baseDir . '/app/Console/Commands/Watcher.php',
     'KarmaBot\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
@@ -16,9 +16,9 @@ return array(
     'KarmaBot\\Model\\Channel' => $baseDir . '/app/Model/Channel.php',
     'KarmaBot\\Model\\Karma' => $baseDir . '/app/Model/Karma.php',
     'KarmaBot\\Model\\System' => $baseDir . '/app/Model/System.php',
+    'KarmaBot\\Model\\System\\DriversMap' => $baseDir . '/app/Model/System/DriversMap.php',
     'KarmaBot\\Model\\User' => $baseDir . '/app/Model/User.php',
     'KarmaBot\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'KarmaBot\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
-    'KarmaBot\\Providers\\BotServiceProvider' => $baseDir . '/app/Providers/BotServiceProvider.php',
     'KarmaBot\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
 );

@@ -176,7 +176,6 @@ return [
         KarmaBot\Providers\AppServiceProvider::class,
         KarmaBot\Providers\AuthServiceProvider::class,
         KarmaBot\Providers\EventServiceProvider::class,
-        KarmaBot\Providers\BotServiceProvider::class,
 
     ],
 

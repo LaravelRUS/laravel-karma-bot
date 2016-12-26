@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 /**
  * This file is part of Laravel-Karma package.
  *
@@ -7,12 +7,19 @@
  */
 namespace KarmaBot\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use KarmaBot\Model\System\DriversMap;
+use Psr\Log\LoggerInterface;
+use Serafim\KarmaCore\Factory;
+use Serafim\KarmaCore\Io\SystemInterface;
 
 /**
  * Class System
  * @package KarmaBot\Model
+ *
+ * @property string $driver_class
  */
 class System extends Model
 {
@@ -27,6 +34,11 @@ class System extends Model
     protected $fillable = ['title', 'name', 'adapter', 'token', 'icon'];
 
     /**
+     * @var array
+     */
+    protected $appends = ['driver_class'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function channels()
@@ -35,12 +47,32 @@ class System extends Model
     }
 
     /**
-     * @param Builder $builder
-     * @param string $name
-     * @return Builder
+     * @param Container $container
+     * @return \Serafim\KarmaCore\Io\SystemInterface
+     * @throws \InvalidArgumentException
      */
-    public static function scopeWithName(Builder $builder, string $name)
+    public function getSystemConnection(Container $container): SystemInterface
     {
-        return $builder->where('name', $name);
+        $factory = $container->make(Factory::class);
+        $factory->setLogger($container->make(LoggerInterface::class));
+
+        return $factory->create($this->driver_class, ['token' => $this->token]);
+    }
+
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function getDriverClassAttribute(): string
+    {
+        return DriversMap::getDriverByAlias($this->driver);
+    }
+
+    /**
+     * @param string $class
+     */
+    public function setDriverClassAttribute(string $class): void
+    {
+        $this->attributes['driver'] = DriversMap::findAliasByDriver($class);
     }
 }

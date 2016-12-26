@@ -7,8 +7,10 @@
  */
 namespace KarmaBot\Model;
 
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Serafim\KarmaCore\Io\ChannelInterface;
 
 /**
  * Class Channel
@@ -52,5 +54,17 @@ class Channel extends Model
     public static function scopeWithExternalId(Builder $builder, string $id)
     {
         return $builder->where('sys_channel_id', $id);
+    }
+
+    /**
+     * @param Container $container
+     * @return ChannelInterface
+     * @throws \InvalidArgumentException
+     */
+    public function getChannelConnection(Container $container): ChannelInterface
+    {
+        return $this->system
+            ->getSystemConnection($container)
+            ->channel($this->sys_channel_id);
     }
 }
