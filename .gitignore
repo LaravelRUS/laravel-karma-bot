@@ -1,4 +1,5 @@
 /vendor
+/karmabot/vendor
 /.idea
 Homestead.json
 Homestead.yaml
