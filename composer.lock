@@ -2278,16 +2278,16 @@
         },
         {
             "name": "react/promise-timer",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise-timer.git",
-                "reference": "6a46050d801688e08d1a550b97b1f3735505c62a"
+                "reference": "ddedc67bfd7f579fc83e66ff67e3564b179297dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise-timer/zipball/6a46050d801688e08d1a550b97b1f3735505c62a",
-                "reference": "6a46050d801688e08d1a550b97b1f3735505c62a",
+                "url": "https://api.github.com/repos/reactphp/promise-timer/zipball/ddedc67bfd7f579fc83e66ff67e3564b179297dd",
+                "reference": "ddedc67bfd7f579fc83e66ff67e3564b179297dd",
                 "shasum": ""
             },
             "require": {
@@ -2324,7 +2324,7 @@
                 "timeout",
                 "timer"
             ],
-            "time": "2016-02-29 19:03:45"
+            "time": "2016-12-27 08:12:19"
         },
         {
             "name": "react/socket",
@@ -2571,12 +2571,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SerafimArts/KarmaCore.git",
-                "reference": "e4854d8ade05385243d3885297fa75b57421c356"
+                "reference": "5a4d323aeb3c387371b98f2958cf38891467d217"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/e4854d8ade05385243d3885297fa75b57421c356",
-                "reference": "e4854d8ade05385243d3885297fa75b57421c356",
+                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/5a4d323aeb3c387371b98f2958cf38891467d217",
+                "reference": "5a4d323aeb3c387371b98f2958cf38891467d217",
                 "shasum": ""
             },
             "require": {
@@ -2602,7 +2602,7 @@
                 "WTFPL"
             ],
             "description": "Karma bot core component",
-            "time": "2016-12-26 13:54:58"
+            "time": "2016-12-26 15:41:35"
         },
         {
             "name": "serafim/laravel-annotations",
