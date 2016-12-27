@@ -168,7 +168,6 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Serafim\KarmaCore\Laravel\KarmaCoreServiceProvider::class,
-        Serafim\Annotations\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -176,6 +175,7 @@ return [
         KarmaBot\Providers\AppServiceProvider::class,
         KarmaBot\Providers\AuthServiceProvider::class,
         KarmaBot\Providers\EventServiceProvider::class,
+        KarmaBot\Providers\BotMiddlewareServiceProvider::class,
     ],
 
     /*

@@ -8,6 +8,8 @@
 namespace KarmaBot\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class User
@@ -31,26 +33,26 @@ class User extends Model
     protected $fillable = ['gitter_id', 'url', 'login', 'name', 'avatar'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function achievements()
+    public function achievements(): BelongsToMany
     {
         return $this->belongsToMany(Achieve::class, 'user_achievements');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function karma()
+    public function karma(): HasMany
     {
-        return $this->hasMany(Karma::class, 'user_target_id', 'id');
+        return $this->hasMany(Karma::class, 'from_user_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function thanks()
+    public function thanks(): HasMany
     {
-        return $this->hasMany(Karma::class, 'user_id', 'id');
+        return $this->hasMany(Karma::class, 'to_user_id', 'id');
     }
 }

@@ -10,6 +10,8 @@ namespace KarmaBot\Model;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Serafim\KarmaCore\Io\ChannelInterface;
 
 /**
@@ -29,11 +31,19 @@ class Channel extends Model
     protected $fillable = ['system_id', 'sys_channel_id', 'name'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function system()
+    public function system(): BelongsTo
     {
         return $this->belongsTo(System::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function middleware(): HasMany
+    {
+        return $this->hasMany(Middleware::class)->orderBy('priority', 'desc');
     }
 
     /**
@@ -41,7 +51,7 @@ class Channel extends Model
      * @param System $system
      * @return Builder
      */
-    public static function scopeInSystem(Builder $builder, System $system)
+    public static function scopeInSystem(Builder $builder, System $system): Builder
     {
         return $builder->where('system_id', $system->id);
     }
@@ -51,7 +61,7 @@ class Channel extends Model
      * @param string $id
      * @return Builder
      */
-    public static function scopeWithExternalId(Builder $builder, string $id)
+    public static function scopeWithExternalId(Builder $builder, string $id): Builder
     {
         return $builder->where('sys_channel_id', $id);
     }

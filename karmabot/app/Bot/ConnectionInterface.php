@@ -6,6 +6,8 @@
  * file that was distributed with this source code.
  */
 namespace KarmaBot\Bot;
+use React\EventLoop\LoopInterface;
+use Serafim\KarmaCore\Io\ReceivedMessageInterface;
 
 /**
  * Interface ConnectionInterface
@@ -15,11 +17,18 @@ interface ConnectionInterface
 {
     /**
      * @param string $message
+     * @return void
      */
     public function send(string $message): void;
 
     /**
      * @param \Closure $callback
+     * @return void
      */
     public function subscribe(\Closure $callback): void;
+
+    /**
+     * @param ReceivedMessageInterface $inputMessage
+     */
+    public function onMessage(ReceivedMessageInterface $inputMessage): void;
 }

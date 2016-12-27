@@ -8,6 +8,7 @@
 namespace KarmaBot\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Achieve
@@ -31,9 +32,9 @@ class Achieve extends Model
     protected $fillable = ['name', 'title', 'image', 'description'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_achievements');
     }

@@ -8,7 +8,6 @@
         "barryvdh/laravel-ide-helper": "~2.0",
         "doctrine/dbal": "~2.2",
         "predis/predis": "~1.1",
-        "serafim/laravel-annotations": "~1.0",
         "roave/security-advisories": "dev-master@dev",
         "serafim/message-component": "dev-master@dev",
         "devristo/phpws": "dev-master@dev",

@@ -124,7 +124,9 @@ return [
     |
     */
     'custom_db_types'             => [
-
+        'mysql' => [
+            'json' => 'text',
+        ],
     ],
 
     /*

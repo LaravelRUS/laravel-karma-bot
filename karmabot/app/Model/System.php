@@ -10,6 +10,7 @@ namespace KarmaBot\Model;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use KarmaBot\Model\System\DriversMap;
 use Psr\Log\LoggerInterface;
 use Serafim\KarmaCore\Factory;
@@ -39,16 +40,16 @@ class System extends Model
     protected $appends = ['driver_class'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function channels()
+    public function channels(): HasMany
     {
         return $this->hasMany(Channel::class);
     }
 
     /**
      * @param Container $container
-     * @return \Serafim\KarmaCore\Io\SystemInterface
+     * @return SystemInterface
      * @throws \InvalidArgumentException
      */
     public function getSystemConnection(Container $container): SystemInterface

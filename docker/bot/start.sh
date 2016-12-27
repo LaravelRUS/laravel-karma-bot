@@ -15,4 +15,5 @@ composer install
 
 php ./karmabot/artisan key:generate
 php ./karmabot/artisan migrate --force
-php ./karmabot/artisan watch > /dev/null
+
+tail -f ./karmabot/storage/logs/laravel.log

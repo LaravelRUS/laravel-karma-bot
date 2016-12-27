@@ -9,9 +9,12 @@ namespace KarmaBot\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Log\Writer;
 use KarmaBot\Bot\SingleChannel;
 use KarmaBot\Model\Channel;
 use KarmaBot\Model\System;
+use Monolog\Handler\StreamHandler;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 
 /**
@@ -59,8 +62,20 @@ class BotListen extends Command
             throw new \InvalidArgumentException('Channel not found');
         }
 
+        $this->addOutputLogger($app);
+
         $connection = new SingleChannel($app, $channel);
 
         $loop->run();
+    }
+
+    /**
+     * @param Container $app
+     */
+    private function addOutputLogger(Container $app)
+    {
+        /** @var Writer $writer */
+        $writer = $app->make(LoggerInterface::class);
+        $writer->getMonolog()->pushHandler(new StreamHandler(STDOUT));
     }
 }

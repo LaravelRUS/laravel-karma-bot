@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "56a5943718ed3497fad54b98558ba3c1",
-    "content-hash": "e5555bb807281d481f31834451a0847c",
+    "hash": "6dcbce09ca468e595b5077a3b72b5d53",
+    "content-hash": "50e77056d85868f96e0ea8f7b5126dce",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -468,35 +468,35 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "v1.2.7",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535"
+                "reference": "30e07cf03edc3cd3ef579d0dd4dd8c58250799a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
-                "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/30e07cf03edc3cd3ef579d0dd4dd8c58250799a5",
+                "reference": "30e07cf03edc3cd3ef579d0dd4dd8c58250799a5",
                 "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
-                "php": ">=5.3.2"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
                 "doctrine/cache": "1.*",
-                "phpunit/phpunit": "4.*"
+                "phpunit/phpunit": "^5.6.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3.x-dev"
+                    "dev-master": "1.4.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Annotations\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -532,7 +532,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2015-08-31 12:32:49"
+            "time": "2016-10-24 11:45:47"
         },
         {
             "name": "doctrine/cache",
@@ -2512,12 +2512,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ccd522f40878bcfbc9bd7cb45f0772098d2963f5"
+                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ccd522f40878bcfbc9bd7cb45f0772098d2963f5",
-                "reference": "ccd522f40878bcfbc9bd7cb45f0772098d2963f5",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c798e4083112679dfe36394ca681153a7a6f83ed",
+                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed",
                 "shasum": ""
             },
             "conflict": {
@@ -2558,7 +2558,7 @@
                 "namshi/jose": "<2.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
-                "phpmailer/phpmailer": ">=5,<5.2.14",
+                "phpmailer/phpmailer": ">=5,<5.2.18",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<4.3.7|>=5,<5.1.5",
@@ -2635,7 +2635,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-12-21 14:15:22"
+            "time": "2016-12-27 15:21:16"
         },
         {
             "name": "serafim/gitter-api",
@@ -2702,12 +2702,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SerafimArts/KarmaCore.git",
-                "reference": "5a4d323aeb3c387371b98f2958cf38891467d217"
+                "reference": "be986cd9de8eb8836416ca160255223a411abbb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/5a4d323aeb3c387371b98f2958cf38891467d217",
-                "reference": "5a4d323aeb3c387371b98f2958cf38891467d217",
+                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/be986cd9de8eb8836416ca160255223a411abbb3",
+                "reference": "be986cd9de8eb8836416ca160255223a411abbb3",
                 "shasum": ""
             },
             "require": {
@@ -2733,40 +2733,7 @@
                 "WTFPL"
             ],
             "description": "Karma bot core component",
-            "time": "2016-12-26 15:41:35"
-        },
-        {
-            "name": "serafim/laravel-annotations",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/SerafimArts/Laravel-Annotations.git",
-                "reference": "ac2888aabcd05af1a44b5aab3ff0bb599859c789"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/Laravel-Annotations/zipball/ac2888aabcd05af1a44b5aab3ff0bb599859c789",
-                "reference": "ac2888aabcd05af1a44b5aab3ff0bb599859c789",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/annotations": "1.2.*",
-                "doctrine/common": "2.6.*",
-                "illuminate/contracts": "5.*",
-                "illuminate/support": "5.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Serafim\\Annotations\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Laravel annotations bridge",
-            "time": "2016-05-10 01:21:49"
+            "time": "2016-12-27 17:09:44"
         },
         {
             "name": "serafim/message-component",
