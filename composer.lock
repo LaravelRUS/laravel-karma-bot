@@ -177,54 +177,6 @@
             "time": "2016-09-16 12:50:15"
         },
         {
-            "name": "clue/block-react",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clue/php-block-react.git",
-                "reference": "ed70f8d497dd265e30bc7dd19cf86b2e149b1ecf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-block-react/zipball/ed70f8d497dd265e30bc7dd19cf86b2e149b1ecf",
-                "reference": "ed70f8d497dd265e30bc7dd19cf86b2e149b1ecf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3",
-                "react/event-loop": "0.4.*|0.3.*",
-                "react/promise": "~2.1|~1.2",
-                "react/promise-timer": "~1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Lück",
-                    "email": "christian@lueck.tv"
-                }
-            ],
-            "description": "Integrate async React PHP components into your blocking environment",
-            "homepage": "https://github.com/clue/php-block-react",
-            "keywords": [
-                "async",
-                "blocking",
-                "event loop",
-                "promise",
-                "reactphp",
-                "synchronous"
-            ],
-            "time": "2016-03-09 15:10:22"
-        },
-        {
             "name": "clue/buzz-react",
             "version": "v1.1.0",
             "source": {
@@ -2277,56 +2229,6 @@
             "time": "2016-12-22 14:09:01"
         },
         {
-            "name": "react/promise-timer",
-            "version": "v1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/promise-timer.git",
-                "reference": "ddedc67bfd7f579fc83e66ff67e3564b179297dd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise-timer/zipball/ddedc67bfd7f579fc83e66ff67e3564b179297dd",
-                "reference": "ddedc67bfd7f579fc83e66ff67e3564b179297dd",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3",
-                "react/event-loop": "~0.4.0|~0.3.0",
-                "react/promise": "~2.1|~1.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "React\\Promise\\Timer\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Lück",
-                    "email": "christian@lueck.tv"
-                }
-            ],
-            "description": "Trivial timeout implementation for Promises",
-            "homepage": "https://github.com/react/promise-timer",
-            "keywords": [
-                "async",
-                "event-loop",
-                "promise",
-                "reactphp",
-                "timeout",
-                "timer"
-            ],
-            "time": "2016-12-27 08:12:19"
-        },
-        {
             "name": "react/socket",
             "version": "v0.4.4",
             "source": {
@@ -2512,12 +2414,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed"
+                "reference": "b809da53b92844354dda4423ed1d393e279b64ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c798e4083112679dfe36394ca681153a7a6f83ed",
-                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b809da53b92844354dda4423ed1d393e279b64ca",
+                "reference": "b809da53b92844354dda4423ed1d393e279b64ca",
                 "shasum": ""
             },
             "conflict": {
@@ -2558,7 +2460,7 @@
                 "namshi/jose": "<2.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
-                "phpmailer/phpmailer": ">=5,<5.2.18",
+                "phpmailer/phpmailer": ">=5,<5.2.20",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<4.3.7|>=5,<5.1.5",
@@ -2570,7 +2472,7 @@
                 "simplesamlphp/simplesamlphp": "<1.14.11",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
-                "swiftmailer/swiftmailer": ">=4,<4.99.99|>=5,<5.2.1",
+                "swiftmailer/swiftmailer": ">=4,<5.4.5",
                 "symfony/dependency-injection": ">=2,<2.0.17",
                 "symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.7",
                 "symfony/framework-bundle": ">=2,<2.3.18|>=2.4,<2.4.8|>=2.5,<2.5.2",
@@ -2635,40 +2537,36 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-12-27 15:21:16"
+            "time": "2016-12-29 12:33:36"
         },
         {
             "name": "serafim/gitter-api",
-            "version": "3.0.3",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SerafimArts/gitter-api.git",
-                "reference": "5bf22f2b5bbc517600937fbbaa44037a89688a82"
+                "reference": "a08bf1b5b842525f36037e76297198d5f79f5a89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/gitter-api/zipball/5bf22f2b5bbc517600937fbbaa44037a89688a82",
-                "reference": "5bf22f2b5bbc517600937fbbaa44037a89688a82",
+                "url": "https://api.github.com/repos/SerafimArts/gitter-api/zipball/a08bf1b5b842525f36037e76297198d5f79f5a89",
+                "reference": "a08bf1b5b842525f36037e76297198d5f79f5a89",
                 "shasum": ""
             },
             "require": {
-                "clue/block-react": "^1.0",
                 "clue/buzz-react": "^1.0",
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-sockets": "*",
-                "monolog/monolog": "^1.21",
+                "guzzlehttp/guzzle": ">=5.0",
                 "php": ">=7.0",
-                "react/event-loop": "^0.4",
-                "serafim/properties": "^1.0"
+                "psr/log": "~1.0",
+                "react/event-loop": "^0.4"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "^6.2",
+                "monolog/monolog": "~1.0",
                 "phpdocumentor/phpdocumentor": "^2.0",
                 "phpunit/phpunit": "~5.5"
-            },
-            "suggest": {
-                "guzzlehttp/guzzle": "Version 6+ for API GuzzleHttp adapters support."
             },
             "type": "library",
             "autoload": {
@@ -2694,7 +2592,7 @@
                 "gitter",
                 "react"
             ],
-            "time": "2016-10-26 00:36:06"
+            "time": "2016-12-28 17:59:39"
         },
         {
             "name": "serafim/karma-core",
@@ -2702,25 +2600,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SerafimArts/KarmaCore.git",
-                "reference": "be986cd9de8eb8836416ca160255223a411abbb3"
+                "reference": "e086162d6a4214a5bdc1439d54806efdeb3114c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/be986cd9de8eb8836416ca160255223a411abbb3",
-                "reference": "be986cd9de8eb8836416ca160255223a411abbb3",
+                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/e086162d6a4214a5bdc1439d54806efdeb3114c0",
+                "reference": "e086162d6a4214a5bdc1439d54806efdeb3114c0",
                 "shasum": ""
             },
             "require": {
                 "coderstephen/slack-client": "~0.2",
                 "crazycodr/standard-exceptions": "~2.1",
                 "devristo/phpws": "dev-master@dev",
+                "illuminate/support": "~5.1",
+                "monolog/monolog": "~1.0",
                 "php": ">=7.0",
                 "react/event-loop": "~0.4",
-                "serafim/gitter-api": "~3.0",
+                "serafim/gitter-api": "~4.0",
                 "serafim/message-component": "dev-master@dev"
-            },
-            "suggest": {
-                "illuminate/console": "Required for Laravel integration (~5.1)"
             },
             "type": "project",
             "autoload": {
@@ -2733,7 +2630,7 @@
                 "WTFPL"
             ],
             "description": "Karma bot core component",
-            "time": "2016-12-27 17:09:44"
+            "time": "2016-12-29 12:07:26"
         },
         {
             "name": "serafim/message-component",
@@ -2741,12 +2638,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SerafimArts/MessageComponent.git",
-                "reference": "1e3653b0375344f585feaf08b4856a1819756388"
+                "reference": "100e4d20aec208280505698e34e1ca4940f9c310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/MessageComponent/zipball/1e3653b0375344f585feaf08b4856a1819756388",
-                "reference": "1e3653b0375344f585feaf08b4856a1819756388",
+                "url": "https://api.github.com/repos/SerafimArts/MessageComponent/zipball/100e4d20aec208280505698e34e1ca4940f9c310",
+                "reference": "100e4d20aec208280505698e34e1ca4940f9c310",
                 "shasum": ""
             },
             "require": {
@@ -2768,71 +2665,28 @@
                 "WTFPL"
             ],
             "description": "Message component",
-            "time": "2016-12-15 02:48:48"
-        },
-        {
-            "name": "serafim/properties",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/SerafimArts/Properties.git",
-                "reference": "35997818ca5d6e715aae3e0fdaaaa9a7efc90539"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/Properties/zipball/35997818ca5d6e715aae3e0fdaaaa9a7efc90539",
-                "reference": "35997818ca5d6e715aae3e0fdaaaa9a7efc90539",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "5.3.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Serafim\\Properties\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nesmeyanov Kirill",
-                    "email": "nesk@xakep.ru"
-                }
-            ],
-            "description": "PHP properties implementation",
-            "homepage": "http://github.io/SerafimArts/Properties",
-            "keywords": [
-                "fields",
-                "properties"
-            ],
-            "time": "2016-05-17 10:15:32"
+            "time": "2016-12-29 11:09:59"
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.4",
+            "version": "v5.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "545ce9136690cea74f98f86fbb9c92dd9ab1a756"
+                "reference": "cd142238a339459b10da3d8234220963f392540c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/545ce9136690cea74f98f86fbb9c92dd9ab1a756",
-                "reference": "545ce9136690cea74f98f86fbb9c92dd9ab1a756",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/cd142238a339459b10da3d8234220963f392540c",
+                "reference": "cd142238a339459b10da3d8234220963f392540c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.1"
+                "mockery/mockery": "~0.9.1",
+                "symfony/phpunit-bridge": "~3.2"
             },
             "type": "library",
             "extra": {
@@ -2865,7 +2719,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-11-24 01:01:23"
+            "time": "2016-12-29 10:02:40"
         },
         {
             "name": "symfony/class-loader",
@@ -4897,16 +4751,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.4",
+            "version": "5.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "af91da3f2671006ff5d0628023de3b7ac4d1ef09"
+                "reference": "50fd2be8f3e23e91da825f36f08e5f9633076ffe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/af91da3f2671006ff5d0628023de3b7ac4d1ef09",
-                "reference": "af91da3f2671006ff5d0628023de3b7ac4d1ef09",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/50fd2be8f3e23e91da825f36f08e5f9633076ffe",
+                "reference": "50fd2be8f3e23e91da825f36f08e5f9633076ffe",
                 "shasum": ""
             },
             "require": {
@@ -4975,7 +4829,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-13 16:19:44"
+            "time": "2016-12-28 07:18:51"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

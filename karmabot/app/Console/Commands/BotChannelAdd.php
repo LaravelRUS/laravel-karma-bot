@@ -42,7 +42,7 @@ class BotChannelAdd extends Command
      */
     public function handle(Container $app): void
     {
-        $system = System::find($this->argument('system'));
+        $system = System::find($this->argument('systemId'));
         if (!$system) {
             throw new \InvalidArgumentException('Invalid system id');
         }

@@ -39,14 +39,6 @@ class Channel extends Model
     }
 
     /**
-     * @return HasMany
-     */
-    public function middleware(): HasMany
-    {
-        return $this->hasMany(Middleware::class)->orderBy('priority', 'desc');
-    }
-
-    /**
      * @param Builder $builder
      * @param System $system
      * @return Builder

@@ -7,18 +7,10 @@
  */
 namespace KarmaBot\Bot;
 
-use Evenement\EventEmitterTrait;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Collection;
-use KarmaBot\Bot\Middleware\Manager;
-use KarmaBot\Bot\Middleware\MiddlewareInterface;
 use KarmaBot\Model\Channel;
-use KarmaBot\Model\Middleware;
 use Psr\Log\LoggerInterface;
-use React\EventLoop\LoopInterface;
 use Serafim\KarmaCore\Io\ChannelInterface;
 use Serafim\KarmaCore\Io\ReceivedMessageInterface;
 
@@ -28,11 +20,6 @@ use Serafim\KarmaCore\Io\ReceivedMessageInterface;
  */
 class SingleChannel implements ConnectionInterface
 {
-    /**
-     * @var MiddlewareInterface[]|Collection
-     */
-    private $middleware;
-
     /**
      * @var ChannelInterface
      */
@@ -56,9 +43,6 @@ class SingleChannel implements ConnectionInterface
      */
     public function __construct(Container $app, Channel $channel)
     {
-        $manager = $app->make(Manager::class);
-
-        $this->middleware = $this->createMiddleware($manager, $channel);
         $this->events = new Dispatcher();
         $this->log = $app->make(LoggerInterface::class);
         $this->io = $channel->getChannelConnection($app);
@@ -70,47 +54,11 @@ class SingleChannel implements ConnectionInterface
     }
 
     /**
-     * @param ReceivedMessageInterface $receivedMessage
-     * @return \Closure
+     * @param ReceivedMessageInterface $message
      */
-    private function filter(ReceivedMessageInterface $receivedMessage): \Closure
+    public function onMessage(ReceivedMessageInterface $message): void
     {
-        return function (MiddlewareInterface $middleware) use ($receivedMessage) {
-            switch ($middleware->getFlowType()) {
-                case MiddlewareInterface::FLOW_LOGIC_SKIP_SELF:
-                    return !$this->matchAuthUserId($receivedMessage->getUser()->getId());
-            }
 
-            return true;
-        };
-    }
-
-    /**
-     * @param string $userId
-     * @return bool
-     */
-    private function matchAuthUserId(string $userId): bool
-    {
-        return $this->io->getSystem()->auth()->getId() === $userId;
-    }
-
-    /**
-     * @param Manager $manager
-     * @param Channel $channel
-     * @return Collection
-     */
-    private function createMiddleware(Manager $manager, Channel $channel): Collection
-    {
-        $list = new Collection();
-
-        /** @var Middleware $model */
-        foreach ($channel->middleware as $model) {
-            $middleware = $manager->make($model->name, $model->options);
-
-            $list->push($middleware);
-        }
-
-        return $list;
     }
 
     /**
@@ -130,24 +78,11 @@ class SingleChannel implements ConnectionInterface
     }
 
     /**
-     * @param ReceivedMessageInterface $message
+     * @param string $userId
+     * @return bool
      */
-    public function onMessage(ReceivedMessageInterface $message): void
+    private function matchAuthUserId(string $userId): bool
     {
-        $list = $this->middleware->filter(function (MiddlewareInterface $middleware) use ($message) {
-            return $this->filter($message);
-        });
-
-        $response = (new Pipeline())
-            ->send($message)
-            ->through($list->toArray())
-            ->via('handle')
-            ->then(function (ReceivedMessageInterface $message) {
-                return null;
-            });
-
-        if (is_string($response)) {
-            $this->send($response);
-        }
+        return $this->io->getSystem()->auth()->getId() === $userId;
     }
 }

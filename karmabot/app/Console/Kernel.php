@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Karma Bot
+        Commands\BotChannelSyncMessages::class,
         Commands\BotChannelList::class,
         Commands\BotChannelAdd::class,
         Commands\BotListen::class,
