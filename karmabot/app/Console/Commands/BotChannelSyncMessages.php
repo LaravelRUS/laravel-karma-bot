@@ -11,9 +11,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\Container;
 use KarmaBot\Model\Channel;
 use KarmaBot\Model\Message;
-use KarmaBot\Model\Repository\UserRepository;
 use KarmaBot\Model\User;
-use Serafim\KarmaCore\System\Gitter\GitterSystem;
 
 /**
  * Class BotChannelAdd
@@ -62,7 +60,7 @@ class BotChannelSyncMessages extends Command
                 $user->save();
 
                 $user->systems()->save($channel->system, [
-                    'sys_user_id' => $received->getUser()->getId()
+                    'sys_user_id' => $received->getUser()->getId(),
                 ]);
             }
 
