@@ -2540,17 +2540,60 @@
             "time": "2016-12-29 12:33:36"
         },
         {
-            "name": "serafim/gitter-api",
-            "version": "4.0.2",
+            "name": "serafim/evacuator",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SerafimArts/gitter-api.git",
-                "reference": "a08bf1b5b842525f36037e76297198d5f79f5a89"
+                "url": "https://github.com/SerafimArts/Evacuator.git",
+                "reference": "d72e22e4c76973f099551360d9dae504ad09e0a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/gitter-api/zipball/a08bf1b5b842525f36037e76297198d5f79f5a89",
-                "reference": "a08bf1b5b842525f36037e76297198d5f79f5a89",
+                "url": "https://api.github.com/repos/SerafimArts/Evacuator/zipball/d72e22e4c76973f099551360d9dae504ad09e0a9",
+                "reference": "d72e22e4c76973f099551360d9dae504ad09e0a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Serafim\\Evacuator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "WTFPL"
+            ],
+            "authors": [
+                {
+                    "name": "Nesmeyanov Kirill",
+                    "email": "nesk@xakep.ru"
+                }
+            ],
+            "description": "Try-catch with multiple retries",
+            "homepage": "https://github.com/SerafimArts/Evacuator",
+            "time": "2016-12-29 19:09:39"
+        },
+        {
+            "name": "serafim/gitter-api",
+            "version": "4.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SerafimArts/gitter-api.git",
+                "reference": "23625b0cea41f02a14c6b80e6933e23f91656c0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SerafimArts/gitter-api/zipball/23625b0cea41f02a14c6b80e6933e23f91656c0e",
+                "reference": "23625b0cea41f02a14c6b80e6933e23f91656c0e",
                 "shasum": ""
             },
             "require": {
@@ -2561,7 +2604,8 @@
                 "guzzlehttp/guzzle": ">=5.0",
                 "php": ">=7.0",
                 "psr/log": "~1.0",
-                "react/event-loop": "^0.4"
+                "react/event-loop": "^0.4",
+                "serafim/evacuator": "~3.0"
             },
             "require-dev": {
                 "monolog/monolog": "~1.0",
@@ -2592,7 +2636,7 @@
                 "gitter",
                 "react"
             ],
-            "time": "2016-12-28 17:59:39"
+            "time": "2016-12-30 02:09:46"
         },
         {
             "name": "serafim/karma-core",
@@ -2600,12 +2644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SerafimArts/KarmaCore.git",
-                "reference": "e086162d6a4214a5bdc1439d54806efdeb3114c0"
+                "reference": "5b06daf782c22ae8d2a9d124ff4162799acda48b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/e086162d6a4214a5bdc1439d54806efdeb3114c0",
-                "reference": "e086162d6a4214a5bdc1439d54806efdeb3114c0",
+                "url": "https://api.github.com/repos/SerafimArts/KarmaCore/zipball/5b06daf782c22ae8d2a9d124ff4162799acda48b",
+                "reference": "5b06daf782c22ae8d2a9d124ff4162799acda48b",
                 "shasum": ""
             },
             "require": {
@@ -2630,7 +2674,7 @@
                 "WTFPL"
             ],
             "description": "Karma bot core component",
-            "time": "2016-12-29 12:07:26"
+            "time": "2016-12-29 12:41:58"
         },
         {
             "name": "serafim/message-component",

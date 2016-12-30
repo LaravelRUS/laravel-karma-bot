@@ -7,14 +7,12 @@
  */
 namespace KarmaBot\Model;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use KarmaBot\Model\System\DriversMap;
-use Psr\Log\LoggerInterface;
-use Serafim\KarmaCore\Factory;
-use Serafim\KarmaCore\Io\SystemInterface;
+use KarmaBot\Model\Transformer\SystemTransformer;
+use Serafim\KarmaCore\Io\UserInterface;
 
 /**
  * Class System
@@ -24,6 +22,8 @@ use Serafim\KarmaCore\Io\SystemInterface;
  */
 class System extends Model
 {
+    use SystemTransformer;
+
     /**
      * @var string
      */
@@ -48,19 +48,6 @@ class System extends Model
     }
 
     /**
-     * @param Container $container
-     * @return SystemInterface
-     * @throws \InvalidArgumentException
-     */
-    public function getSystemConnection(Container $container): SystemInterface
-    {
-        $factory = $container->make(Factory::class);
-        $factory->setLogger($container->make(LoggerInterface::class));
-
-        return $factory->create($this->driver_class, ['token' => $this->token]);
-    }
-
-    /**
      * @return string
      * @throws \InvalidArgumentException
      */
@@ -75,5 +62,23 @@ class System extends Model
     public function setDriverClassAttribute(string $class): void
     {
         $this->attributes['driver'] = DriversMap::findAliasByDriver($class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_system');
+    }
+
+    /**
+     * @param User $user
+     * @param string $sysUserId
+     * @return Model
+     */
+    public function addUser(User $user, string $sysUserId)
+    {
+        return $this->users()->save($user, ['sys_user_id' => $sysUserId]);
     }
 }

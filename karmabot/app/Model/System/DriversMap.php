@@ -70,8 +70,8 @@ final class DriversMap
      */
     public static function getDriverByAlias(string $alias): string
     {
-        if (($alias = static::findDriverByAlias($alias)) !== null) {
-            return $alias;
+        if (null !== ($driver = static::findDriverByAlias($alias))) {
+            return $driver;
         }
 
         throw new \InvalidArgumentException(sprintf('Invalid alias <%s> name', $alias));

@@ -28,6 +28,8 @@ class CreateSystemsTable extends Migration
             $t->string('token');    // Access token
             $t->string('icon')->default('');
             $t->timestamps();
+
+            $t->unique(['driver', 'token']);
         });
     }
 

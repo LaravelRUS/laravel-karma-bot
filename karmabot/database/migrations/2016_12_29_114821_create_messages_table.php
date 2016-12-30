@@ -23,6 +23,7 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $t) {
             $t->increments('id');
+            $t->string('sys_message_id')->index();
             $t->unsignedInteger('channel_id')->index();
             $t->unsignedInteger('user_id')->index();
             $t->longText('body');

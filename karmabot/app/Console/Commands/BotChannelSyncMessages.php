@@ -10,6 +10,9 @@ namespace KarmaBot\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Container\Container;
 use KarmaBot\Model\Channel;
+use KarmaBot\Model\Message;
+use KarmaBot\Model\Repository\UserRepository;
+use KarmaBot\Model\User;
 use Serafim\KarmaCore\System\Gitter\GitterSystem;
 
 /**
@@ -51,8 +54,26 @@ class BotChannelSyncMessages extends Command
         $conn = $channel->getChannelConnection($container);
 
 
-        foreach ($conn->messages() as $message) {
+        foreach ($conn->messages() as $received) {
+            $user = User::whereExternalUser($channel->system, $received->getUser())->first();
 
+            if (!$user) {
+                $user = User::new($received->getUser());
+                $user->save();
+
+                $user->systems()->save($channel->system, [
+                    'sys_user_id' => $received->getUser()->getId()
+                ]);
+            }
+
+            $message = Message::whereExternalMessage($received, $channel, $user)->first();
+
+            if (!$message) {
+                $message = Message::new($received, $channel, $user);
+                $message->save();
+            }
+
+            $this->info(' > ' . $message->body);
         }
     }
 }

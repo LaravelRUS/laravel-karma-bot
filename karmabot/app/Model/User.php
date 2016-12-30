@@ -10,6 +10,8 @@ namespace KarmaBot\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use KarmaBot\Model\Scope\UserScope;
+use KarmaBot\Model\Transformer\UserTransformer;
 
 /**
  * Class User
@@ -17,6 +19,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class User extends Model
 {
+    use UserScope;
+    use UserTransformer;
+
     /**
      * @var string
      */
@@ -54,5 +59,13 @@ class User extends Model
     public function thanks(): HasMany
     {
         return $this->hasMany(Karma::class, 'to_user_id', 'id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function systems()
+    {
+        return $this->belongsToMany(System::class, 'user_system');
     }
 }
