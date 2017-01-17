@@ -55,21 +55,18 @@ RUN docker-php-ext-install \
 #
 # Install non standard extensions
 #
-RUN pecl install xdebug
 RUN pecl install zip
 RUN pecl install ev
 
 #
 # Export configs
 #
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 #
 # Enable non standard extensions
 #
 RUN docker-php-ext-enable \
-    xdebug \
     opcache \
     zip \
     ev

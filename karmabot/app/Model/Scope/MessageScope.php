@@ -33,7 +33,7 @@ trait MessageScope
     )
     {
         return $builder
-            ->where('sys_message_id', $message->id())
+            ->where('sys_message_id', $message->getId())
             ->where('channel_id', $channel->id)
             ->where('user_id', $user->id);
     }

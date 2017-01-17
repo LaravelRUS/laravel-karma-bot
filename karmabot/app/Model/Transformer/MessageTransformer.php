@@ -40,7 +40,7 @@ trait MessageTransformer
 
         $model->channel_id = $channel->id;
         $model->user_id = $user->id;
-        $model->sys_message_id = $message->id();
+        $model->sys_message_id = $message->getId();
         $model->body = $message->getBody();
         $model->created_at = $message->at();
 
@@ -59,7 +59,7 @@ trait MessageTransformer
             throw new \LogicException('Channel does not exists in the storage');
         }
 
-        return static::where('sys_message_id', $message->id())
+        return static::where('sys_message_id', $message->getId())
                 ->where('channel_id', $channel->id)
                 ->first() !== null;
     }
