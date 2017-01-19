@@ -30,6 +30,9 @@ RUN apt-get update && \
         libfreetype6-dev \
         libssl-dev \
         libmcrypt-dev \
+        libjudydebian1 \
+        libjudy-dev \
+        cron \
     && apt-get clean
 
 #
@@ -57,11 +60,13 @@ RUN docker-php-ext-install \
 #
 RUN pecl install zip
 RUN pecl install ev
+RUN pecl install xdebug
 
 #
 # Export configs
 #
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 #
 # Enable non standard extensions
@@ -69,6 +74,7 @@ COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 RUN docker-php-ext-enable \
     opcache \
     zip \
+    xdebug \
     ev
 
 #
@@ -102,4 +108,6 @@ WORKDIR /var/www/karmabot
 
 RUN usermod -u 1000 www-data
 USER www-data
+
+EXPOSE 9000
 

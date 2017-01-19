@@ -35,7 +35,7 @@ class MemoryProfiler
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->memory = memory_get_usage(true);
+        $this->memory = memory_get_usage();
         $this->out = function ($message) {
         };
     }
@@ -56,24 +56,13 @@ class MemoryProfiler
      */
     public function check(string $id = null)
     {
-        $current = memory_get_usage(true);
+        $current = memory_get_usage();
 
         if ($current !== $this->memory) {
             $delta = $current - $this->memory;
-            ($this->out)($id . ': ' . $this->format($delta) .
-                ' [current: ' . $this->format($current) . ']');
+            ($this->out)($delta / 1024, $current / 1024);
         }
 
         $this->memory = $current;
-    }
-
-    /**
-     * @param $memory
-     * @return string
-     */
-    private function format($memory)
-    {
-        return ($memory > 0 ? '+' : '-') .
-            number_format($memory / 1024, 2) . 'Kb';
     }
 }
