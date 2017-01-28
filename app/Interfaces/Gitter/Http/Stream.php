@@ -145,6 +145,7 @@ class Stream
      */
     public function reconnect()
     {
+        sleep(60); // Await for 1 min (temporary)
         return $this->connect();
     }
 
