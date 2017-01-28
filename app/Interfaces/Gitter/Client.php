@@ -249,10 +249,9 @@ class Client implements ClientInterface
     }
 
     /**
-     * @TODO I do not know if it works
      * @param Stream $stream
      */
-    protected function onClose(Stream $stream)
+    public function onClose(Stream $stream)
     {
         $stream->reconnect();
     }
@@ -261,7 +260,7 @@ class Client implements ClientInterface
      * @param Stream $stream
      * @param \Exception $e
      */
-    protected function onError(Stream $stream, \Exception $e)
+    public function onError(Stream $stream, \Exception $e)
     {
         $this->logException($e);
     }
@@ -280,7 +279,8 @@ class Client implements ClientInterface
 
     /**
      * @param RoomInterface $room
-     * @param string        $message
+     * @param string $message
+     * @throws \InvalidArgumentException
      */
     public function sendMessage(RoomInterface $room, $message)
     {
@@ -293,6 +293,7 @@ class Client implements ClientInterface
      * @param string $id
      *
      * @return User
+     * @throws \InvalidArgumentException
      */
     public function getUserById($id)
     {
