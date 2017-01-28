@@ -7,24 +7,46 @@ services:
             args:
                 - TZ=UTC
         volumes:
-            - ".:/var/www"
+            - ".:/var/www/karmabot"
         extra_hosts:
             - "dockerhost:172.17.0.1"
         tty: true
 
-    bot:
+    php:
         build:
-            context: ./docker/bot
-        command: "/bin/bash /start.sh"
+            context: ./docker/php
+        command: "/start.sh && php-fpm"
+        volumes:
+            - "./docker/logs/php-fpm:/var/log"
         volumes_from:
             - workspace
-        links:
-            - workspace
+        expose:
+            - "9000"
         extra_hosts:
             - "dockerhost:172.17.0.1"
+        links:
+            - workspace
+            - mysql
+            - redis
         environment:
             - PHP_IDE_CONFIG="serverName=laravel"
         tty: true
+
+    nginx:
+        build:
+            context: ./docker/nginx
+            args:
+                - PHP_UPSTREAM=php
+        volumes_from:
+            - workspace
+        volumes:
+            - ./docker/logs/nginx/:/var/log/nginx
+            - ./docker/nginx/sites-available/:/etc/nginx/sites-available
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - php
 
     mysql:
         build: 
@@ -44,7 +66,7 @@ services:
         volumes:
             - redis:/data
         ports:
-            - "6381:6379"
+            - "6379:6379"
 
 volumes:
     mysql:
