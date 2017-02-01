@@ -39,8 +39,8 @@ export default class User extends Model {
             .find((user:User) => {
                 user.resetHighlight();
 
-                return escape(user.name).search(query) >= 0 ||
-                    escape(user.login).search(query) >= 0;
+                return escape(user.name || '').search(query) >= 0 ||
+                    escape(user.login || '').search(query) >= 0;
             })
             .take(count);
     }
