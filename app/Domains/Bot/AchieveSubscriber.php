@@ -12,6 +12,7 @@ namespace Domains\Bot;
 
 use Domains\Achieve;
 use Domains\Bot\Achievements\DocsAchieve;
+use Domains\Bot\Achievements\ReaderAchieve;
 use Domains\Bot\Achievements\Karma100Achieve;
 use Domains\Bot\Achievements\Karma10Achieve;
 use Domains\Bot\Achievements\Karma500Achieve;
@@ -51,6 +52,7 @@ class AchieveSubscriber implements
         Thanks10Karma0Achieve::class,
         DocsAchieve::class,
         GrumblerAchieve::class,
+        ReaderAchieve::class,
     ];
 
     /**
