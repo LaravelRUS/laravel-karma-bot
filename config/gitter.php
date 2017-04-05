@@ -6,6 +6,7 @@ return [
     'rooms' => [
         env('GITTER_DEBUG_ROOM', 'KarmaBot/KarmaTest') => ['*'],
         'LaravelRUS/chat'                              => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/offtop'                            => ['common', 'improvements', 'laravel'],
         'LaravelRUS/laravel.ru'                        => ['common', 'karma', 'improvements', 'laravel'],
         'LaravelRUS/GitterBot'                         => ['common', 'karma', 'improvements', 'laravel'],
         'LaravelRUS/SleepingOwlAdmin'                  => ['common', 'karma', 'improvements', 'laravel'],
