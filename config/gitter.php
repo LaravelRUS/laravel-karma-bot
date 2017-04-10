@@ -17,7 +17,7 @@ return [
         'yiisoft/yii/rus'                              => ['common', 'karma', 'improvements', 'yii'],
         'php-ua/symfony'                               => ['common', 'karma', 'improvements', 'php'],
         'php-ua/php'                                   => ['common', 'karma', 'improvements', 'php'],
-        'ru-symfoniacs/chat'                           => ['common', 'karma', 'improvements', 'php'],
+        'ru-symfoniacs/chat'                           => ['karma', 'improvements', 'php'],
         'vuejs-ru/Discussion'                          => ['common', 'karma', 'improvements', 'vuejs'],
     ],
 
