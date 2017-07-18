@@ -167,6 +167,9 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 'laravel',
                 'ларавель',
                 'йии',
+                'джумла',
+                'джумля',
+                'joomla',
             ], true);
 
             if ($isPolitics) {
