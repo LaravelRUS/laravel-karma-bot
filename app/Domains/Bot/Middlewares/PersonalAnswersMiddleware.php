@@ -117,7 +117,7 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
             }
 
             // Question
-            $isPolitics = Str::contains($message->text_without_special_chars, [
+            $isPolitics = Str::contains(Str::lower($message->text_without_special_chars), [
                 'яровая',
                 'пакет яровой',
                 'пакетом яровой',
@@ -125,7 +125,9 @@ class PersonalAnswersMiddleware implements MiddlewareInterface
                 'пакету яровой',
                 'роксомнадзор',
                 'битрикс',
-                'мизулина'
+                'мизулина',
+                'курс русакова',
+                'русаков',
             ]);
 
             if ($isPolitics) {
