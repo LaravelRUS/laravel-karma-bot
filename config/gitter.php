@@ -11,6 +11,7 @@ return [
         'LaravelRUS/GitterBot'                         => ['common', 'karma', 'improvements', 'laravel'],
         'LaravelRUS/SleepingOwlAdmin'                  => ['common', 'karma', 'improvements', 'laravel'],
         'DrupalRu/drupal.ru'                           => ['common', 'karma', 'improvements', 'drupal'],
+        'DrupalRu/chat'                                => ['common', 'karma', 'improvements', 'drupal'],
         'dru-io/Drupal'                                => ['common', 'karma', 'improvements', 'drupal'],
         'yiisoft/yii2/offtopic-rus'                    => ['common', 'karma', 'improvements', 'yii'],
         'yiisoft/yii2/rus'                             => ['common', 'karma', 'improvements', 'yii'],
