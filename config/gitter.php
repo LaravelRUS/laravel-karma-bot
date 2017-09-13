@@ -1,61 +1,70 @@
 <?php
-use App\Gitter\Middleware\Storage;
 
 return [
-    'token'       => env('GITTER_TOKEN', null),
+    'token' => env('GITTER_TOKEN', null),
 
-    'output'      => true,
-
-    'rooms'       => [
-        //'debug' => env('GITTER_DEBUG_ROOM', '5617cdcad33f749381a8d5e5'), // Debug
-
-        'laravel.chat'  => '52f9b90e5e986b0712ef6b9d',  // https://gitter.im/LaravelRUS/chat
-        'laravel.site'  => '54053e51163965c9bc201c26',  // https://gitter.im/LaravelRUS/laravel.ru
-        'laravel.bot'   => '560281040fc9f982beb1908a',  // https://gitter.im/LaravelRUS/GitterBot
-
-        'drupal'        => '565c8d6716b6c7089cbcbd5d', // https://gitter.im/DrupalRu/drupal.ru
-        'druio'         => '568a54e816b6c7089cc11010', // https://gitter.im/dru-io/Drupal
-
-        'yii.offtop'    => '55dc21c10fc9f982beae822c', // https://gitter.im/yiisoft/yii2/offtopic-rus
-        'yii.chat'      => '555086c915522ed4b3e03631', // https://gitter.im/yiisoft/yii2/rus
-
-        'phpua.symfony' => '5497ef29db8155e6700e1e81', // https://gitter.im/php-ua/symfony
-
-
+    'rooms' => [
+        env('GITTER_DEBUG_ROOM', 'KarmaBot/KarmaTest') => ['*'],
+        'LaravelRUS/chat'                              => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/offtop'                            => ['common', 'improvements', 'laravel'],
+        'LaravelRUS/laravel.ru'                        => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/GitterBot'                         => ['common', 'karma', 'improvements', 'laravel'],
+        'LaravelRUS/SleepingOwlAdmin'                  => ['common', 'karma', 'improvements', 'laravel'],
+        'DrupalRu/drupal.ru'                           => ['common', 'karma', 'improvements', 'drupal'],
+        'dru-io/Drupal'                                => ['common', 'karma', 'improvements', 'drupal'],
+        'yiisoft/yii2/offtopic-rus'                    => ['common', 'karma', 'improvements', 'yii'],
+        'yiisoft/yii2/rus'                             => ['common', 'karma', 'improvements', 'yii'],
+        'yiisoft/yii/rus'                              => ['common', 'karma', 'improvements', 'yii'],
+        'php-ua/symfony'                               => ['common', 'karma', 'improvements', 'php'],
+        'php-ua/php'                                   => ['common', 'karma', 'improvements', 'php'],
+        'ru-symfoniacs/chat'                           => ['karma', 'improvements', 'php'],
+        'vuejs-ru/Discussion'                          => ['common', 'karma', 'improvements', 'vuejs'],
     ],
 
-
-    // Middlewares
     'middlewares' => [
-        // Вывод кармы по запросу
-        App\Middlewares\KarmaRenderMiddleware::class  => Storage::PRIORITY_DEFAULT,
+        'common' => [
+            // Google поисковик
+            Domains\Bot\Middlewares\NewGoogleSearchMiddleware::class,
+            // Domains\Bot\Middlewares\GoogleSearchMiddleware::class,
 
-        // SQL билдер
-        App\Middlewares\SqlBuilderMiddleware::class   => Storage::PRIORITY_DEFAULT,
+            // Советник по оформлению сообщений
+            Domains\Bot\Middlewares\MarkdownAdviserMiddleware::class,
 
-        // Google поисковик
-        App\Middlewares\GoogleSearchMiddleware::class => Storage::PRIORITY_DEFAULT,
+            // Ответы на персональные вопросы для бота
+            Domains\Bot\Middlewares\PersonalAnswersMiddleware::class,
+        ],
 
-        // Советник по оформлению сообщений
-        App\Middlewares\MarkdownAdviserMiddleware::class => Storage::PRIORITY_DEFAULT,
+        'karma' => [
+            // Вывод кармы по запросу
+            Domains\Bot\Middlewares\KarmaRenderMiddleware::class,
 
-        // Слишком длинные сообщения
-        App\Middlewares\LongMessageMiddleware::class => Storage::PRIORITY_DEFAULT,
+            // Подсчёт "спасибок"
+            Domains\Bot\Middlewares\KarmaCounterMiddleware::class,
+            // Подписывается на создание ачивки и отправляет сообщеньку в чат
+            // Domains\Bot\Middlewares\AchievementsMiddleware::class,
+        ],
 
-        // Подсчёт "спасибок"
-        App\Middlewares\KarmaCounterMiddleware::class => Storage::PRIORITY_MINIMAL,
+        'laravel' => [
+            // Поиск по документации Laravel
+            Domains\Bot\Middlewares\LaravelDocumentationSearcherMiddleware::class,
 
-        // Анализ ссылок на изображения и видео
-        // App\Middlewares\InlineDataMiddleware::class => Storage::PRIORITY_MINIMAL,
+            // SQL билдер
+            Domains\Bot\Middlewares\SqlBuilderMiddleware::class,
 
-        // Ответы на персональные вопросы для бота
-        App\Middlewares\PersonalAnswersMiddleware::class => Storage::PRIORITY_MINIMAL,
+            // Анализ ссылок на изображения и видео
+            // App\Middlewares\InlineDataMiddleware::class,
+        ],
+
+        'improvements' => [
+            // Слишком длинные сообщения
+            Domains\Bot\Middlewares\LongMessageMiddleware::class,
+        ],
     ],
 
 
     // Subscribers
     'subscribers' => [
         // Подписывается на создание ачивки и отправляет сообщеньку в чат
-        App\Subscribers\AchieveSubscriber::class,
+        Domains\Bot\AchieveSubscriber::class,
     ],
 ];

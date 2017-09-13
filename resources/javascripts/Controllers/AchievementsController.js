@@ -28,7 +28,7 @@ export default class AchievementsController extends BaseController {
      */
     onShow() {
         Achieve.load().then((model: Achieve) => {
-            this.achievements(model.toArray());
+            this.achievements(model.items());
         });
     }
 }

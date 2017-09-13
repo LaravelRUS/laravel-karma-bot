@@ -19,7 +19,7 @@
 @yield('content')
 <script>
     (function(global) {
-        global['app'] = (new (require('Application'))).run();
+        global['app'] = (new (require('/Application').default)).run();
     })(window);
 </script>
 </body>

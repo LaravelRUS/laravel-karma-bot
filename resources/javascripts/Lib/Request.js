@@ -32,11 +32,29 @@ export default class Request {
     }
 
     /**
+     * @return {string}
+     * @private
+     */
+    get _key() {
+        return this.url + JSON.stringify(this.args);
+    }
+
+    /**
      * @param title
      * @returns {*}
      */
     async get(title) {
-        return await this.request(title, 'get');
+        if (sessionStorage.getItem(this._key) === null) {
+            let result = await this.request(title, 'get');
+            try {
+                sessionStorage.setItem(this._key, JSON.stringify(result));
+            } catch (e) {
+                sessionStorage.clear();
+                return result;
+            }
+        }
+
+        return JSON.parse(sessionStorage.getItem(this._key));
     }
 
     /**
