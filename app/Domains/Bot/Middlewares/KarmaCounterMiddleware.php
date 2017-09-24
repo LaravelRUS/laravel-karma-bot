@@ -34,6 +34,10 @@ class KarmaCounterMiddleware implements MiddlewareInterface
      */
     public function handle(Message $message)
     {
+        if ($message->user->isBot()) {
+            return $message;
+        }
+
         $collection = $this->validator->validate($message);
         $hasAnswers = false;
 
